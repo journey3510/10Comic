@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const AppName = __APP_NAME__
 const AppVersion = __APP_VERSION__
 const AppEnv = __APP_ENVIRONMENT__
