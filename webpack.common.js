@@ -3,9 +3,9 @@ const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
-const pathResolve = (dir) => {
-  return path.resolve(__dirname, '..', dir)
-}
+// const pathResolve = (dir) => {
+//   return path.resolve(__dirname, '..', dir)
+// }
 
 module.exports = () => {
   const entryFile = process.env.TAMPERMONKEY_ENTRY_FILE

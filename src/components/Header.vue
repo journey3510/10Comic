@@ -1,8 +1,8 @@
 <template>
   <div class="header">
-    <i class="el-icon-share"></i>
-    <h3>{{AppName}}</h3>
-    <el-tag>v{{AppVersion}}</el-tag>
+    <i class="el-icon-share" />
+    <h3>{{ AppName }}</h3>
+    <el-tag>v{{ AppVersion }}</el-tag>
   </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       AppName,
-      AppVersion,
+      AppVersion
     }
   }
 }
