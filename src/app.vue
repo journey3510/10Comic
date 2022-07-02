@@ -78,7 +78,7 @@ import Setting from '@/views/setting.vue'
 import Down from '@/views/down.vue'
 import { AppName, AppVersion } from './config'
 
-import { setValue } from '@/utils/index'
+import { matchWeb } from './utils/comics'
 
 export default {
   name: 'App',
@@ -92,13 +92,10 @@ export default {
       show: true,
       isHide: false,
       active: 0
-      // current: 0
-
     }
   },
   computed: {
     current: function() {
-      console.log('this.active: ', this.active)
       return this.active
     }
   },
@@ -109,9 +106,7 @@ export default {
   },
   mounted() {
     console.clear()
-  },
-  created() {
-    // this.GM_setValue('9999', 5555555555555)
+    matchWeb('http://www.kmwu6.com/dddddddd/1379635.html')
   },
   methods: {
     showContext() {
@@ -121,7 +116,7 @@ export default {
       this.isHide = !this.isHide
     },
     onChange() {
-      // this.current = index
+      this.$bus.$emit('selectDown', 'X')
     }
   }
 }

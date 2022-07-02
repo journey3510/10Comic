@@ -1,4 +1,3 @@
-
 import JSZip from 'jszip'
 // import saveAs from 'file-saver'
 import axios from 'axios'
@@ -80,3 +79,13 @@ export default class Queue {
   }
 }
 
+//   zip.generateAsync({
+//     type: 'blob',
+//     compression: 'DEFLATE',
+//     compressionOptions: {
+//       level: 9
+//     }
+//   }).then((res) => {
+//     console.log('压缩包: ', res)
+//     saveAs(res, '压缩包.zip')
+//   })

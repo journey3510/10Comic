@@ -2,24 +2,40 @@
   <div id="comiclist">
     <!-- 编辑选项 -->
     <div id="editItem">
-      <van-button
-        type="primary"
-        size="mini"
-        @click="selectAll"
-      >全选</van-button>
+      <div>
 
-      <input v-model="startIndex" type="number" min="1" max=""> - <input type="number" :min="startIndex" :max="endIndex">
+        <van-button
+          type="primary"
+          size="mini"
+          @click="selectAll"
+        >全选</van-button>
+        <van-button
+          type="primary"
+          size="mini"
+          @click="CancelSelect"
+        >取消</van-button>
+      </div>
+
+      <!-- <input v-model="startIndex" type="number" min="1" max=""> - <input type="number" :min="startIndex" :max="endIndex">
       <van-button
         type="primary"
         size="mini"
         @click="scopeSelect"
-      >范围选择</van-button>
+      >范围选择</van-button> -->
+
+      <van-button
+        style="width:80px;"
+        size="mini"
+        round
+        type="primary"
+        @click="downSelectList"
+      >下载</van-button>
     </div>
 
     <!-- <van-divider /> -->
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 15px',height: '10px' }"
-    >文字</van-divider>
+    >章节列表</van-divider>
 
     <!-- 列表为空 -->
     <div v-if="!showSelectList">
@@ -38,22 +54,28 @@
     <div
       v-if="showSelectList"
       id="select-list"
-      v-loading="false"
+      v-loading="selectListLoading"
     >
       <van-cell-group
         style="border-radius: 25px;"
         inset
       >
-        <van-cell
-          v-for="(item,index) in list"
-          :key="index"
-          :title="item.name"
-        >
-          <template #right-icon>
-            <!-- <van-icon  name="search" class="search-icon" /> -->
-            <van-checkbox v-model="item.check" class="selectChapter" icon-size="24px" @click="radioSelect" />
-          </template>
-        </van-cell>
+        <van-checkbox-group ref="checkboxGroup" v-model="selectResult">
+          <van-cell
+            v-for="(item,index) in list"
+            :key="index"
+            :title="item.name"
+          >
+            <template #right-icon>
+              <van-checkbox
+                :name="index"
+                class="selectChapter"
+                icon-size="24px"
+                @click="radioSelect(index)"
+              />
+            </template>
+          </van-cell>
+        </van-checkbox-group>
       </van-cell-group>
     </div>
 
@@ -62,6 +84,9 @@
 
 <script>
 
+import { currentComics } from '@/utils/comics'
+import { Toast } from 'vant'
+
 export default {
   name: 'Table',
   data() {
@@ -69,52 +94,59 @@ export default {
       startIndex: 1,
       endIndex: 10,
 
-      showSelectList: false,
+      list: [],
+      selectResult: [],
+      downResult: [],
 
-      list: [
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true }
-      ]
+      selectListLoading: false,
+      showSelectList: false
+
     }
+  },
+  created() {
+
   },
   methods: {
     selectAll() {
-      this.list.forEach(element => {
-        element.check = true
-      })
+      this.$refs.checkboxGroup.toggleAll(true)
     },
-    radioSelect() {
-      console.log(this.list)
+    CancelSelect() {
+      this.$refs.checkboxGroup.toggleAll(false)
+    },
+
+    radioSelect(index) {
+      console.log('this.selectResult: ', this.selectResult)
     },
     scopeSelect() {
 
     },
-    getSelectList() {
-      this.showSelectList = !this.showSelectList
+    async getSelectList() {
+      this.showSelectList = true
+      this.selectListLoading = true
+      await this.$nextTick()
+      const chapterCssID = currentComics.chapterCssID
+      setTimeout(() => {
+        const dom = document.getElementById(chapterCssID)
+        const urls = dom.querySelectorAll('a')
+        urls.forEach(element => {
+          this.list.push(
+            { name: element.innerText,
+              urls: element.href }
+          )
+        })
+        console.log(this.list)
+        this.selectListLoading = false
+      }, 200)
     },
-    onChange(index) {
-      console.log('index: ', index)
-      // Toast('当前 Swipe 索引：' + index)
+    downSelectList() {
+      if (this.selectResult.length === 0) {
+        Toast('请选择章节')
+        return
+      }
+      this.selectResult.forEach(element => {
+        this.downResult.push(this.list[element])
+      })
+      this.$bus.$emit('selectDown', this.downResult)
     }
   }
 }
@@ -123,19 +155,20 @@ export default {
 <style lang="scss" scoped>
 #comiclist {
   margin-top:  15px;
-  // padding:  15px 15px;
   border-radius: 15px;
   position: relative;
   height: 650px;
 }
 
 #select-list {
-  height: 500px;
+  max-height: 600px;
   overflow-y:auto;
-
 }
 
 #editItem {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 15px;
   padding: 5px;
   display: flex;
   flex-wrap: wrap;

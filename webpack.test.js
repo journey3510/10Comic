@@ -15,7 +15,7 @@ module.exports = merge(common(), {
   optimization: {
     minimize: false
   },
-  devtool: 'inline-source-map',
+  devtool: 'cheap-source-map',
   // 关闭 webpack 的性能提示
   performance: {
     hints: false
