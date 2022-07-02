@@ -34,6 +34,19 @@ export const down = (id, time, name) => {
   })
 }
 
+export const downtest = (id, time, name) => {
+  console.log('开始id', id)
+  return new Promise((resolve) => {
+    let thenum = 0
+    setInterval(() => {
+      thenum++
+    }, 1000)
+    setTimeout(() => {
+      resolve()
+    }, time * 1000)
+  })
+}
+
 export const getChapterLinks = (url) => {
 
 }

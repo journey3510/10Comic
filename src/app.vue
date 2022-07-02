@@ -13,6 +13,7 @@
         :touchable="false"
         style="cursor: default;"
         :duration="5"
+        :initial-swipe="active"
       >
         <!-- :show-indicators="false" -->
         <van-swipe-item class="swipeitem">
@@ -91,7 +92,7 @@ export default {
       AppVersion,
       show: true,
       isHide: false,
-      active: 0
+      active: 2
     }
   },
   computed: {
@@ -105,7 +106,6 @@ export default {
     }
   },
   mounted() {
-    console.clear()
     matchWeb('http://www.kmwu6.com/dddddddd/1379635.html')
   },
   methods: {
@@ -116,7 +116,7 @@ export default {
       this.isHide = !this.isHide
     },
     onChange() {
-      this.$bus.$emit('selectDown', 'X')
+
     }
   }
 }
@@ -128,15 +128,15 @@ export default {
   padding: 0;
 }
 
-  .custom-indicator {
-    position: absolute;
-    height: 700px;
-    right: 5px;
-    bottom: 5px;
-    padding: 2px 5px;
-    font-size: 12px;
-    background: rgba(0, 0, 0, 0.1);
-  }
+.custom-indicator {
+  position: absolute;
+  height: 700px;
+  right: 5px;
+  bottom: 5px;
+  padding: 2px 5px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.1);
+}
 
 // #thebtn {
 //   position: fixed;

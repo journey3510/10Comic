@@ -3,39 +3,75 @@
 
     <van-collapse
       v-model="collapseActiveName"
-      accordion
     >
+      <!-- accordion -->
       <van-collapse-item
-        title="标题1"
+        title="下载中"
         name="1"
       >
         <div id="downlist">
           <div
-            v-for="(item,index) in list"
+            v-for="(item,index) in queue.worker"
             :key="index"
             class="downitem"
           >
+            <div v-if="item !== undefined ">
+              <div class="itemname">
+                <span class="custom-title">{{ item.name }}</span>
+                <van-icon name="down" size="18px" />
+              </div>
+              <van-progress
+                ref="progress"
+                :percentage="item.xx"
+                style="width: 100%;margin-top:5px;"
+                pivot-color="#66ccff"
+                color="linear-gradient(to right, #66ccff22, ##66ccff)"
+              />
+              <van-divider
+                :style="{ margin:'11px 0px', color: '#1989fa', borderColor: '#1989fa', padding: '0 0px',height: '1px' }"
+              />
+            </div>
+          </div>
 
+        </div>
+
+      </van-collapse-item>
+      <van-collapse-item title="待下载" name="2">
+        <div id="downlist">
+
+          <div
+            v-for="(item,index) in queue.list"
+            :key="index"
+            class="downitem"
+          >
             <div class="itemname">
-              <span class="custom-title">{{ item.name }}</span>
+              <span class="custom-title">{{ item[4] }}</span>
               <van-icon name="down" size="18px" />
             </div>
-            <van-progress
-              ref="progress"
-              :percentage="ee"
-              style="width: 100%;margin-top:5px;"
-              pivot-color="#66ccff"
-              color="linear-gradient(to right, #66ccff22, ##66ccff)"
-            />
             <van-divider
               :style="{ margin:'11px 0px', color: '#1989fa', borderColor: '#1989fa', padding: '0 0px',height: '1px' }"
             />
           </div>
         </div>
-
       </van-collapse-item>
-      <van-collapse-item title="标题2" name="2">内容</van-collapse-item>
-      <van-collapse-item title="标题3" name="3">内容</van-collapse-item>
+      <van-collapse-item title="已下载" name="3">
+        <div id="downlist">
+
+          <div
+            v-for="(item,index) in queue.workeredList"
+            :key="index"
+            class="downitem"
+          >
+            <div class="itemname">
+              <span class="custom-title">{{ item }}</span>
+            </div>
+            <van-divider
+              :style="{ margin:'11px 0px', color: '#1989fa', borderColor: '#1989fa', padding: '0 0px',height: '1px' }"
+            />
+          </div>
+
+        </div>
+      </van-collapse-item>
     </van-collapse>
 
   </div>
@@ -43,31 +79,53 @@
 
 <script>
 import Queue from '@/utils/queue'
-import { down, getHtml } from '@/utils/index'
+import { downtest } from '@/utils/index'
 
 export default {
   name: 'Down',
   data() {
     return {
-      ee: 50,
-      collapseActiveName: '1',
-      list: []
+      ee: 20,
+      collapseActiveName: ['1', '2', '3'],
+      list: [],
+      downingList: [],
+      downedList: [],
+      waitingDownList: [
+        [downtest, undefined, 1, 10, 'ds11', 'urllxxxxxxxxxxxxxxxx'],
+        [downtest, undefined, 2, 9, 'ds22', 'urllxxeeeeeeeexx'],
+        [downtest, undefined, 3, 6, 'ds33', 'urllxmmmmmmmmmm'],
+        [downtest, undefined, 4, 15, 'dd44', 'urllxmmmmmmmmmm'],
+        [downtest, undefined, 5, 9, 'dd55', 'urllxmmmmmmmmmm'],
+        [downtest, undefined, 6, 13, 'dd66', 'urllxmmmmmmmmmm']
+      ],
+
+      queue: null
     }
   },
   mounted() {
+    console.clear()
     this.$bus.$on('selectDown', this.downInit)
+    this.downInit(this.waitingDownList)
+  },
+  created() {
+    this.$bus.$emit('selectDown', [])
   },
   methods: {
     downInit(arr) {
       console.log('arr: ', arr)
-      const queue = new Queue(2)
-      queue.addList([
-        [down, undefined, '0001', 3.02, 'ds1'],
-        [down, undefined, '0002', 5, 'ds2'],
-        [down, undefined, '0003', 1, 'ds3']
-      ])
-      console.log('queue: ', queue)
-      queue.run()
+      this.waitingDownList = arr
+
+      this.queue = new Queue(3)
+
+      this.queue.addList(this.waitingDownList)
+      // console.log('queue: ', this.queue)
+      console.log('this.queue.worker[0]: ', this.queue.worker[0])
+      // console.log('this.queue.workeredList: ', this.queue.workeredList)
+      this.queue.run()
+
+      // setTimeout(() => {
+      //   this.queue.pause()
+      // }, 1000)
     }
 
   }
@@ -87,7 +145,7 @@ export default {
   // border: 1px solid black;
   // background-color: #fff;
   border-radius: 15px;
-  border: 1px solid black;
+  // border: 1px solid black;
   overflow-y: auto;
   max-height: 500px;
   // 下载项
