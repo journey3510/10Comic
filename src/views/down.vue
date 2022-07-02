@@ -43,7 +43,7 @@
 
 <script>
 import Queue from '@/utils/queue'
-import { down } from '@/utils/index'
+import { down, getHtml } from '@/utils/index'
 
 export default {
   name: 'Down',
@@ -51,33 +51,15 @@ export default {
     return {
       ee: 50,
       collapseActiveName: '1',
-      list: [
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: false },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 11, check: true },
-        { name: 'xx', check: true },
-        { name: 11, check: true }
-      ]
+      list: []
     }
   },
   mounted() {
-
+    this.$bus.$on('selectDown', this.downInit)
   },
   methods: {
-
-    getSelectList() {
-      this.showSelectList = !this.showSelectList
+    downInit(arr) {
+      console.log('arr: ', arr)
       const queue = new Queue(2)
       queue.addList([
         [down, undefined, '0001', 3.02, 'ds1'],
@@ -87,6 +69,7 @@ export default {
       console.log('queue: ', queue)
       queue.run()
     }
+
   }
 }
 </script>

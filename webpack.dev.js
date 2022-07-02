@@ -7,7 +7,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = merge(common(), {
   mode: 'development',
   target: 'web',
-  devtool: 'inline-source-map',
+  devtool: 'cheap-source-map',
+  // devtool: 'inline-source-map',
   devServer: {
     publicPath: '/',
     contentBase: path.join(__dirname, 'dist'),

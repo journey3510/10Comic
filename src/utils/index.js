@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+// import { Base64 } from 'js-base64'
 /**
  * load style file
  * @param {String} url
@@ -33,18 +34,26 @@ export const down = (id, time, name) => {
   })
 }
 
-//   zip.generateAsync({
-//     type: 'blob',
-//     compression: 'DEFLATE',
-//     compressionOptions: {
-//       level: 9
-//     }
-//   }).then((res) => {
-//     console.log('压缩包: ', res)
-//     saveAs(res, '压缩包.zip')
-//   })
+export const getChapterLinks = (url) => {
 
-export const setValue = (key, val) => {
-  GM_setValue(key, val)
+}
+
+export const getHtml = (url) => {
+  console.log('url: ', url)
+  // responseType: 'text/html'
+  axios({
+    method: 'get',
+    url: url
+  })
+    .then(function(res) {
+      // console.log(res.data)
+      getImg(res.data)
+      // console.log('response: ', response)
+      // resolve()
+    })
+}
+
+const getImg = (context) => {
+
 }
 
