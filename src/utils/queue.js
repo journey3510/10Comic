@@ -28,16 +28,15 @@ export default class Queue {
      * @param { Function } fn: 执行的函数
      * @param { Array<any> } args: 传递给执行函数的参数
      */
-  * executionFunc(index, fn, ...args) {
-    console.log('args: ', args)
+  * executionFunc(index, item) {
     const _this = this
-    yield this.downtest(index, args[1], args[3])
+    yield this.downtest(index, item.name, item.url, item.time, item.imgs)
       .then(function() {
         // 任务执行完毕后，再次分配任务并执行任务
-        _this.worker[index].xx = 100
+        // _this.worker[index].progress = 100
         setTimeout(() => {
           _this.worker[index] = undefined
-          _this.workeredList.push(args[3])
+          _this.workeredList.push(item.name)
           _this.run()
         }, 1000)
       })
@@ -53,21 +52,41 @@ export default class Queue {
     }
   }
 
-  downtest(id, time, name) {
+  addPromise(index, url, time) {
+    return new Promise((reslove, reject) => {
+      const img = new Image()
+      img.src = url
+      img.onload = () => {
+        this.worker[index].currentnum = this.worker[index].currentnum + 1
+        this.worker[index].progress = parseInt(this.worker[index].currentnum / this.worker[index].number * 100)
+        this.worker.push('')
+        this.worker.pop()
+
+        // console.log('this.worker[index][4]: ', this.worker[index][4])
+        // if (this.worker[index][4] === 80) {
+        //   reslove(img)
+
+        //   return
+        // }
+
+        reslove(img)
+        // setTimeout(() => {
+        //   console.log('this.worker[' + index + '].progress: ', this.worker[index])
+        // }, time * 1000)
+      }
+    })
+  }
+
+  downtest(workerId, name, url, time, imgs) {
     return new Promise((resolve) => {
-      const _this = this
-      let thenum = 0
-
-      const pageTimer = setInterval(() => {
-        thenum = thenum + 0.1
-        _this.worker[id].xx = parseInt(thenum / time * 100)
-        console.log('_this.worker[{$id}].xx: ', _this.worker[id].xx)
-      }, 100)
-
-      setTimeout(() => {
-        clearInterval(pageTimer)
+      const que = []
+      for (let i = 0; i < imgs.length; i++) {
+        que.push(this.addPromise(workerId, imgs[i], time))
+      }
+      Promise.all(que).then(res => {
+        console.log(res)
         resolve()
-      }, (time + 1) * 1000)
+      })
     })
   }
 
@@ -82,15 +101,18 @@ export default class Queue {
       const len = this.list.length
 
       if (!this.worker[i] && len > 0) {
+        console.log('this.worker[i]: ', this.worker[i])
         // 需要执行的任务
         const worker = {
-          name: this.list[len - 1][4],
-          number: 20,
-          time: this.list[len - 1][3],
-          xx: 4,
-          func: this.executionFunc(i, ...this.list[len - 1])
+          name: this.list[len - 1].name,
+          currentnum: 0,
+          number: this.list[len - 1].imgs.length,
+          time: this.list[len - 1].time,
+          progress: 0,
+          func: this.executionFunc(i, this.list[len - 1])
         }
         this.worker[i] = worker
+
         runIndex.push(i)
 
         // 从任务队列内删除任务

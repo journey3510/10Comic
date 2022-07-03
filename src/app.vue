@@ -1,10 +1,7 @@
 <template>
   <div class="app">
-
-    <!-- <div class="app-info">Hello {{ AppName }} v{{ AppVersion }} !</div> -->
     <div class="card" :class="{ 'card--hide': isHide }">
-
-      <van-nav-bar id="border-top-set" title="标题" />
+      <van-nav-bar id="border-top-set" :title="titles[this.active]" />
 
       <van-swipe
         ref="swipe"
@@ -15,7 +12,6 @@
         :duration="5"
         :initial-swipe="active"
       >
-        <!-- :show-indicators="false" -->
         <van-swipe-item class="swipeitem">
           <Home />
         </van-swipe-item>
@@ -31,7 +27,6 @@
       </van-swipe>
 
       <div class="app-container ">
-        <!-- class="van-hairline--bottom" -->
         <van-tabbar
           id="border-bottom-set"
           v-model="active"
@@ -77,14 +72,14 @@ import Home from '@/views/home.vue'
 import Table from '@/views/table.vue'
 import Setting from '@/views/setting.vue'
 import Down from '@/views/down.vue'
-import { AppName, AppVersion } from './config'
 
+import { AppName, AppVersion } from './config'
 import { matchWeb } from './utils/comics'
 
 export default {
   name: 'App',
   components: {
-    Home, Table, Setting, Down
+    Home, Table, Down, Setting
   },
   data() {
     return {
@@ -92,7 +87,8 @@ export default {
       AppVersion,
       show: true,
       isHide: false,
-      active: 2
+      active: 2,
+      titles: ['漫画网站', '选择章节', '下载', '设置']
     }
   },
   computed: {
