@@ -6,7 +6,7 @@
         :key="index"
         :title="item.name"
         is-link
-        :url="item.url"
+        @click="jump(item.url)"
       />
     </van-cell-group>
   </div>
@@ -25,6 +25,13 @@ export default {
   },
   mounted() {
     this.comicList = getWebList()
+  },
+  methods: {
+    jump(url) {
+      console.log('url: ', url)
+      // window.open(url, '_blank')
+      window.location.href = url
+    }
   }
 }
 </script>

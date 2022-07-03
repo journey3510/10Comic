@@ -2,6 +2,7 @@
 const comicsWebInfo = [
   {
     domain: 'www.kmwu6.com',
+    homepage: 'http://www.kmwu6.com/',
     webName: '酷漫屋6',
     reg: /g/,
     chapterCssID: 'detail-list-select-1',
@@ -18,6 +19,7 @@ const comicsWebInfo = [
   },
   {
     domain: 'www.kmwu5.com',
+    homepage: '',
     webName: '酷漫屋5',
     reg: /g/,
     chapterCssID: '',
@@ -32,7 +34,7 @@ export const getWebList = () => {
   comicsWebInfo.forEach(element => {
     list.push({
       name: element.webName,
-      url: element.domain
+      url: element.homepage
     })
   })
   return list
