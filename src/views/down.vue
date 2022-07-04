@@ -82,7 +82,6 @@
 
 <script>
 import Queue from '@/utils/queue'
-import { downtest } from '@/utils/index'
 
 export default {
   name: 'Down',
@@ -120,7 +119,7 @@ export default {
           imgs: [
             'https://i0.hdslb.com/bfs/new_dyn/2d4a8def12be9eefa3983095f2ea6f4336081646.jpg@1139w.webp',
             'https://i0.hdslb.com/bfs/album/bd8e36b1f93e4efb51ae1544a04b8d2eb559819d.jpg@1139w.webp',
-            'https://w.wallhaven.cc/full/k7/wallhaven-k7q9m7.png',
+            // 'https://w.wallhaven.cc/full/k7/wallhaven-k7q9m7.png',
             'https://i0.hdslb.com/bfs/album/4fe2af34cae57a5cb742fee6c1a647237188c298.jpg@1139w.webp',
             'https://i0.hdslb.com/bfs/album/5b1854ff6a03889e1b998fb445c97a2b1d2cb84b.jpg@1139w.webp',
             'https://i0.hdslb.com/bfs/album/0785528d75711812f8b23fdd4718cc44a10b9812.jpg@1139w.webp',
@@ -139,7 +138,7 @@ export default {
             'https://i0.hdslb.com/bfs/album/4fe2af34cae57a5cb742fee6c1a647237188c298.jpg@1139w.webp',
             'https://i0.hdslb.com/bfs/album/5b1854ff6a03889e1b998fb445c97a2b1d2cb84b.jpg@1139w.webp',
             'https://i0.hdslb.com/bfs/album/0785528d75711812f8b23fdd4718cc44a10b9812.jpg@1139w.webp',
-            'https://w.wallhaven.cc/full/y8/wallhaven-y8622k.jpg',
+
             'https://i0.hdslb.com/bfs/new_dyn/16cf84189faa58cfae28cd389a627f8d36081646.jpg@1139w.webp',
             'https://i0.hdslb.com/bfs/new_dyn/7e0e9ae370e7dcd8a1dcbf837a1a01bb36081646.jpg@1139w.webp'
           ]
@@ -181,18 +180,16 @@ export default {
           time: 3,
           progress: 20,
           imgs: [
-            'https://images2.alphacoders.com/526/thumb-1920-526200.jpg',
-            'https://w.wallhaven.cc/full/9m/wallhaven-9mkydk.jpg'
+            'https://i0.hdslb.com/bfs/new_dyn/16cf84189faa58cfae28cd389a627f8d36081646.jpg@1139w.webp',
+
+            'https://images2.alphacoders.com/526/thumb-1920-526200.jpg'
+            // 'https://w.wallhaven.cc/full/9m/wallhaven-9mkydk.jpg'
 
           ]
         }
       ],
-      queue: {
-        worker: [
-          {}
-        ]
-      },
-      percentage: 5
+      queue: {}
+
     }
   },
   watch: {
@@ -207,37 +204,19 @@ export default {
   mounted() {
     console.clear()
     this.$bus.$on('selectDown', this.downInit)
+
     this.downInit(this.waitingDownList)
   },
   created() {
   },
   methods: {
     downInit(arr) {
-      // this.reset()
       console.log('arr: ', arr)
       this.list = arr
       this.queue = new Queue(2)
 
       this.queue.addList(this.list)
       this.queue.run()
-
-      // setInterval(() => {
-      //   console.log(' this.queue: ', this.queue)
-      // }, 1000)
-
-      // setTimeout(() => {
-      //   this.queue.pause()
-      // }, 1000)
-    },
-
-    reset() {
-      const a = setInterval(() => {
-        this.percentage += 10
-      }, 10)
-
-      setTimeout(() => {
-        clearInterval(a)
-      }, 5000)
     }
 
   }
