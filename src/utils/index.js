@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { currentComics } from '@/utils/comics'
+
 // import { Base64 } from 'js-base64'
 /**
  * load style file
@@ -34,36 +36,24 @@ export const down = (id, time, name) => {
   })
 }
 
-export const downtest = (id, time, name) => {
-  console.log('开始id', id)
-  return new Promise((resolve) => {
-    let thenum = 0
-    setInterval(() => {
-      thenum++
-    }, 1000)
-    setTimeout(() => {
-      resolve()
-    }, time * 1000)
-  })
-}
-
 export const getChapterLinks = (url) => {
 
 }
 
 export const getHtml = (url) => {
   console.log('url: ', url)
-  // responseType: 'text/html'
-  axios({
-    method: 'get',
-    url: url
-  })
-    .then(function(res) {
-      // console.log(res.data)
-      getImg(res.data)
-      // console.log('response: ', response)
-      // resolve()
+  return new Promise((resolve, reject) => {
+    axios({
+      method: 'get',
+      url: url
     })
+    // responseType: 'text/html'
+      .then(function(res) {
+        // console.log(res.data)
+        const imgs = currentComics.getImgs(res.data)
+        resolve(imgs)
+      })
+  })
 }
 
 const getImg = (context) => {

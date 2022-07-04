@@ -1,8 +1,7 @@
 import JSZip from 'jszip'
-// import saveAs from 'file-saver'
-import axios from 'axios'
-
-const zip = new JSZip()
+// import axios from 'axios'
+import { currentComics } from '@/utils/comics'
+import { getHtml } from '@/utils/index'
 
 export default class Queue {
   constructor(workerLen) {
@@ -15,6 +14,15 @@ export default class Queue {
 
   pause() {
     this.statu = 0
+  }
+
+  downloadFile(fileName, content) {
+    const a = document.createElement('a')
+    const url = window.URL.createObjectURL(content)
+    a.href = url
+    a.download = fileName
+    a.click()
+    window.URL.revokeObjectURL(url)
   }
 
   start() {
@@ -33,7 +41,7 @@ export default class Queue {
     yield this.downtest(index, item.name, item.url, item.time, item.imgs)
       .then(function() {
         // 任务执行完毕后，再次分配任务并执行任务
-        // _this.worker[index].progress = 100
+
         setTimeout(() => {
           _this.worker[index] = undefined
           _this.workeredList.push(item.name)
@@ -53,26 +61,27 @@ export default class Queue {
   }
 
   addPromise(index, url, time) {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
       const img = new Image()
       img.src = url
+      img.setAttribute('crossOrigin', 'Anonymous')
       img.onload = () => {
         this.worker[index].currentnum = this.worker[index].currentnum + 1
         this.worker[index].progress = parseInt(this.worker[index].currentnum / this.worker[index].number * 100)
         this.worker.push('')
         this.worker.pop()
 
-        // console.log('this.worker[index][4]: ', this.worker[index][4])
-        // if (this.worker[index][4] === 80) {
-        //   reslove(img)
-
-        //   return
-        // }
-
-        reslove(img)
-        // setTimeout(() => {
-        //   console.log('this.worker[' + index + '].progress: ', this.worker[index])
-        // }, time * 1000)
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d')
+        canvas.width = img.width
+        canvas.height = img.height
+        context.drawImage(img, 0, 0, img.width, img.height)
+        canvas.toBlob(imgblob => {
+          resolve(imgblob)
+        })
+      }
+      img.onerror = () => {
+        resolve(1)
       }
     })
   }
@@ -84,8 +93,27 @@ export default class Queue {
         que.push(this.addPromise(workerId, imgs[i], time))
       }
       Promise.all(que).then(res => {
-        console.log(res)
-        resolve()
+        console.log('res: ', res)
+        const zip = new JSZip()
+
+        res.forEach((imgblob, index) => {
+          if (imgblob === 1) {
+            return
+          }
+          zip.folder(name).file(index + '.jpg', imgblob, { blob: true })
+        })
+
+        zip.generateAsync({
+          type: 'blob',
+          compression: 'DEFLATE',
+          compressionOptions: {
+            level: 9
+          }
+        }).then((zipblob) => {
+          resolve()
+          return
+          this.downloadFile(name, zipblob)
+        })
       })
     })
   }
@@ -102,12 +130,14 @@ export default class Queue {
 
       if (!this.worker[i] && len > 0) {
         console.log('this.worker[i]: ', this.worker[i])
+        const imgs = getHtml()
+
         // 需要执行的任务
         const worker = {
           name: this.list[len - 1].name,
           currentnum: 0,
           number: this.list[len - 1].imgs.length,
-          time: this.list[len - 1].time,
+          imgs: imgs,
           progress: 0,
           func: this.executionFunc(i, this.list[len - 1])
         }
@@ -129,14 +159,3 @@ export default class Queue {
     }
   }
 }
-
-//   zip.generateAsync({
-//     type: 'blob',
-//     compression: 'DEFLATE',
-//     compressionOptions: {
-//       level: 9
-//     }
-//   }).then((res) => {
-//     console.log('压缩包: ', res)
-//     saveAs(res, '压缩包.zip')
-//   })
