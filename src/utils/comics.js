@@ -14,7 +14,7 @@ const comicsWebInfo = [
       // eslint-disable-next-line no-eval
       imgstr = eval(imgstr).toString()
       const imgArray = imgstr.match(/https:(\S*)jpg/g)
-      console.log('imgArray: ', imgArray)
+      return imgArray
     }
   },
   {

@@ -10,8 +10,12 @@ import 'vant/lib/index.css'
 
 const id = `app_vue_${Date.now()}`
 const root = document.createElement('div')
+const root2 = document.createElement('div')
 root.id = id
+root2.id = 'xxxxxxxxxxxxx'
+root2.style = 'height:200px;width:600px;'
 document.body.appendChild(root)
+document.body.appendChild(root2)
 
 Vue.prototype.$bus = new Vue()
 

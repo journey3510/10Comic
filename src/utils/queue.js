@@ -1,6 +1,6 @@
 import JSZip from 'jszip'
-// import axios from 'axios'
-import { currentComics } from '@/utils/comics'
+import axios from 'axios'
+// import { currentComics } from '@/utils/comics'
 import { getHtml } from '@/utils/index'
 
 export default class Queue {
@@ -36,17 +36,22 @@ export default class Queue {
      * @param { Function } fn: 执行的函数
      * @param { Array<any> } args: 传递给执行函数的参数
      */
-  * executionFunc(index, item) {
+  * executionFunc(index) {
+    const name = this.worker[index].name
+    const imgs = this.worker[index].imgs
+    // const imgs = [
+    //   'https://i0.hdslb.com/bfs/album/bd8e36b1f93e4efb51ae1544a04b8d2eb559819d.jpg@1139w.webp',
+    //   'https://i0.hdslb.com/bfs/album/4fe2af34cae57a5cb742fee6c1a647237188c298.jpg@1139w.webp']
+
     const _this = this
-    yield this.downtest(index, item.name, item.url, item.time, item.imgs)
+    yield this.downtest(index, name, imgs)
       .then(function() {
         // 任务执行完毕后，再次分配任务并执行任务
-
         setTimeout(() => {
           _this.worker[index] = undefined
-          _this.workeredList.push(item.name)
+          _this.workeredList.push(name)
           _this.run()
-        }, 1000)
+        }, 500)
       })
   }
 
@@ -60,16 +65,21 @@ export default class Queue {
     }
   }
 
-  addPromise(index, url, time) {
+  addPromise(index, imgurl) {
     return new Promise((resolve, reject) => {
       const img = new Image()
-      img.src = url
+      img.src = imgurl
+      //  + '?time=' + new Date().valueOf()
+
       img.setAttribute('crossOrigin', 'Anonymous')
+
       img.onload = () => {
         this.worker[index].currentnum = this.worker[index].currentnum + 1
         this.worker[index].progress = parseInt(this.worker[index].currentnum / this.worker[index].number * 100)
         this.worker.push('')
         this.worker.pop()
+
+        resolve(img)
 
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
@@ -81,27 +91,65 @@ export default class Queue {
         })
       }
       img.onerror = () => {
-        resolve(1)
+        this.worker[index].currentnum = this.worker[index].currentnum + 1
+        this.worker[index].progress = parseInt(this.worker[index].currentnum / this.worker[index].number * 100)
+        this.worker.push('')
+        this.worker.pop()
+        console.log('img: ', img)
+        img.removeAttribute('crossOrigin')
+
+        const dom = document.getElementById('xxxxxxxxxxxxx')
+        // dom.innerHTML = img
+        // const img = document.createElement('img')
+        // img.src = imgurl
+
+        dom.appendChild(img)
+
+        resolve(img)
+
+        // const canvas = document.createElement('canvas')
+        // const context = canvas.getContext('2d')
+        // canvas.width = img.width
+        // canvas.height = img.height
+        // context.drawImage(img, 0, 0, img.width, img.height)
+        // canvas.toBlob(imgblob => {
+        //   resolve(imgblob)
+        // })
       }
+
+      // axios({
+      //   method: 'get',
+      //   url: imgurl
+      // })
+      // // responseType: 'blob'
+      // // responseType: 'text/html'
+      //   .then(function(res) {
+      //     console.log(res)
+      //     resolve()
+      //     // const imgs = currentComics.getImgs(res.data)
+      //     // console.log('imgs: ', imgs)
+      //     // resolve(imgs)
+      //   })
     })
   }
 
-  downtest(workerId, name, url, time, imgs) {
+  downtest(workerId, name, imgs) {
     return new Promise((resolve) => {
       const que = []
       for (let i = 0; i < imgs.length; i++) {
-        que.push(this.addPromise(workerId, imgs[i], time))
+        que.push(this.addPromise(workerId, imgs[i]))
       }
       Promise.all(que).then(res => {
-        console.log('res: ', res)
+        console.log('allres: ', res)
         const zip = new JSZip()
 
         res.forEach((imgblob, index) => {
           if (imgblob === 1) {
             return
           }
-          zip.folder(name).file(index + '.jpg', imgblob, { blob: true })
+          zip.file(index + '.jpg', imgblob, { blob: true })
         })
+        console.log('zip: ', zip)
 
         zip.generateAsync({
           type: 'blob',
@@ -110,16 +158,17 @@ export default class Queue {
             level: 9
           }
         }).then((zipblob) => {
+          console.log('zipblob: ', zipblob)
+          // return
+          // this.downloadFile(name, zipblob)
           resolve()
-          return
-          this.downloadFile(name, zipblob)
         })
       })
     })
   }
 
   // 分配并执行任务
-  run() {
+  async run() {
     if (this.statu !== 1) {
       return
     }
@@ -130,16 +179,17 @@ export default class Queue {
 
       if (!this.worker[i] && len > 0) {
         console.log('this.worker[i]: ', this.worker[i])
-        const imgs = getHtml()
+        const imgs = await getHtml(this.list[len - 1].url)
+        // console.log('imgs: ', imgs)
 
         // 需要执行的任务
         const worker = {
           name: this.list[len - 1].name,
           currentnum: 0,
-          number: this.list[len - 1].imgs.length,
+          number: imgs.length,
           imgs: imgs,
           progress: 0,
-          func: this.executionFunc(i, this.list[len - 1])
+          func: this.executionFunc(i)
         }
         this.worker[i] = worker
 

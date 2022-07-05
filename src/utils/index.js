@@ -2,7 +2,6 @@ import axios from 'axios'
 
 import { currentComics } from '@/utils/comics'
 
-// import { Base64 } from 'js-base64'
 /**
  * load style file
  * @param {String} url
@@ -40,7 +39,7 @@ export const getChapterLinks = (url) => {
 
 }
 
-export const getHtml = (url) => {
+export const getHtml = async(url) => {
   console.log('url: ', url)
   return new Promise((resolve, reject) => {
     axios({
@@ -51,6 +50,7 @@ export const getHtml = (url) => {
       .then(function(res) {
         // console.log(res.data)
         const imgs = currentComics.getImgs(res.data)
+        console.log('imgs: ', imgs)
         resolve(imgs)
       })
   })

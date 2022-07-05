@@ -92,103 +92,8 @@ export default {
       list: [1, 2, 2, 2, 2, 2, 2, 2],
       downingList: [],
       downedList: [],
-      waitingDownList:
-      [
-        {
-          'name': '第826话 星域之门（下）（P）',
-          'urls': 'http://www.kmwu6.com/16177/1045956.html',
-          time: 5,
-          progress: 20,
-          imgs: [
-
-            'https://i0.hdslb.com/bfs/album/bd8e36b1f93e4efb51ae1544a04b8d2eb559819d.jpg@1139w.webp',
-
-            'https://i0.hdslb.com/bfs/album/4fe2af34cae57a5cb742fee6c1a647237188c298.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/5b1854ff6a03889e1b998fb445c97a2b1d2cb84b.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/0785528d75711812f8b23fdd4718cc44a10b9812.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/37dc52ecff948e6a71ae45c642f598b87766a2fb.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/new_dyn/16cf84189faa58cfae28cd389a627f8d36081646.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/new_dyn/7e0e9ae370e7dcd8a1dcbf837a1a01bb36081646.jpg@1139w.webp'
-          ]
-        },
-        {
-          'name': '第825话 星域之门（上）（P）',
-          'urls': 'http://www.kmwu6.com/16177/1045955.html',
-          time: 6,
-          progress: 20,
-          imgs: [
-            'https://i0.hdslb.com/bfs/new_dyn/2d4a8def12be9eefa3983095f2ea6f4336081646.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/bd8e36b1f93e4efb51ae1544a04b8d2eb559819d.jpg@1139w.webp',
-            // 'https://w.wallhaven.cc/full/k7/wallhaven-k7q9m7.png',
-            'https://i0.hdslb.com/bfs/album/4fe2af34cae57a5cb742fee6c1a647237188c298.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/5b1854ff6a03889e1b998fb445c97a2b1d2cb84b.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/0785528d75711812f8b23fdd4718cc44a10b9812.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/37dc52ecff948e6a71ae45c642f598b87766a2fb.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/new_dyn/16cf84189faa58cfae28cd389a627f8d36081646.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/new_dyn/7e0e9ae370e7dcd8a1dcbf837a1a01bb36081646.jpg@1139w.webp'
-          ]
-        },
-        {
-          'name': '1 误会？（下）（P）',
-          'urls': 'http://www.kmwu6.com/16177/1041746.html',
-          time: 4,
-          progress: 20,
-          imgs: [
-            'https://i0.hdslb.com/bfs/new_dyn/2d4a8def12be9eefa3983095f2ea6f4336081646.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/4fe2af34cae57a5cb742fee6c1a647237188c298.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/5b1854ff6a03889e1b998fb445c97a2b1d2cb84b.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/0785528d75711812f8b23fdd4718cc44a10b9812.jpg@1139w.webp',
-
-            'https://i0.hdslb.com/bfs/new_dyn/16cf84189faa58cfae28cd389a627f8d36081646.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/new_dyn/7e0e9ae370e7dcd8a1dcbf837a1a01bb36081646.jpg@1139w.webp'
-          ]
-        },
-        {
-          'name': '2 星域之门（下）（P）',
-          'urls': 'http://www.kmwu6.com/16177/1045956.html',
-          time: 5,
-          progress: 20,
-          imgs: [
-            'https://i0.hdslb.com/bfs/new_dyn/2d4a8def12be9eefa3983095f2ea6f4336081646.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/bd8e36b1f93e4efb51ae1544a04b8d2eb559819d.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/new_dyn/e85b85af2726b734dbb9ef1d97e664f036081646.jpg@1139w.webp',
-            'https://w.wallhaven.cc/full/k7/wallhaven-k7v9yq.png',
-            'https://i0.hdslb.com/bfs/album/5b1854ff6a03889e1b998fb445c97a2b1d2cb84b.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/0785528d75711812f8b23fdd4718cc44a10b9812.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/album/37dc52ecff948e6a71ae45c642f598b87766a2fb.jpg@1139w.webp'
-
-          ]
-        },
-        {
-          'name': '3 星域之门（上）（P）',
-          'urls': 'http://www.kmwu6.com/16177/1045955.html',
-          time: 2,
-          progress: 20,
-          imgs: [
-            'https://i0.hdslb.com/bfs/new_dyn/2d4a8def12be9eefa3983095f2ea6f4336081646.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/new_dyn/16cf84189faa58cfae28cd389a627f8d36081646.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/new_dyn/16cf84189faa58cfae28cd389a627f8d36081646.jpg@1139w.webp',
-            'https://i0.hdslb.com/bfs/new_dyn/16cf84189faa58cfae28cd389a627f8d36081646.jpg@1139w.webp',
-            'https://w.wallhaven.cc/full/pk/wallhaven-pkgkkp.png',
-
-            'https://i0.hdslb.com/bfs/new_dyn/7e0e9ae370e7dcd8a1dcbf837a1a01bb36081646.jpg@1139w.webp'
-          ]
-        },
-        {
-          'name': '第824话 误会？（下）（P）',
-          'urls': 'http://www.kmwu6.com/16177/1041746.html',
-          time: 3,
-          progress: 20,
-          imgs: [
-            'https://i0.hdslb.com/bfs/new_dyn/16cf84189faa58cfae28cd389a627f8d36081646.jpg@1139w.webp',
-
-            'https://images2.alphacoders.com/526/thumb-1920-526200.jpg'
-            // 'https://w.wallhaven.cc/full/9m/wallhaven-9mkydk.jpg'
-
-          ]
-        }
-      ],
-      queue: {}
+      waitingDownList: [],
+      queue: []
 
     }
   },
@@ -205,17 +110,29 @@ export default {
     console.clear()
     this.$bus.$on('selectDown', this.downInit)
 
-    this.downInit(this.waitingDownList)
+    // this.downInit([{
+    //   'name': '第780回（P）',
+    //   'url': 'http://www.kmwu6.com/16177/1045956.html'
+    // }])
   },
   created() {
   },
   methods: {
+    addQueue() {
+
+    },
+
     downInit(arr) {
       console.log('arr: ', arr)
-      this.list = arr
-      this.queue = new Queue(2)
+      // return
+      if (this.queue.length === 0) {
+        console.log(22)
+        this.queue = new Queue(2)
+      }
+      this.queue.addList(arr)
+      // this.list = arr
 
-      this.queue.addList(this.list)
+      // this.queue.addList(this.waitingDownList)
       this.queue.run()
     }
 

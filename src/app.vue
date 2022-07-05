@@ -101,8 +101,11 @@ export default {
       this.$refs.swipe.swipeTo(val)
     }
   },
-  mounted() {
+  created() {
     matchWeb('http://www.kmwu6.com/dddddddd/1379635.html')
+  },
+  mounted() {
+    this.$bus.$on('changTab', (val) => { this.active = val })
   },
   methods: {
     showContext() {

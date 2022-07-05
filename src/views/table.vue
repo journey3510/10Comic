@@ -2,8 +2,8 @@
   <div id="comiclist">
     <!-- 编辑选项 -->
     <div id="editItem">
-      <div>
 
+      <div>
         <van-button
           type="primary"
           size="mini"
@@ -131,10 +131,9 @@ export default {
         urls.forEach(element => {
           this.list.push(
             { name: element.innerText,
-              urls: element.href }
+              url: element.href }
           )
         })
-        console.log(this.list)
         this.selectListLoading = false
       }, 200)
     },
@@ -147,6 +146,8 @@ export default {
         this.downResult.push(this.list[element])
       })
       this.$bus.$emit('selectDown', this.downResult)
+      this.$bus.$emit('changTab', 2)
+      this.downResult = []
     }
   }
 }
