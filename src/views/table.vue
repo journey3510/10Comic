@@ -7,11 +7,13 @@
         <van-button
           type="primary"
           size="mini"
+          :disabled="!showSelectList"
           @click="selectAll"
         >全选</van-button>
         <van-button
           type="primary"
           size="mini"
+          :disabled="!showSelectList"
           @click="CancelSelect"
         >取消</van-button>
       </div>
@@ -28,6 +30,7 @@
         size="mini"
         round
         type="primary"
+        :disabled="!showSelectList"
         @click="downSelectList"
       >下载</van-button>
     </div>
@@ -39,15 +42,23 @@
 
     <!-- 列表为空 -->
     <div v-if="!showSelectList">
-      <van-empty description="描述文字">
+      <van-empty description="漫画章节">
         <van-button
           style="width:120px;"
           round
           type="primary"
           class="bottom-button"
+          :disabled="comicName === '------'"
           @click="getSelectList"
         > 加载 </van-button>
+
       </van-empty>
+
+      <van-cell-group style="width: 280px;margin: 20px auto;" inset>
+        <van-cell title="网站" :value="webname" />
+        <van-cell title="漫画" :value="comicName" />
+      </van-cell-group>
+
     </div>
 
     <!-- 展示列表 -->
@@ -99,14 +110,30 @@ export default {
       downResult: [],
 
       selectListLoading: false,
-      showSelectList: false
+      showSelectList: false,
+      currentComics: '',
+
+      webname: '未匹配',
+      comicName: '------',
+      chapterReg: ''
 
     }
   },
-  created() {
-
+  mounted() {
+    this.getInfo()
   },
   methods: {
+    getInfo() {
+      // console.log(currentComics)
+      this.currentComics = currentComics
+      if (currentComics === null) {
+        return
+      }
+      const comicNameCss = this.currentComics.comicNameCss
+      this.webname = currentComics.webName
+      this.comicName = document.querySelector(comicNameCss).innerText
+      this.chapterReg = currentComics.reg
+    },
     selectAll() {
       this.$refs.checkboxGroup.toggleAll(true)
     },
@@ -124,9 +151,11 @@ export default {
       this.showSelectList = true
       this.selectListLoading = true
       await this.$nextTick()
-      const chapterCssID = currentComics.chapterCssID
+      const chapterCss = currentComics.chapterCss
       setTimeout(() => {
-        const dom = document.getElementById(chapterCssID)
+        const dom = document.querySelector(chapterCss)
+        console.log('dom: ', dom)
+
         const urls = dom.querySelectorAll('a')
         urls.forEach(element => {
           this.list.push(

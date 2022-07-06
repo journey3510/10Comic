@@ -20,7 +20,7 @@
                 <span class="custom-title">{{ item.name }}</span>
                 <van-icon name="down" size="18px" />
               </div>
-              <!-- :percentage="item.progress" -->
+
               <div>
                 {{ queue.worker[index][4] }}
               </div>
@@ -32,7 +32,7 @@
                 color="linear-gradient(to right, #66ccff22, ##66ccff)"
               />
               <van-divider
-                :style="{ margin:'11px 0px', color: '#1989fa', borderColor: '#1989fa', padding: '0 0px',height: '1px' }"
+                :style="{ margin:'11px 0px', padding: '0 0px',height: '1px' }"
               />
             </div>
           </div>
@@ -42,7 +42,6 @@
       </van-collapse-item>
       <van-collapse-item title="待下载" name="2">
         <div id="downlist">
-
           <div
             v-for="(item,index) in queue.list"
             :key="index"
@@ -52,14 +51,13 @@
               <span class="custom-title">{{ item.name }}</span>
             </div>
             <van-divider
-              :style="{ margin:'11px 0px', color: '#1989fa', borderColor: '#1989fa', padding: '0 0px',height: '1px' }"
+              :style="{ margin:'11px 0px', padding: '0 0px',height: '1px' }"
             />
           </div>
         </div>
       </van-collapse-item>
       <van-collapse-item title="已下载" name="3">
         <div id="downlist">
-
           <div
             v-for="(item,index) in queue.workeredList"
             :key="index"
@@ -69,10 +67,9 @@
               <span class="custom-title">{{ item }}</span>
             </div>
             <van-divider
-              :style="{ margin:'11px 0px', color: '#1989fa', borderColor: '#1989fa', padding: '0 0px',height: '1px' }"
+              :style="{ margin:'11px 0px', padding: '0 0px',height: '1px' }"
             />
           </div>
-
         </div>
       </van-collapse-item>
     </van-collapse>
@@ -87,24 +84,12 @@ export default {
   name: 'Down',
   data() {
     return {
-      ee: 20,
       collapseActiveName: ['1', '2', '3'],
-      list: [1, 2, 2, 2, 2, 2, 2, 2],
-      downingList: [],
-      downedList: [],
-      waitingDownList: [],
       queue: []
-
     }
   },
   watch: {
-    data1: {
-      handler(newName, oldName) {
-        console.log('obj.a changed')
-      }
-      // immediate: true
-      // deep: true
-    }
+
   },
   mounted() {
     console.clear()
@@ -118,10 +103,6 @@ export default {
   created() {
   },
   methods: {
-    addQueue() {
-
-    },
-
     downInit(arr) {
       console.log('arr: ', arr)
       // return
@@ -130,9 +111,6 @@ export default {
         this.queue = new Queue(2)
       }
       this.queue.addList(arr)
-      // this.list = arr
-
-      // this.queue.addList(this.waitingDownList)
       this.queue.run()
     }
 
@@ -143,17 +121,15 @@ export default {
 <style lang="scss" scoped>
 #downcontext {
   margin: 15px 15px;
+  max-height: 680px;
   border-radius: 15px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 #downlist {
   margin: 10px 0px;
   padding: 5px 5px;
-  // border: 1px solid black;
-  // background-color: #fff;
   border-radius: 15px;
-  // border: 1px solid black;
   overflow-y: auto;
   max-height: 500px;
   // 下载项
