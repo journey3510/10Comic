@@ -3,6 +3,7 @@ import axios from 'axios'
 // import { currentComics } from '@/utils/comics'
 import { getHtml } from '@/utils/index'
 
+//
 export default class Queue {
   constructor(workerLen) {
     this.workerLen = workerLen || 3 // 同时执行的任务数
@@ -39,10 +40,6 @@ export default class Queue {
   * executionFunc(index) {
     const name = this.worker[index].name
     const imgs = this.worker[index].imgs
-    // const imgs = [
-    //   'https://i0.hdslb.com/bfs/album/bd8e36b1f93e4efb51ae1544a04b8d2eb559819d.jpg@1139w.webp',
-    //   'https://i0.hdslb.com/bfs/album/4fe2af34cae57a5cb742fee6c1a647237188c298.jpg@1139w.webp']
-
     const _this = this
     yield this.downtest(index, name, imgs)
       .then(function() {
@@ -67,69 +64,26 @@ export default class Queue {
 
   addPromise(index, imgurl) {
     return new Promise((resolve, reject) => {
-      const img = new Image()
-      img.src = imgurl
-      //  + '?time=' + new Date().valueOf()
+      this.worker[index].currentnum = this.worker[index].currentnum + 1
+      this.worker[index].progress = parseInt(this.worker[index].currentnum / this.worker[index].number * 100)
+      this.worker.push('')
+      this.worker.pop()
 
-      img.setAttribute('crossOrigin', 'Anonymous')
-
-      img.onload = () => {
-        this.worker[index].currentnum = this.worker[index].currentnum + 1
-        this.worker[index].progress = parseInt(this.worker[index].currentnum / this.worker[index].number * 100)
-        this.worker.push('')
-        this.worker.pop()
-
-        resolve(img)
-
-        const canvas = document.createElement('canvas')
-        const context = canvas.getContext('2d')
-        canvas.width = img.width
-        canvas.height = img.height
-        context.drawImage(img, 0, 0, img.width, img.height)
-        canvas.toBlob(imgblob => {
-          resolve(imgblob)
-        })
-      }
-      img.onerror = () => {
-        this.worker[index].currentnum = this.worker[index].currentnum + 1
-        this.worker[index].progress = parseInt(this.worker[index].currentnum / this.worker[index].number * 100)
-        this.worker.push('')
-        this.worker.pop()
-        console.log('img: ', img)
-        img.removeAttribute('crossOrigin')
-
-        const dom = document.getElementById('xxxxxxxxxxxxx')
-        // dom.innerHTML = img
-        // const img = document.createElement('img')
-        // img.src = imgurl
-
-        dom.appendChild(img)
-
-        resolve(img)
-
-        // const canvas = document.createElement('canvas')
-        // const context = canvas.getContext('2d')
-        // canvas.width = img.width
-        // canvas.height = img.height
-        // context.drawImage(img, 0, 0, img.width, img.height)
-        // canvas.toBlob(imgblob => {
-        //   resolve(imgblob)
-        // })
-      }
-
-      // axios({
-      //   method: 'get',
-      //   url: imgurl
-      // })
-      // // responseType: 'blob'
-      // // responseType: 'text/html'
-      //   .then(function(res) {
-      //     console.log(res)
-      //     resolve()
-      //     // const imgs = currentComics.getImgs(res.data)
-      //     // console.log('imgs: ', imgs)
-      //     // resolve(imgs)
-      //   })
+      // eslint-disable-next-line no-undef
+      GM_xmlhttpRequest({
+        method: 'get',
+        url: imgurl,
+        responseType: 'blob',
+        onload: function(gmres) {
+          resolve(gmres.response)
+        },
+        onerror: function(e) {
+          console.log(e)
+        },
+        ontimeout: function() {
+          console.log()
+        }
+      })
     })
   }
 
@@ -147,7 +101,7 @@ export default class Queue {
           if (imgblob === 1) {
             return
           }
-          zip.file(index + '.jpg', imgblob, { blob: true })
+          zip.file(parseInt(index + 1) + '.jpg', imgblob, { blob: true })
         })
         console.log('zip: ', zip)
 
@@ -158,10 +112,10 @@ export default class Queue {
             level: 9
           }
         }).then((zipblob) => {
-          console.log('zipblob: ', zipblob)
-          // return
-          // this.downloadFile(name, zipblob)
+          console.log('下载zipblob: ', zipblob)
           resolve()
+          return
+          this.downloadFile(name, zipblob)
         })
       })
     })
@@ -178,28 +132,32 @@ export default class Queue {
       const len = this.list.length
 
       if (!this.worker[i] && len > 0) {
-        console.log('this.worker[i]: ', this.worker[i])
-        const imgs = await getHtml(this.list[len - 1].url)
+        // const imgs = await getHtml(this.list[len - 1].url)
         // console.log('imgs: ', imgs)
+        console.log(4444444444444444)
 
         // 需要执行的任务
         const worker = {
           name: this.list[len - 1].name,
           currentnum: 0,
-          number: imgs.length,
-          imgs: imgs,
+          number: 0,
+          imgs: [],
           progress: 0,
           func: this.executionFunc(i)
         }
-        this.worker[i] = worker
-
-        runIndex.push(i)
-
         // 从任务队列内删除任务
+        const url = this.list[len - 1].url
         if (this.statu === 1) {
           this.list.pop()
           // return
         }
+        this.worker[i] = worker
+
+        const imgs = await getHtml(url)
+        this.worker[i].imgs = imgs
+        this.worker[i].number = imgs.length
+
+        runIndex.push(i)
       }
     }
 

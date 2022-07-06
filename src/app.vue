@@ -31,6 +31,8 @@
           id="border-bottom-set"
           v-model="active"
           style="position: absolute;"
+          active-color="#ee0000"
+          inactive-color="#000"
         >
           <van-tabbar-item icon="home-o" />
           <van-tabbar-item icon="todo-list-o" />
@@ -88,7 +90,8 @@ export default {
       show: true,
       isHide: false,
       active: 2,
-      titles: ['漫画网站', '选择章节', '下载', '设置']
+      titles: ['漫画网站', '选择章节', '下载', '设置'],
+      comicInfo: {}
     }
   },
   computed: {
@@ -102,7 +105,8 @@ export default {
     }
   },
   created() {
-    matchWeb('http://www.kmwu6.com/dddddddd/1379635.html')
+    matchWeb(window.location.href)
+    // matchWeb('http://www.kmwu6.com/dddddddd/1379635.html')
   },
   mounted() {
     this.$bus.$on('changTab', (val) => { this.active = val })

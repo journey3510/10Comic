@@ -24,6 +24,11 @@
 // @require      https://unpkg.com/vant@2.12/lib/vant.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/jszip/3.10.0/jszip.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js
+
+// @match        *://www.kmwu6.com/*
+// @match        *://qiximh1.com/*
+
 // @include      *
+
 // ==/UserScript==
 
