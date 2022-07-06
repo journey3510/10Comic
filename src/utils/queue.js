@@ -1,7 +1,7 @@
 import JSZip from 'jszip'
 import axios from 'axios'
 // import { currentComics } from '@/utils/comics'
-import { getHtml } from '@/utils/index'
+import { getHtml, request } from '@/utils/index'
 
 //
 export default class Queue {
@@ -64,25 +64,67 @@ export default class Queue {
 
   addPromise(index, imgurl) {
     return new Promise((resolve, reject) => {
-      this.worker[index].currentnum = this.worker[index].currentnum + 1
-      this.worker[index].progress = parseInt(this.worker[index].currentnum / this.worker[index].number * 100)
-      this.worker.push('')
-      this.worker.pop()
-
+      const _this = this
       // eslint-disable-next-line no-undef
       GM_xmlhttpRequest({
         method: 'get',
         url: imgurl,
         responseType: 'blob',
         onload: function(gmres) {
+          // console.log(this)
+          _this.worker[index].currentnum = _this.worker[index].currentnum + 1
+          _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
+          _this.worker.push('')
+          _this.worker.pop()
+
           resolve(gmres.response)
         },
         onerror: function(e) {
+          resolve(1)
+
           console.log(e)
         },
         ontimeout: function() {
+          resolve(1)
+
           console.log()
         }
+      })
+    })
+  }
+
+  async downx(workerId, name, imgs) {
+    const que = []
+    const imgaa = imgs
+    if (imgaa.length > 0) {
+      const res = await request('get', imgs[0], 'blob')
+    }
+    for (let i = 0; i < imgs.length; i++) {
+    }
+
+    Promise.all(que).then(res => {
+      console.log('allres: ', res)
+      const zip = new JSZip()
+
+      res.forEach((imgblob, index) => {
+        if (imgblob === 1) {
+          return
+        }
+        zip.file(parseInt(index + 1) + '.jpg', imgblob, { blob: true })
+      })
+      console.log('zip: ', zip)
+
+      zip.generateAsync({
+        type: 'blob',
+        compression: 'DEFLATE',
+        compressionOptions: {
+          level: 9
+        }
+      }).then((zipblob) => {
+        console.log('下载zipblob: ', zipblob)
+
+        return
+        this.downloadFile(name, zipblob)
       })
     })
   }
@@ -132,8 +174,6 @@ export default class Queue {
       const len = this.list.length
 
       if (!this.worker[i] && len > 0) {
-        // const imgs = await getHtml(this.list[len - 1].url)
-        // console.log('imgs: ', imgs)
         console.log(4444444444444444)
 
         // 需要执行的任务
@@ -154,6 +194,7 @@ export default class Queue {
         this.worker[i] = worker
 
         const imgs = await getHtml(url)
+        console.log('imgs: ', imgs)
         this.worker[i].imgs = imgs
         this.worker[i].number = imgs.length
 
