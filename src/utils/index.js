@@ -32,3 +32,23 @@ export const getHtml = async(url) => {
       })
   })
 }
+
+export const request = async(method, url, responseType) => {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-undef
+    GM_xmlhttpRequest({
+      method,
+      url,
+      responseType,
+      onload: function(res) {
+        resolve(res)
+      },
+      onerror: function(e) {
+        reject(e)
+      },
+      ontimeout: function() {
+        console.log()
+      }
+    })
+  })
+}

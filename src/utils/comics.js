@@ -1,5 +1,7 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
+import { request } from '@/utils/index'
 
 const comicsWebInfo = [
   {
@@ -17,6 +19,21 @@ const comicsWebInfo = [
       imgstr = eval(imgstr).toString()
       const imgArray = imgstr.match(/https:(\S*)jpg/g)
       return imgArray
+    }
+  },
+  {
+    domain: 'darpou.com',
+    homepage: 'https://darpou.com/',
+    webName: '百漫谷',
+    comicNameCss: '.fed-part-eone.fed-font-xvi a',
+    reg: /g/,
+    chapterCss: '.fed-play-item.fed-drop-item.fed-visible .fed-part-rows:nth-child(2)',
+    getImgs: async function(context) {
+      const txtUrl = context.match(/http(\S*).txt/gi)[0]
+      const txtRes = await request('get', txtUrl)
+      const txtContext = txtRes.responseText
+      const imgReg = /http(\S*)jpg/g
+      return txtContext.match(imgReg)
     }
   },
   {
