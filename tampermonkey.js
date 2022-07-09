@@ -26,7 +26,9 @@
 // @require      https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js
 
 // @match        *://www.kmwu6.com/*
-// @match        *://qiximh1.com/*
+// @match        *://darpou.com/*
+// @match        *://www.kawazhuyy.com/*
+// @match        *://m.wuxiamh.com/*
 
 // @include      *
 

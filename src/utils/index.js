@@ -17,19 +17,17 @@ export const loadStyle = (url) => {
 }
 
 export const getHtml = async(url) => {
-  console.log('url: ', url)
   return new Promise((resolve, reject) => {
-    axios({
-      method: 'get',
-      url: url
-    })
-    // responseType: 'text/html'
-      .then(function(res) {
-        // console.log(res.data)
-        const imgs = currentComics.getImgs(res.data)
-        console.log('imgs: ', imgs)
-        resolve(imgs)
+    setTimeout(() => {
+      axios({
+        method: 'get',
+        url: url
       })
+        .then(function(res) {
+          const imgs = currentComics.getImgs(res.data)
+          resolve(imgs)
+        })
+    }, 100)
   })
 }
 

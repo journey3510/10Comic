@@ -11,6 +11,7 @@
         style="cursor: default;"
         :duration="5"
         :initial-swipe="active"
+        :show-indicators="false"
       >
         <van-swipe-item class="swipeitem">
           <Home />
