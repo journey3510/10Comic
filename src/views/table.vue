@@ -157,10 +157,12 @@ export default {
         console.log('dom: ', dom)
 
         const urls = dom.querySelectorAll('a')
+        const type = currentComics.type
         urls.forEach(element => {
           this.list.push(
             { name: element.innerText,
-              url: element.href }
+              url: element.href,
+              type: type }
           )
         })
         this.selectListLoading = false

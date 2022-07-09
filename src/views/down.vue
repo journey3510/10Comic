@@ -85,7 +85,8 @@ export default {
   data() {
     return {
       collapseActiveName: ['1', '2', '3'],
-      queue: []
+      queue: [],
+      queueNum: 2
     }
   },
   watch: {
@@ -94,24 +95,20 @@ export default {
   mounted() {
     console.clear()
     this.$bus.$on('selectDown', this.downInit)
-
-    // this.downInit([{
-    //   'name': '第780回（P）',
-    //   'url': 'http://www.kmwu6.com/16177/1045956.html'
-    // }])
+    this.getnum()
   },
   created() {
   },
   methods: {
     downInit(arr) {
-      console.log('arr: ', arr)
-      // return
       if (this.queue.length === 0) {
-        console.log(22)
-        this.queue = new Queue(2)
+        this.queue = new Queue(this.queueNum)
       }
       this.queue.addList(arr)
       this.queue.run()
+    },
+    getnum() {
+      this.queueNum = GM_getValue('queueNum')
     }
 
   }
@@ -141,12 +138,6 @@ export default {
       display: flex;
       justify-content: space-between;
       margin: 2px 5px;
-    }
-    hr {
-      margin-top: 15px;
-      margin-bottom: 5px;
-      border-color: #eeeeee;
-      scale: 0.1;
     }
 
   }
