@@ -46,18 +46,15 @@ const comicsWebInfo = [
     nextpageRgeCss: '.action-list li:nth-child(3) a',
     getImgs: async function(context) {
       const imgobj = context.matchAll(/><mip-img src="(https:\/\/[\s\S]+?jpg)/g)
-
       const imgUrl = []
       for (const item of imgobj) {
         imgUrl.push(item[1])
       }
 
       const number = context.match(/<span id="k_total" class="curPage">(\d+)<\/span>/)[1]
-
       const context1 = context.match(/class="action-list">[\s\S]+?<mip-link href="(https:\/\/[\s\S]+?html)">下一页/g)[0]
       let nextPageUrl = context1.match(/http(\S*)html/g)[2]
       nextPageUrl = nextPageUrl.indexOf('-') !== -1 ? nextPageUrl : ''
-      console.log('nextPageUrl: ', nextPageUrl)
       return { imgUrl, nextPageUrl, number }
     }
   },
@@ -70,13 +67,12 @@ const comicsWebInfo = [
     type: 1,
     getImgs: async function(context) {
       const context1 = context.match(/var (pages = [\s\S]+?)\<\/script>/g)[0]
-      const imgreg = /url[\S]?(https:\/\/[\s\S]+?jpg)/g
-      const imgobj = context1.matchAll(imgreg)
+      const imgReg = /url[\S]?(https:\/\/[\s\S]+?jpg)/g
+      const imgobj = context1.matchAll(imgReg)
       const imgs = []
       for (const result of imgobj) {
         imgs.push(result[1])
       }
-
       return imgs
     }
   },
@@ -92,10 +88,7 @@ const comicsWebInfo = [
 
       try {
         const newImgs = []
-        console.log(9999999999999)
         eval(context.match(/(eval\([\s\S]+?)<\/script/)[1] + `newImgs.map(a => console.log(a)).join('\n')`)
-
-        // console.log('newImgs: ', newImgs)
         return newImgs
       } catch (e) {
         console.log('e: ', e)
@@ -118,9 +111,7 @@ export const getWebList = () => {
 export let currentComics = null
 
 export const matchWeb = (url) => {
-  console.log('url: ', url)
   let hname = ''
-  // let hname = window.location.host
   var domain = url.split('/')
   if (domain[2]) {
     hname = domain[2]
@@ -133,6 +124,5 @@ export const matchWeb = (url) => {
       break
     }
   }
-  console.log('currentComics: ', currentComics)
 }
 
