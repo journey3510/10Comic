@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     jump(url) {
-      console.log('url: ', url)
       // window.open(url, '_blank')
       window.location.href = url
     }

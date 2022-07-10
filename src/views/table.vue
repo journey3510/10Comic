@@ -142,7 +142,7 @@ export default {
     },
 
     radioSelect(index) {
-      console.log('this.selectResult: ', this.selectResult)
+      console.log('选择index', this.selectResult)
     },
     scopeSelect() {
 
@@ -154,8 +154,6 @@ export default {
       const chapterCss = currentComics.chapterCss
       setTimeout(() => {
         const dom = document.querySelector(chapterCss)
-        console.log('dom: ', dom)
-
         const urls = dom.querySelectorAll('a')
         const type = currentComics.type
         urls.forEach(element => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // ==UserScript==
 // @name         __APP_NAME__
 // @namespace    http://tampermonkey.net/
@@ -24,13 +25,17 @@
 // @require      https://unpkg.com/vant@2.12/lib/vant.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/jszip/3.10.0/jszip.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js
-
 // @match        *://www.kmwu6.com/*
 // @match        *://darpou.com/*
-// @match        *://www.kawazhuyy.com/*
 // @match        *://m.wuxiamh.com/*
 
+// @match        *://www.kawazhuyy.com/*
 // @include      *
-
 // ==/UserScript==
+
+(function() {
+  'use strict'
+  GM_addStyle(GM_getResourceText('elementcss'))
+  GM_addStyle(GM_getResourceText('vantcss'))
+})()
 

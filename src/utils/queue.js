@@ -1,5 +1,4 @@
 import JSZip from 'jszip'
-// import { currentComics } from '@/utils/comics'
 import { getHtml } from '@/utils/index'
 
 //
@@ -34,37 +33,33 @@ export default class Queue {
   /**
      * 执行一个任务
      * @param { number } index
-     * @param { Function } fn: 执行的函数
-     * @param { Array<any> } args: 传递给执行函数的参数
      */
   * exeDown(index) {
+    const downtype = this.worker[index].type
     const name = this.worker[index].name
-    const imgs = this.worker[index].imgs
     const _this = this
-    // yield this.downAll(index, name, imgs)
-    yield this.downOne(index, name, imgs)
-      .then(function() {
-        // 任务执行完毕后，再次分配任务并执行任务
-        setTimeout(() => {
-          _this.worker[index] = undefined
-          _this.workeredList.push(name)
-          _this.run()
-        }, 500)
-      })
-  }
-
-  * exeDown2(index) {
-    const name = this.worker[index].name
-
-    const _this = this
-    yield this.downOne2(index)
-      .then(function() {
-        setTimeout(() => {
-          _this.worker[index] = undefined
-          _this.workeredList.push(name)
-          _this.run()
-        }, 500)
-      })
+    if (downtype === 1) {
+      const imgs = this.worker[index].imgs
+      // yield this.downAll(index, name, imgs)
+      yield this.downOne(index, name, imgs)
+        .then(function() {
+          // 任务执行完毕后，再次分配任务并执行任务
+          setTimeout(() => {
+            _this.worker[index] = undefined
+            _this.workeredList.push(name)
+            _this.run()
+          }, 500)
+        })
+    } else {
+      yield this.downOne2(index)
+        .then(function() {
+          setTimeout(() => {
+            _this.worker[index] = undefined
+            _this.workeredList.push(name)
+            _this.run()
+          }, 500)
+        })
+    }
   }
 
   /**
@@ -104,12 +99,11 @@ export default class Queue {
     })
   }
 
+  // 网站单页阅读方式  下载
   async downOne2(workerId) {
-    console.log(1111111111111111)
     const url = this.worker[workerId].url
     const { imgUrl, nextPageUrl, number } = await getHtml(url)
     this.worker[workerId].number = number
-    console.log('imgUrl: ', imgUrl)
     for (let index = 0; index < imgUrl.length; index++) {
       const res = await this.addImgPromise(workerId, imgUrl[index])
       this.workerimg[workerId].push(res)
@@ -147,6 +141,7 @@ export default class Queue {
   }
 
   // 请求一张图片得到后 再请求下一张图片
+  // 网站卷轴阅读方式  下载
   async downOne(workerId) {
     const imgs = this.worker[workerId].imgs
     const res = await this.addImgPromise(workerId, imgs[0])
@@ -181,9 +176,6 @@ export default class Queue {
       })
     })
   }
-
-  // ___________________________________________________ //
-  // ___________________________________________________ //
 
   // 一次请求所有图片
   downAll(workerId, name, imgs) {
@@ -258,7 +250,7 @@ export default class Queue {
             url: item.url,
             progress: 0,
             type: item.type,
-            func: this.exeDown2(i)
+            func: this.exeDown(i)
           }
           this.workerimg[i] = []
           this.worker[i] = worker
