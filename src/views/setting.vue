@@ -1,14 +1,45 @@
 <template>
   <div class="setting">
 
-    <van-sidebar id="setitem" v-model="activeKey">
-      <van-sidebar-item title="下载" />
-      <van-sidebar-item title="说明" />
-    </van-sidebar>
+    <van-cell-group title="下载" inset>
+      <van-cell label="* 描述信息">
+        <template #title>
+          <span style="width: 200px" class="custom-title">最大下载数量</span>
+        </template>
 
-    <div id="setcontent">
-      qq
-    </div>
+        <template #right-icon>
+          <van-slider
+            id="queuenum"
+            v-model="queueNum"
+            :min="1"
+            :max="5"
+            style="width: 200px"
+            @change="onChange"
+          >
+            <template #button>
+              <div class="custom-button">{{ queueNum }}</div>
+            </template>
+          </van-slider>
+        </template>
+        <br>
+
+        <template #label>
+          <van-slider
+            id="queuenum"
+            v-model="queueNum"
+            :min="1"
+            :max="5"
+            style="width: 200px"
+            @change="onChange"
+          >
+            <template #button>
+              <div class="custom-button">{{ queueNum }}</div>
+            </template>
+          </van-slider>
+        </template>
+
+      </van-cell>
+    </van-cell-group>
 
   </div>
 </template>
@@ -16,10 +47,21 @@
 <script>
 
 export default {
-  name: 'Index',
+  name: 'Setting',
   data() {
     return {
-      activeKey: 0
+      queueNum: 1
+    }
+  },
+  mounted() {
+    this.getnum()
+  },
+  methods: {
+    onChange(value) {
+      GM_setValue('queueNum', value)
+    },
+    getnum() {
+      this.queueNum = GM_getValue('queueNum')
     }
   }
 }
@@ -29,36 +71,23 @@ export default {
 .setting {
   margin: 20px 15px;
   border-radius: 15px;
-  display: flex;
-  height: 670px;
   background-color: #ffffff;
   overflow: auto;
 
-  #setitem {
-  margin: 20px 5px;
-  width: 120px;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  border: 0.5px solid #66ccff9e;
-  border-radius: 15px;
-  // background-color: rgba(235, 233, 233, 0.73);
-  .van-sidebar-item {
-    background-color:  #f8f8f8;
-  }
-  .van-sidebar-item--select {
-    background-color: #66ccff20;
+  #queuenum {
+    margin: 10px 0;
   }
 
+  .custom-button {
+  width: 26px;
+  color: #fff;
+  font-size: 10px;
+  line-height: 18px;
+  text-align: center;
+  background-color: #ee0a24;
+  border-radius: 100px;
 }
 
-  #setcontent {
-    width: 100%;
-    border: 1px solid rgba(255, 0, 0, 0.54);
-    border-radius: 15px;
-
-    margin: 5px;
-  }
 }
 
 </style>

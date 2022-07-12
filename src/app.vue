@@ -89,8 +89,8 @@ export default {
       AppName,
       AppVersion,
       show: true,
-      isHide: false,
-      active: 2,
+      isHide: true,
+      active: 1,
       titles: ['漫画网站', '选择章节', '下载', '设置'],
       comicInfo: {}
     }
@@ -107,7 +107,6 @@ export default {
   },
   created() {
     matchWeb(window.location.href)
-    // matchWeb('http://www.kmwu6.com/dddddddd/1379635.html')
   },
   mounted() {
     this.$bus.$on('changTab', (val) => { this.active = val })

@@ -8,7 +8,8 @@
   "keywords": [
     "tampermonkey",
     "webpack",
-    "vue"
+    "vue",
+    "vant"
   ],
   "scripts": {
     "dev": "dotenv -e .env.dev -- webpack-dev-server --open --config webpack.dev.js",
@@ -18,7 +19,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.0",
     "core-js": "^3.23.3",
     "element-ui": "^2.14.1",
     "jszip": "^3.10.0",

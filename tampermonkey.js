@@ -3,7 +3,7 @@
 // @name         __APP_NAME__
 // @namespace    http://tampermonkey.net/
 // @version      __APP_VERSION__
-// @description  油猴漫画插件
+// @description  漫画分章节压缩下载。适用于 武侠漫画、酷漫屋、百漫谷。
 // @author       journey3510
 // @run-at       document-end
 // @grant        GM_getValue
@@ -26,16 +26,8 @@
 // @require      https://cdn.bootcdn.net/ajax/libs/jszip/3.10.0/jszip.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js
 // @match        *://www.kmwu6.com/*
+// @match        *://manhua.dmzj.com/*
 // @match        *://darpou.com/*
 // @match        *://m.wuxiamh.com/*
-
-// @match        *://www.kawazhuyy.com/*
-// @include      *
 // ==/UserScript==
-
-(function() {
-  'use strict'
-  GM_addStyle(GM_getResourceText('elementcss'))
-  GM_addStyle(GM_getResourceText('vantcss'))
-})()
 

@@ -1,11 +1,5 @@
-import axios from 'axios'
-
 import { currentComics } from '@/utils/comics'
 
-/**
- * load style file
- * @param {String} url
- */
 export const loadStyle = (url) => {
   const head = document.getElementsByTagName('head')[0]
   const link = document.createElement('link')
@@ -17,17 +11,22 @@ export const loadStyle = (url) => {
 }
 
 export const getHtml = async(url) => {
+  console.log('url: ', url)
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      axios({
+    // eslint-disable-next-line no-undef
+      GM_xmlhttpRequest({
         method: 'get',
-        url: url
-      })
-        .then(function(res) {
-          const imgs = currentComics.getImgs(res.data)
+        url: url,
+        onload: function(res) {
+          const imgs = currentComics.getImgs(res.response)
           resolve(imgs)
-        })
-    }, 100)
+        },
+        onerror: function(e) {
+          reject(e)
+        }
+      })
+    }, 200)
   })
 }
 
