@@ -2,9 +2,9 @@
   <div class="setting">
 
     <van-cell-group title="下载" inset>
-      <van-cell label="* 描述信息">
+      <van-cell label="* 刷新生效">
         <template #title>
-          <span style="width: 200px" class="custom-title">最大下载数量</span>
+          <span style="width: 300px" class="custom-title">最大下载数量</span>
         </template>
 
         <template #right-icon>
@@ -13,7 +13,7 @@
             v-model="queueNum"
             :min="1"
             :max="5"
-            style="width: 200px"
+            style="width: 150px"
             @change="onChange"
           >
             <template #button>
@@ -22,21 +22,6 @@
           </van-slider>
         </template>
         <br>
-
-        <template #label>
-          <van-slider
-            id="queuenum"
-            v-model="queueNum"
-            :min="1"
-            :max="5"
-            style="width: 200px"
-            @change="onChange"
-          >
-            <template #button>
-              <div class="custom-button">{{ queueNum }}</div>
-            </template>
-          </van-slider>
-        </template>
 
       </van-cell>
     </van-cell-group>

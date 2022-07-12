@@ -11,7 +11,6 @@ export const loadStyle = (url) => {
 }
 
 export const getHtml = async(url) => {
-  console.log('url: ', url)
   return new Promise((resolve, reject) => {
     setTimeout(() => {
     // eslint-disable-next-line no-undef
@@ -44,7 +43,7 @@ export const request = async(method, url, responseType) => {
         reject(e)
       },
       ontimeout: function() {
-        console.log()
+        console.log('超时')
       }
     })
   })

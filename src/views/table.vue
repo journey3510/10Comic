@@ -57,8 +57,8 @@
     <div
       v-if="showSelectList"
       id="select-list"
-      v-loading="selectListLoading"
     >
+
       <van-cell-group
         style="border-radius: 25px;"
         inset
@@ -98,7 +98,6 @@ export default {
       selectResult: [],
       downResult: [],
 
-      selectListLoading: false,
       showSelectList: false,
       currentComics: '',
 
@@ -113,7 +112,6 @@ export default {
   },
   methods: {
     getInfo() {
-      // console.log(currentComics)
       this.currentComics = currentComics
       if (currentComics === null) {
         return
@@ -135,7 +133,6 @@ export default {
     },
     async getSelectList() {
       this.showSelectList = true
-      this.selectListLoading = true
       await this.$nextTick()
       const chapterCss = currentComics.chapterCss
       setTimeout(() => {
@@ -151,7 +148,6 @@ export default {
             )
           })
         })
-        this.selectListLoading = false
       }, 200)
     },
     downSelectList() {
