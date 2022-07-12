@@ -86,7 +86,7 @@ export default {
     return {
       collapseActiveName: ['1', '2', '3'],
       queue: [],
-      queueNum: 2
+      queueNum: 3
     }
   },
   watch: {
@@ -108,7 +108,10 @@ export default {
       this.queue.run()
     },
     getnum() {
-      this.queueNum = GM_getValue('queueNum')
+      try {
+        const num = GM_getValue('queueNum')
+        this.queueNum = num
+      } catch (error) {}
     }
 
   }

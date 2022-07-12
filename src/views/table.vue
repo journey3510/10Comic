@@ -18,13 +18,6 @@
         >取消</van-button>
       </div>
 
-      <!-- <input v-model="startIndex" type="number" min="1" max=""> - <input type="number" :min="startIndex" :max="endIndex">
-      <van-button
-        type="primary"
-        size="mini"
-        @click="scopeSelect"
-      >范围选择</van-button> -->
-
       <van-button
         style="width:80px;"
         size="mini"
@@ -35,7 +28,6 @@
       >下载</van-button>
     </div>
 
-    <!-- <van-divider /> -->
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 15px',height: '10px' }"
     >章节列表</van-divider>
@@ -102,9 +94,6 @@ export default {
   name: 'Table',
   data() {
     return {
-      startIndex: 1,
-      endIndex: 10,
-
       list: [],
       selectResult: [],
       downResult: [],
@@ -144,24 +133,23 @@ export default {
     radioSelect(index) {
       console.log('选择index', this.selectResult)
     },
-    scopeSelect() {
-
-    },
     async getSelectList() {
       this.showSelectList = true
       this.selectListLoading = true
       await this.$nextTick()
       const chapterCss = currentComics.chapterCss
       setTimeout(() => {
-        const dom = document.querySelector(chapterCss)
-        const urls = dom.querySelectorAll('a')
-        const type = currentComics.type
-        urls.forEach(element => {
-          this.list.push(
-            { name: element.innerText,
-              url: element.href,
-              type: type }
-          )
+        const nodeList = document.querySelectorAll(chapterCss)
+        nodeList.forEach(dom => {
+          const urls = dom.querySelectorAll('a')
+          const type = currentComics.type
+          urls.forEach(element => {
+            this.list.push(
+              { name: element.innerText,
+                url: element.href,
+                type: type }
+            )
+          })
         })
         this.selectListLoading = false
       }, 200)
