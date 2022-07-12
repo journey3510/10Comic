@@ -18,7 +18,7 @@
             <div v-if="item !== undefined ">
               <div class="itemname">
                 <span class="custom-title">{{ item.name }}</span>
-                <van-icon name="down" size="18px" />
+                <!-- <van-icon name="down" size="18px" /> -->
               </div>
 
               <div>
@@ -109,6 +109,7 @@ export default {
     },
     getnum() {
       try {
+        // eslint-disable-next-line no-undef
         const num = GM_getValue('queueNum')
         this.queueNum = num
       } catch (error) {}

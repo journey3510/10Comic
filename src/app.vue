@@ -60,13 +60,6 @@
       </div>
     </div>
 
-    <van-button
-      id="thebtn"
-      icon="plus"
-      type="primary"
-      @click="onChange"
-    />
-
   </div>
 </template>
 
@@ -117,9 +110,6 @@ export default {
     },
     hide() {
       this.isHide = !this.isHide
-    },
-    onChange() {
-
     }
   }
 }

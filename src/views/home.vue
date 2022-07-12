@@ -28,8 +28,8 @@ export default {
   },
   methods: {
     jump(url) {
-      // window.open(url, '_blank')
-      window.location.href = url
+      window.open(url, '_blank')
+      // window.location.href = url
     }
   }
 }

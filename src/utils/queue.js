@@ -95,7 +95,6 @@ export default class Queue {
   async downOne2(workerId) {
     const url = this.worker[workerId].url
     const { imgUrl, nextPageUrl, number } = await getHtml(url)
-    console.log('imgUrl: ', imgUrl)
     this.worker[workerId].number = number
     for (let index = 0; index < imgUrl.length; index++) {
       const res = await this.addImgPromise(workerId, imgUrl[index])
@@ -117,6 +116,7 @@ export default class Queue {
   async downOne(workerId) {
     const imgs = this.worker[workerId].imgs
     const res = await this.addImgPromise(workerId, imgs[0])
+
     this.workerimg[workerId].push(res)
     this.worker[workerId].imgs.shift()
 
@@ -185,7 +185,7 @@ export default class Queue {
     const name = this.worker[workerId].name
     return new Promise((resolve, reject) => {
       const zip = new JSZip()
-      console.log('this.workerimg[workerId]: ', this.workerimg[workerId])
+
       this.workerimg[workerId].forEach((imgblob, index) => {
         if (imgblob === 1 || imgblob === 0) {
           zip.file(parseInt(index + 1) + '.jpg', '', { blob: true })
@@ -193,7 +193,6 @@ export default class Queue {
         }
         zip.file(parseInt(index + 1) + '.jpg', imgblob, { blob: true })
       })
-      console.log('zip: ', zip)
 
       zip.generateAsync({
         type: 'blob',
@@ -202,7 +201,7 @@ export default class Queue {
           level: 9
         }
       }).then((zipblob) => {
-        console.log('下载zipblob: ', zipblob)
+        console.log('zipblob: ', zipblob)
         this.downloadFile(name, zipblob)
         resolve()
         return

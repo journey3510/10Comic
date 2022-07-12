@@ -16,14 +16,9 @@ document.body.appendChild(root)
 Vue.prototype.$bus = new Vue()
 
 if (isDev) {
-  const ElementUI = require('element-ui')
-  loadStyle('https://unpkg.com/element-ui@2.14.1/lib/theme-chalk/index.css')
   loadStyle('https://unpkg.com/vant@2.12/lib/index.css')
-  Vue.use(ElementUI)
   Vue.use(Vant)
 } else {
-  // eslint-disable-next-line no-undef
-  GM_addStyle(GM_getResourceText('elementcss'))
   // eslint-disable-next-line no-undef
   GM_addStyle(GM_getResourceText('vantcss'))
 }

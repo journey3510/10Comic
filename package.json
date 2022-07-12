@@ -20,7 +20,6 @@
   "license": "MIT",
   "dependencies": {
     "core-js": "^3.23.3",
-    "element-ui": "^2.14.1",
     "jszip": "^3.10.0",
     "vant": "^2.12.48",
     "vue": "^2.6.12"
