@@ -24,6 +24,7 @@
 // @match        *://www.kmwu6.com/*
 // @match        *://darpou.com/*
 // @match        *://m.wuxiamh.com/*
+// @match        *://www.wuxiamh.com/*
 // @license      MIT
 // ==/UserScript==
 
