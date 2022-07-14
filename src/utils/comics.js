@@ -44,7 +44,7 @@ const comicsWebInfo = [
   {
     domain: 'm.wuxiamh.com',
     homepage: 'https://m.wuxiamh.com/',
-    webName: '武侠漫画',
+    webName: '武侠漫画（手机）',
     comicNameCss: '.view-sub.autoHeight .title',
     chapterCss: '#chapter-list-1',
     type: 0,
@@ -61,6 +61,19 @@ const comicsWebInfo = [
       let nextPageUrl = context1.match(/http(\S*)html/g)[2]
       nextPageUrl = nextPageUrl.indexOf('-') !== -1 ? nextPageUrl : ''
       return { imgUrl, nextPageUrl, number }
+    }
+  },
+  {
+    domain: 'www.wuxiamh.com',
+    homepage: 'http://www.wuxiamh.com/',
+    webName: '武侠漫画网（电脑）',
+    comicNameCss: '.title h1',
+    chapterCss: '#chapter-list-1',
+    type: 1,
+    getImgs: async function(context) {
+      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+      const imgs = eval(imgStr)
+      return imgs
     }
   }
 ]

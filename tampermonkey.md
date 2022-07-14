@@ -21,7 +21,14 @@
   - 刷新页面任务会终止
 
 
+### 更新记录
+  - 2022/7/13   v1.0.1       新增一个漫画网站
+
+  
 ### 感谢
   - [Tampermonkey-Vue](https://github.com/huangxubo23/tampermonkey-vue)
   - [用JS实现多个任务并行执行的队列](https://juejin.cn/post/6844903961728647181)
+
+
+
 
