@@ -30,7 +30,9 @@
 
     <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 15px',height: '10px' }"
-    >章节列表</van-divider>
+    >
+      <code style="cursor: pointer" @click="reloadList">重载列表</code>
+    </van-divider>
 
     <!-- 列表为空 -->
     <div v-if="!showSelectList">
@@ -46,7 +48,7 @@
 
       </van-empty>
 
-      <van-cell-group style="width: 280px;margin: 20px auto;" inset>
+      <van-cell-group id="comicinfo" inset>
         <van-cell title="网站" :value="webname" />
         <van-cell title="漫画" :value="comicName" />
       </van-cell-group>
@@ -161,6 +163,12 @@ export default {
       this.$bus.$emit('selectDown', this.downResult)
       this.$bus.$emit('changTab', 2)
       this.downResult = []
+      this.selectResult = []
+    },
+    reloadList() {
+      this.list = []
+      this.selectResult = []
+      this.getSelectList()
     }
   }
 }
@@ -186,6 +194,15 @@ export default {
   padding: 5px;
   display: flex;
   flex-wrap: wrap;
+
+}
+
+#comicinfo {
+  width: 280px;
+  margin: 20px auto;
+  .van-cell__title {
+    max-width: 80px !important;
+  }
 }
 
 input {

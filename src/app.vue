@@ -59,7 +59,12 @@
         </svg>
       </div>
     </div>
-
+    <van-button
+      id="thebtn"
+      icon="plus"
+      type="primary"
+      @click="onChange"
+    />
   </div>
 </template>
 
@@ -110,6 +115,9 @@ export default {
     },
     hide() {
       this.isHide = !this.isHide
+    },
+    onChange(e) {
+      console.log(Down.data)
     }
   }
 }
@@ -159,7 +167,7 @@ export default {
   border-radius: 30px 0 0 30px;
   width: 30px;
   height: 60px;
-  background-color: #66ccff55;
+  background-color: #66ccff96;
   cursor: pointer;
   position: absolute;
   right: 420px;

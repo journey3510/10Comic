@@ -85,7 +85,11 @@ export default {
   data() {
     return {
       collapseActiveName: ['1', '2', '3'],
-      queue: [],
+      queue: {
+        'worker': '',
+        'list': '',
+        'workeredList': ''
+      },
       queueNum: 3
     }
   },
@@ -101,7 +105,7 @@ export default {
   },
   methods: {
     downInit(arr) {
-      if (this.queue.length === 0) {
+      if (this.queue.worker === '') {
         this.queue = new Queue(this.queueNum)
       }
       this.queue.addList(arr)
