@@ -64,6 +64,11 @@ export default class Queue {
     }
   }
 
+  refresh() {
+    this.worker.push('')
+    this.worker.pop()
+  }
+
   // 请求图片
   addImgPromise(index, imgurl) {
     return new Promise((resolve, reject) => {
@@ -76,9 +81,7 @@ export default class Queue {
         onload: function(gmRes) {
           _this.worker[index].currentnum = _this.worker[index].currentnum + 1
           _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
-          _this.worker.push('')
-          _this.worker.pop()
-
+          _this.refresh()
           resolve(gmRes.response)
         },
         onerror: function(e) {
@@ -201,7 +204,6 @@ export default class Queue {
           level: 9
         }
       }).then((zipblob) => {
-        console.log('zipblob: ', zipblob)
         this.downloadFile(name, zipblob)
         resolve()
         return

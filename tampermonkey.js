@@ -2,7 +2,7 @@
 // @name         __APP_NAME__
 // @namespace    http://tampermonkey.net/
 // @version      __APP_VERSION__
-// @description  漫画分章节压缩下载。适用于 武侠漫画、酷漫屋、百漫谷。
+// @description  漫画分章节压缩下载。适用于 武侠漫画、酷漫屋、百漫谷、动漫之家、七夕漫画
 // @author       journey3510
 // @run-at       document-end
 // @grant        GM_getValue
@@ -25,6 +25,11 @@
 // @match        *://darpou.com/*
 // @match        *://m.wuxiamh.com/*
 // @match        *://www.wuxiamh.com/*
+// @match        *://manhua.dmzj.com/*
+// @match        *://qiximh1.com/*
+
+// @connect      dmzj.com
+// @connect      byteimg.com
 // @license      MIT
 // ==/UserScript==
 

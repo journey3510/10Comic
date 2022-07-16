@@ -6,6 +6,31 @@ import { request } from '@/utils/index'
 
 const comicsWebInfo = [
   {
+    domain: 'manhua.dmzj.com',
+    homepage: 'https://manhua.dmzj.com/',
+    webName: '动漫之家',
+    comicNameCss: '.odd_anim_title_m .anim_title_text h1',
+    chapterCss: '.cartoon_online_border',
+    type: 1,
+    getImgs: async function(context) {
+      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      const func = []
+      for (const item of group) {
+        func.push(item[1])
+        func.push(item[2])
+      }
+      const code = '(' + func[0] + ')' + func[1]
+      let imgStr = eval(code)
+      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      let imgArray = JSON.parse(imgStr)
+      imgArray = imgArray.map((item) => {
+        return 'https://images.dmzj.com/' + item
+      })
+      console.log('imgArray: ', imgArray)
+      return imgArray
+    }
+  },
+  {
     domain: 'www.kmwu6.com',
     homepage: 'http://www.kmwu6.com/',
     webName: '酷漫屋6',
@@ -52,6 +77,7 @@ const comicsWebInfo = [
     getImgs: async function(context) {
       const imgobj = context.matchAll(/><mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
       const imgUrl = []
+      console.log('imgobj: ', imgobj)
       for (const item of imgobj) {
         imgUrl.push(item[1])
       }
@@ -74,6 +100,28 @@ const comicsWebInfo = [
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
       const imgs = eval(imgStr)
       return imgs
+    }
+
+  },
+  {
+    domain: 'qiximh1.com',
+    homepage: 'http://qiximh1.com',
+    webName: '七夕漫画',
+    comicNameCss: '.comic_name .name',
+    chapterCss: '.catalog_list.row_catalog_list',
+    type: 1,
+    getImgs: function(context) {
+      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      const func = []
+      for (const item of group) {
+        func.push(item[1])
+        func.push(item[2])
+      }
+      const code = '(' + func[0] + ')' + func[1]
+      let imgStr = eval(code)
+      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      const imgArray = JSON.parse(imgStr)
+      return imgArray
     }
   }
 ]

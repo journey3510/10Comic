@@ -6,7 +6,7 @@ import { loadStyle } from './utils'
 import './styles/global.scss'
 
 import Vant from 'vant'
-// import 'vant/lib/index.css'
+import 'vant/lib/index.css'
 
 const id = `app_vue_${Date.now()}`
 const root = document.createElement('div')
@@ -16,11 +16,11 @@ document.body.appendChild(root)
 Vue.prototype.$bus = new Vue()
 
 if (isDev) {
-  loadStyle('https://unpkg.com/vant@2.12/lib/index.css')
+  // loadStyle('https://unpkg.com/vant@2.12/lib/index.css')
   Vue.use(Vant)
 } else {
   // eslint-disable-next-line no-undef
-  GM_addStyle(GM_getResourceText('vantcss'))
+  // GM_addStyle(GM_getResourceText('vantcss'))
 }
 
 new Vue({
