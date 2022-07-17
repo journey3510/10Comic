@@ -123,6 +123,27 @@ const comicsWebInfo = [
       const imgArray = JSON.parse(imgStr)
       return imgArray
     }
+  },
+  {
+    domain: 'www.36manga.com',
+    homepage: 'https://www.36manga.com/',
+    webName: '36漫画网',
+    comicNameCss: '.book-title h1 span',
+    chapterCss: '#chapter-list-4 li:not(:first-of-type)',
+    type: 1,
+    getImgs: function(context) {
+      const group = context.matchAll(/chapterImages = ([\s\S]+?);var chapterPath = "([\s\S]+?)";var chapterPrice/g)
+      let imgarr = []
+      let middleStr = ''
+      for (const item of group) {
+        imgarr = JSON.parse(item[1])
+        middleStr = item[2]
+      }
+      imgarr = imgarr.map((item) => {
+        return 'https://img001.arc-theday.com/' + middleStr + item
+      })
+      return imgarr
+    }
   }
 ]
 

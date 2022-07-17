@@ -26,19 +26,23 @@ export default class Queue {
      * 执行一个任务
      * @param { number } index
      */
-  * exeDown(index) {
+  async * exeDown(index) {
     const downtype = this.worker[index].type
-    const name = this.worker[index].name
+    const chapterName = this.worker[index].chapterName
     const _this = this
     if (downtype === 1) {
-      const imgs = this.worker[index].imgs
-      // yield this.downAll(index, name, imgs)
-      yield this.downOne(index, name, imgs)
+      const url = this.worker[index].url
+      const imgs = await getHtml(url)
+      this.worker[index].imgs = imgs
+      this.worker[index].number = imgs.length
+
+      // yield this.downAll(index, chapterName, imgs)
+      yield this.downOne(index, chapterName, imgs)
         .then(function() {
           // 任务执行完毕后，再次分配任务并执行任务
           setTimeout(() => {
             _this.worker[index] = undefined
-            _this.workeredList.push(name)
+            _this.workeredList.push(chapterName)
             _this.run()
           }, 500)
         })
@@ -47,7 +51,7 @@ export default class Queue {
         .then(function() {
           setTimeout(() => {
             _this.worker[index] = undefined
-            _this.workeredList.push(name)
+            _this.workeredList.push(chapterName)
             _this.run()
           }, 500)
         })
@@ -73,22 +77,30 @@ export default class Queue {
   addImgPromise(index, imgurl) {
     return new Promise((resolve, reject) => {
       const _this = this
+      const suffix = this.getSuffix(imgurl)
       // eslint-disable-next-line no-undef
       GM_xmlhttpRequest({
         method: 'get',
         url: imgurl,
         responseType: 'blob',
         onload: function(gmRes) {
+          console.log('gmRes: ', gmRes)
           _this.worker[index].currentnum = _this.worker[index].currentnum + 1
           _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
           _this.refresh()
-          resolve(gmRes.response)
+          resolve({
+            blob: gmRes.response,
+            suffix: suffix })
         },
         onerror: function(e) {
-          resolve(1)
+          resolve({
+            blob: 1,
+            suffix: '' })
         },
         ontimeout: function() {
-          resolve(0)
+          resolve({
+            blob: 0,
+            suffix: '' })
         }
       })
     })
@@ -142,59 +154,58 @@ export default class Queue {
         // 需要执行的任务
         const item = this.list[len - 1]
 
-        if (item.type === 1) {
-          const worker = {
-            name: item.name,
-            currentnum: 0,
-            number: 0,
-            imgs: [],
-            progress: 0,
-            type: item.type,
-            func: this.exeDown(i)
-          }
-          this.workerimg[i] = []
-          this.worker[i] = worker
-
-          this.list.pop()
-          const imgs = await getHtml(item.url)
-          this.worker[i].imgs = imgs
-          this.worker[i].number = imgs.length
-        } else {
-          const worker = {
-            name: item.name,
-            currentnum: 0,
-            number: 0,
-            url: item.url,
-            progress: 0,
-            type: item.type,
-            func: this.exeDown(i)
-          }
-          this.workerimg[i] = []
-          this.worker[i] = worker
-          this.list.pop()
+        const worker = {
+          comicName: item.comicName,
+          chapterName: item.chapterName,
+          currentnum: 0,
+          number: 0,
+          imgs: [],
+          url: item.url,
+          progress: 0,
+          type: item.type,
+          func: this.exeDown(i)
         }
+        this.workerimg[i] = []
+        this.worker[i] = worker
+        this.list.pop()
         runIndex.push(i)
       }
     }
-
     // 执行任务
     for (const index of runIndex) {
       this.worker[index].func.next()
     }
   }
 
+  getSuffix(url) {
+    const testurl = url.toLowerCase()
+    const imgtype = ['jpg', 'jpeg', 'webp', 'png', 'gif', 'bmp', 'tiff', 'svg', 'ico']
+    for (let i = 0; i < imgtype.length; i++) {
+      const a = testurl.search(imgtype[i])
+      if (a !== -1) {
+        return imgtype[i]
+      }
+    }
+    // 可能网址没有图片后缀
+    return 'jpg'
+  }
+
   // 压缩
   async makeZip(workerId) {
-    const name = this.worker[workerId].name
+    const comicName = this.worker[workerId].comicName
+    const chapterName = this.worker[workerId].chapterName
+
     return new Promise((resolve, reject) => {
       const zip = new JSZip()
 
-      this.workerimg[workerId].forEach((imgblob, index) => {
+      this.workerimg[workerId].forEach((item, index) => {
+        const imgblob = item.blob
+        const suffix = item.suffix
         if (imgblob === 1 || imgblob === 0) {
-          zip.file(parseInt(index + 1) + '.jpg', '', { blob: true })
+          zip.file(parseInt(index + 1) + '.xx', '', { blob: true })
           return
         }
-        zip.file(parseInt(index + 1) + '.jpg', imgblob, { blob: true })
+        zip.file(parseInt(index + 1) + '.' + suffix, imgblob, { blob: true })
       })
 
       zip.generateAsync({
@@ -204,7 +215,7 @@ export default class Queue {
           level: 9
         }
       }).then((zipblob) => {
-        this.downloadFile(name, zipblob)
+        this.downloadFile(comicName + '_' + chapterName, zipblob)
         resolve()
         return
       })
