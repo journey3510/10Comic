@@ -17,7 +17,7 @@
           >
             <div v-if="item !== undefined ">
               <div class="itemname">
-                <span class="custom-title">{{ item.name }}</span>
+                <span class="custom-title">{{ item.chapterName }}</span>
                 <!-- <van-icon name="down" size="18px" /> -->
               </div>
 
@@ -48,7 +48,7 @@
             class="downitem"
           >
             <div class="itemname">
-              <span class="custom-title">{{ item.name }}</span>
+              <span class="custom-title">{{ item.chapterName }}</span>
             </div>
             <van-divider
               :style="{ margin:'11px 0px', padding: '0 0px',height: '1px' }"

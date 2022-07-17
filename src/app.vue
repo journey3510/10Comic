@@ -59,12 +59,12 @@
         </svg>
       </div>
     </div>
-    <van-button
+    <!-- <van-button
       id="thebtn"
       icon="plus"
       type="primary"
       @click="onChange"
-    />
+    /> -->
   </div>
 </template>
 

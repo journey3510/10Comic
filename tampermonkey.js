@@ -27,6 +27,8 @@
 // @match        *://www.wuxiamh.com/*
 // @match        *://manhua.dmzj.com/*
 // @match        *://qiximh1.com/*
+// @match        *://36manga.com/*
+// @match        *://www.36manga.com/*
 
 // @connect      dmzj.com
 // @connect      byteimg.com

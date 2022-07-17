@@ -69,7 +69,7 @@
           <van-cell
             v-for="(item,index) in list"
             :key="index"
-            :title="item.name"
+            :title="item.chapterName"
           >
             <template #right-icon>
               <van-checkbox
@@ -144,7 +144,8 @@ export default {
           const type = currentComics.type
           urls.forEach(element => {
             this.list.push(
-              { name: element.innerText,
+              { comicName: this.comicName,
+                chapterName: element.innerText,
                 url: element.href,
                 type: type }
             )
@@ -157,8 +158,8 @@ export default {
         Toast('请选择章节')
         return
       }
-      this.selectResult.forEach(element => {
-        this.downResult.push(this.list[element])
+      this.selectResult.forEach(num => {
+        this.downResult.push(this.list[num])
       })
       this.$bus.$emit('selectDown', this.downResult)
       this.$bus.$emit('changTab', 2)
