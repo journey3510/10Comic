@@ -84,7 +84,6 @@ export default class Queue {
         url: imgurl,
         responseType: 'blob',
         onload: function(gmRes) {
-          console.log('gmRes: ', gmRes)
           _this.worker[index].currentnum = _this.worker[index].currentnum + 1
           _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
           _this.refresh()

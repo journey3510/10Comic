@@ -116,7 +116,9 @@ export default {
         // eslint-disable-next-line no-undef
         const num = GM_getValue('queueNum')
         this.queueNum = num
-      } catch (error) {}
+      } catch (error) {
+        console.log('error: ', error)
+      }
     }
 
   }

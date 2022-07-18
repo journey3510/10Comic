@@ -117,7 +117,7 @@ export default {
       this.isHide = !this.isHide
     },
     onChange(e) {
-      console.log(Down.data)
+
     }
   }
 }

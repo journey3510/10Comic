@@ -26,7 +26,6 @@ const comicsWebInfo = [
       imgArray = imgArray.map((item) => {
         return 'https://images.dmzj.com/' + item
       })
-      console.log('imgArray: ', imgArray)
       return imgArray
     }
   },
@@ -77,7 +76,6 @@ const comicsWebInfo = [
     getImgs: async function(context) {
       const imgobj = context.matchAll(/><mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
       const imgUrl = []
-      console.log('imgobj: ', imgobj)
       for (const item of imgobj) {
         imgUrl.push(item[1])
       }
