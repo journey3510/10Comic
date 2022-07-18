@@ -43,9 +43,11 @@ export default {
   },
   methods: {
     onChange(value) {
+      // eslint-disable-next-line no-undef
       GM_setValue('queueNum', value)
     },
     getnum() {
+      // eslint-disable-next-line no-undef
       this.queueNum = GM_getValue('queueNum')
     }
   }

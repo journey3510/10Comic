@@ -131,7 +131,7 @@ export default {
     },
 
     radioSelect(index) {
-      console.log('选择index', this.selectResult)
+      console.log('index', this.selectResult)
     },
     async getSelectList() {
       this.showSelectList = true
