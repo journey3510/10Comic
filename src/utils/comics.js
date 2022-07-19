@@ -23,7 +23,7 @@ const comicsWebInfo = [
       let imgStr = eval(code)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       let imgArray = JSON.parse(imgStr)
-      if (imgarr[0].search('http') === -1) {
+      if (imgArray[0].search('http') === -1) {
         imgArray = imgArray.map((item) => {
           return 'https://images.dmzj.com/' + item
         })
