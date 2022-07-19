@@ -23,9 +23,11 @@ const comicsWebInfo = [
       let imgStr = eval(code)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       let imgArray = JSON.parse(imgStr)
-      imgArray = imgArray.map((item) => {
-        return 'https://images.dmzj.com/' + item
-      })
+      if (imgarr[0].search('http') === -1) {
+        imgArray = imgArray.map((item) => {
+          return 'https://images.dmzj.com/' + item
+        })
+      }
       return imgArray
     }
   },
@@ -137,9 +139,29 @@ const comicsWebInfo = [
         imgarr = JSON.parse(item[1])
         middleStr = item[2]
       }
-      imgarr = imgarr.map((item) => {
-        return 'https://img001.arc-theday.com/' + middleStr + item
-      })
+      if (imgarr[0].search('http') === -1) {
+        imgarr = imgarr.map((item) => {
+          return 'https://img001.arc-theday.com/' + middleStr + item
+        })
+      }
+      return imgarr
+    }
+  },
+  {
+    domain: 'www.gufengmanhua.com',
+    homepage: 'https://www.gufengmanhua.com/',
+    webName: '古风漫画网',
+    comicNameCss: '.book-title h1 span',
+    chapterCss: '#chapter-list-1,#chapter-list-10',
+    type: 1,
+    getImgs: function(context) {
+      const imgStr = context.match(/chapterImages = ([\s\S]+?);var chapterPath/)[1]
+      let imgarr = JSON.parse(imgStr)
+      if (imgarr[0].search('http') === -1) {
+        imgarr = imgarr.map((item) => {
+          return 'https://res5.gufengmanhua.com' + item
+        })
+      }
       return imgarr
     }
   }
