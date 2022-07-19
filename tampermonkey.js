@@ -29,10 +29,7 @@
 // @match        *://qiximh1.com/*
 // @match        *://www.36manga.com/*
 // @match        *://www.gufengmanhua.com/*
-// @connect      dmzj.com
-// @connect      byteimg.com
-// @connect      arc-theday.com
-// @connect      gufengmanhua.com
+// @connect      *
 // @license      MIT
 // ==/UserScript==
 
