@@ -69,11 +69,13 @@
           <van-cell
             v-for="(item,index) in list"
             :key="index"
+            :style="item.url !== 'javascript:void();' ?'': {color: 'red'}"
             :title="item.chapterName"
           >
             <template #right-icon>
               <van-checkbox
                 :name="index"
+                :disabled="item.url !== 'javascript:void();' ? false: true"
                 class="selectChapter"
                 icon-size="24px"
                 @click="radioSelect(index)"
@@ -131,7 +133,7 @@ export default {
     },
 
     radioSelect(index) {
-      console.log('index', this.selectResult)
+      // console.log('index', this.selectResult)
     },
     async getSelectList() {
       this.showSelectList = true
