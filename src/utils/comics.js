@@ -164,6 +164,39 @@ const comicsWebInfo = [
       }
       return imgarr
     }
+  },
+  {
+    domain: 'ac.qq.com',
+    homepage: 'https://ac.qq.com/',
+    webName: '腾讯漫画',
+    comicNameCss: '.works-intro-title.ui-left strong',
+    chapterCss: '.chapter-page-all.works-chapter-list',
+    type: 1,
+    hasSpend: true,
+    freeCss: '.ui-icon-free',
+    payCss: '.ui-icon-pay',
+    getImgs: function(context) {
+      let nonce = context.match(/<script>\s*window.*?=(.*?)?;/)[1]
+      nonce = eval(nonce)
+      const dataStr = context.match(/DATA.*?'(.*)?'/)[1]
+      const data = dataStr.split('')
+      nonce = nonce.match(/\d+[a-zA-Z]+/g)
+      let len = nonce.length
+      let locate = null
+      let str = ''
+      while (len--) {
+        locate = parseInt(nonce[len]) & 255
+        str = nonce[len].replace(/\d+/g, '')
+        data.splice(locate, str.length)
+      }
+      const chapterStr = data.join('')
+      const chapterObj = JSON.parse(window.atob(chapterStr))
+      const imgarr = []
+      chapterObj.picture.forEach(element => {
+        imgarr.push(element.url)
+      })
+      return imgarr
+    }
   }
 ]
 

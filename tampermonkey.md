@@ -16,13 +16,15 @@
   - 设置最多可同时下载章节数量
 
 
-### <font color="#dd0000">* 注意</font>
-  - 部分漫画不能正常阅读，下载也可能会失败
+### <font color="#dd0000">* 声明/注意</font>
+  - 该脚本仅用于学习交流，且不可用于商业行为，否则后果自负
+  - 下载漫画仅限免费部分，部分漫画不能正常阅读，下载也可能会失败
   - 文件后缀名为 .xx 表示下载该图片失败
   - 刷新页面任务会终止
 
 
 ### 更新记录
+  - 2022/7/23 <span style="margin:0 10px;">v1.0.6</span> 新增腾讯漫画
   - 2022/7/19 <span style="margin:0 10px;">v1.0.4</span> 新增古风漫画网
   - 2022/7/18 <span style="margin:0 10px;">v1.0.3</span> 新增36漫画网网站、优化下载显示、修改压缩命名
   - 2022/7/16 <span style="margin:0 10px;">v1.0.2</span> 新增适用网站（动漫之家、七夕漫画）、可重新加载章节列表
@@ -32,7 +34,4 @@
 ### 感谢
   - [Tampermonkey-Vue](https://github.com/huangxubo23/tampermonkey-vue)
   - [用JS实现多个任务并行执行的队列](https://juejin.cn/post/6844903961728647181)
-
-
-
 
