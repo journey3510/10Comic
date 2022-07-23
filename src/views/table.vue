@@ -55,6 +55,8 @@
 
     </div>
 
+    <van-overlay id="overlayDom" :show="overlayShow" />
+
     <!-- 展示列表 -->
     <div
       v-if="showSelectList"
@@ -103,12 +105,13 @@ export default {
       downResult: [],
 
       showSelectList: false,
-      currentComics: '',
+      overlayShow: false,
 
+      currentComics: '',
       webname: '未匹配',
       comicName: '------',
-      chapterReg: ''
 
+      paylogoArr: []
     }
   },
   mounted() {
@@ -116,16 +119,28 @@ export default {
   },
   methods: {
     getInfo() {
-      this.currentComics = currentComics
-      if (currentComics === null) {
-        return
-      }
-      const comicNameCss = this.currentComics.comicNameCss
-      this.webname = currentComics.webName
-      this.comicName = document.querySelector(comicNameCss).innerText
-      this.chapterReg = currentComics.reg
+      try {
+        this.currentComics = currentComics
+
+        if (currentComics === null) {
+          return
+        }
+        const comicNameCss = this.currentComics.comicNameCss
+        this.webname = currentComics.webName
+        this.comicName = document.querySelector(comicNameCss).innerText
+      // eslint-disable-next-line no-empty
+      } catch (error) {}
     },
     selectAll() {
+      this.$refs.checkboxGroup.toggleAll(false)
+      if (currentComics.hasSpend) {
+        this.list.forEach((element, index) => {
+          if (element.url !== 'javascript:void();') {
+            this.selectResult.push(index)
+          }
+        })
+        return
+      }
       this.$refs.checkboxGroup.toggleAll(true)
     },
     CancelSelect() {
@@ -136,24 +151,45 @@ export default {
       // console.log('index', this.selectResult)
     },
     async getSelectList() {
-      this.showSelectList = true
-      await this.$nextTick()
+      this.overlayShow = true
       const chapterCss = currentComics.chapterCss
       setTimeout(() => {
+        if (currentComics.hasSpend) {
+          this.paylogoArr = []
+          const logoArr = document.querySelectorAll('.works-chapter-item .ui-icon-pay,.ui-icon-free')
+          logoArr.forEach((element, index) => {
+            if ('.' + logoArr[index].className === currentComics.payCss) {
+              this.paylogoArr.push(true)
+            } else {
+              this.paylogoArr.push(false)
+            }
+          })
+        }
         const nodeList = document.querySelectorAll(chapterCss)
         nodeList.forEach(dom => {
           const urls = dom.querySelectorAll('a')
           const type = currentComics.type
-          urls.forEach(element => {
-            this.list.push(
-              { comicName: this.comicName,
-                chapterName: element.innerText,
-                url: element.href,
-                type: type }
-            )
+          urls.forEach((element, index) => {
+            let chapterName = element.innerText.replace(/\n|\r/g, '')
+            chapterName = chapterName.trim()
+            const data = {
+              comicName: this.comicName,
+              chapterName: chapterName,
+              url: element.href,
+              type: type
+            }
+            if (currentComics.hasSpend) {
+              data.isPay = this.paylogoArr[index]
+              if (data.isPay) {
+                data.url = 'javascript:void();'
+              }
+            }
+            this.list.push(data)
           })
         })
-      }, 200)
+        this.overlayShow = false
+        this.showSelectList = true
+      }, 100)
     },
     downSelectList() {
       if (this.selectResult.length === 0) {
@@ -184,7 +220,9 @@ export default {
   position: relative;
   height: 650px;
 }
-
+#overlayDom {
+  background-color: #eeeeeece;
+}
 #select-list {
   max-height: 600px;
   overflow-y:auto;
