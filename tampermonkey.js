@@ -15,7 +15,7 @@
 // @grant        GM.getValue
 // @grant        GM.setValue
 // @grant        GM.setClipboard
-// @grant        GM_info
+// @grant        GM.info
 // @grant        GM.xmlHttpRequest
 // @resource   vantcss   https://unpkg.com/vant@2.12/lib/index.css
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js

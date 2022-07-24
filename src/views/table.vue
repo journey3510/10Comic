@@ -193,7 +193,11 @@ export default {
     },
     downSelectList() {
       if (this.selectResult.length === 0) {
-        Toast('请选择章节')
+        Toast({
+          message: '请选择章节',
+          getContainer: '.card',
+          position: 'bottom'
+        })
         return
       }
       this.selectResult.forEach(num => {

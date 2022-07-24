@@ -14,10 +14,10 @@ root.id = id
 document.body.appendChild(root)
 
 Vue.prototype.$bus = new Vue()
+Vue.use(Vant)
 
 if (isDev) {
   loadStyle('https://unpkg.com/vant@2.12/lib/index.css')
-  Vue.use(Vant)
 } else {
   // eslint-disable-next-line no-undef
   GM_addStyle(GM_getResourceText('vantcss'))
