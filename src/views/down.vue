@@ -117,7 +117,7 @@ export default {
         const num = GM_getValue('queueNum')
         this.queueNum = num
       } catch (error) {
-        console.log('error: ', error)
+        //
       }
     }
 

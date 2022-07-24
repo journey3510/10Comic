@@ -63,7 +63,7 @@
       id="thebtn"
       icon="plus"
       type="primary"
-      @click="onChange"
+      @click="test"
     /> -->
   </div>
 </template>
@@ -76,6 +76,7 @@ import Down from '@/views/down.vue'
 
 import { AppName, AppVersion } from './config'
 import { matchWeb } from './utils/comics'
+import { appinit } from './config/setup.js'
 
 export default {
   name: 'App',
@@ -104,6 +105,7 @@ export default {
     }
   },
   created() {
+    appinit()
     matchWeb(window.location.href)
   },
   mounted() {
@@ -116,7 +118,7 @@ export default {
     hide() {
       this.isHide = !this.isHide
     },
-    onChange(e) {
+    test(e) {
 
     }
   }
