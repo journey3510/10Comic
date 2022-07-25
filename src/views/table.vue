@@ -2,7 +2,6 @@
   <div id="comiclist">
     <!-- 编辑选项 -->
     <div id="editItem">
-
       <div>
         <van-button
           type="primary"
@@ -156,7 +155,8 @@ export default {
       setTimeout(() => {
         if (currentComics.hasSpend) {
           this.paylogoArr = []
-          const logoArr = document.querySelectorAll('.works-chapter-item .ui-icon-pay,.ui-icon-free')
+          const logoCss = currentComics.freeCss + ',' + currentComics.payCss
+          const logoArr = document.querySelectorAll(logoCss)
           logoArr.forEach((element, index) => {
             if ('.' + logoArr[index].className === currentComics.payCss) {
               this.paylogoArr.push(true)

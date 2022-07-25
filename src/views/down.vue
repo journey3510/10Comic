@@ -79,6 +79,7 @@
 
 <script>
 import Queue from '@/utils/queue'
+import { getStorage } from '@/config/setup'
 
 export default {
   name: 'Down',
@@ -90,7 +91,8 @@ export default {
         'list': '',
         'workeredList': ''
       },
-      queueNum: 3
+      maxChapterNum: 3,
+      maxPictureNum: 2
     }
   },
   watch: {
@@ -99,28 +101,19 @@ export default {
   mounted() {
     console.clear()
     this.$bus.$on('selectDown', this.downInit)
-    this.getnum()
   },
   created() {
   },
   methods: {
-    downInit(arr) {
+    async downInit(arr) {
       if (this.queue.worker === '') {
-        this.queue = new Queue(this.queueNum)
+        this.maxChapterNum = await getStorage('maxChapterNum')
+        this.maxPictureNum = await getStorage('maxPictureNum')
+        this.queue = new Queue(this.maxChapterNum, this.maxPictureNum)
       }
       this.queue.addList(arr)
       this.queue.run()
-    },
-    getnum() {
-      try {
-        // eslint-disable-next-line no-undef
-        const num = GM_getValue('queueNum')
-        this.queueNum = num
-      } catch (error) {
-        //
-      }
     }
-
   }
 }
 </script>
