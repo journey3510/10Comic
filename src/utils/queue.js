@@ -5,12 +5,13 @@ import { getHtml } from '@/utils/index'
 // https://juejin.cn/post/6844903961728647181
 
 export default class Queue {
-  constructor(workerLen) {
+  constructor(workerLen, maxPictureNum) {
     this.workerLen = workerLen || 3 // 同时执行的任务数
     this.list = [] // 任务队列
     this.workeredList = [] // 已完成的任务
     this.worker = new Array(this.workerLen) // 正在执行的任务
     this.workerimg = new Array(this.workerLen) // 存储下载的图片数据
+    this.pictureNum = maxPictureNum || 2
   }
 
   downloadFile(fileName, content) {
@@ -110,9 +111,22 @@ export default class Queue {
     const url = this.worker[workerId].url
     const { imgUrl, nextPageUrl, number } = await getHtml(url)
     this.worker[workerId].number = number
-    for (let index = 0; index < imgUrl.length; index++) {
-      const res = await this.addImgPromise(workerId, imgUrl[index])
-      this.workerimg[workerId].push(res)
+
+    while (imgUrl.length > 0) {
+      // eslint-disable-next-line prefer-const
+      let promise = []
+      for (let index = this.pictureNum; index > 0; index--) {
+        if (imgUrl[0] === undefined) {
+          break
+        }
+        promise.push(this.addImgPromise(workerId, imgUrl[0]))
+        imgUrl.shift()
+      }
+
+      const res = await Promise.all(promise)
+      res.forEach(element => {
+        this.workerimg[workerId].push(element)
+      })
     }
 
     if (nextPageUrl !== '') {
@@ -129,10 +143,20 @@ export default class Queue {
   // 网站卷轴阅读方式  下载
   async downOne(workerId) {
     const imgs = this.worker[workerId].imgs
-    const res = await this.addImgPromise(workerId, imgs[0])
-
-    this.workerimg[workerId].push(res)
-    this.worker[workerId].imgs.shift()
+    const promise = []
+    let len = imgs.length
+    let pictureNum = this.pictureNum
+    while (pictureNum--) {
+      if (len > 0) {
+        promise.push(this.addImgPromise(workerId, imgs[0]))
+        this.worker[workerId].imgs.shift()
+        len--
+      }
+    }
+    const res = await Promise.all(promise)
+    res.forEach(element => {
+      this.workerimg[workerId].push(element)
+    })
 
     if (this.worker[workerId].imgs.length > 0) {
       return this.downOne(workerId)
