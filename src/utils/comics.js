@@ -32,9 +32,9 @@ const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.kmwu6.com',
-    homepage: 'http://www.kmwu6.com/',
-    webName: '酷漫屋6',
+    domain: 'www.kumw5.com',
+    homepage: 'http://www.kumw5.com/',
+    webName: '酷漫屋',
     comicNameCss: '.info h1',
     chapterCss: '#detail-list-select-1',
     type: 1,
@@ -196,6 +196,27 @@ const comicsWebInfo = [
         imgarr.push(element.url)
       })
       return imgarr
+    }
+  },
+  {
+    domain: 'www.mhxqiu1.com',
+    homepage: 'http://www.mhxqiu1.com/',
+    webName: '漫画星球',
+    comicNameCss: '.cy_title h1',
+    chapterCss: '.cy_plist #mh-chapter-list-ol-0',
+    type: 1,
+    getImgs: function(context) {
+      const group = context.matchAll(/(function.*?return \S})(\(.*?{}\))/g)
+      const func = []
+      for (const item of group) {
+        func.push(item[1])
+        func.push(item[2])
+      }
+      const code = '(' + func[0] + ')' + func[1]
+      let imgStr = eval(code)
+      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      const imgArray = JSON.parse(imgStr)
+      return imgArray
     }
   }
 ]
