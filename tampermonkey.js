@@ -32,6 +32,7 @@
 // @match        *://www.gufengmanhua.com/*
 // @match        *://ac.qq.com/*
 // @match        *://www.mhxqiu1.com/*
+// @match        *://www.123gf.com/*
 // @connect      kumw5.com
 // @connect      manga8.xyz
 // @connect      169gouwu.com
@@ -39,6 +40,8 @@
 // @connect      byteimg.com
 // @connect      arc-theday.com
 // @connect      gufengmanhua.com
+// @connect      123gf.com
+// @connect      xiaoqinre.com
 // @connect      acimg.cn
 // @connect      byteimg.com
 // @connect      *

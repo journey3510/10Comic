@@ -166,6 +166,32 @@ const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.123gf.com',
+    homepage: 'https://www.123gf.com/',
+    webName: '古风漫画网 2',
+    comicNameCss: '.book-title h1 span',
+    chapterCss: '#chapter-list-1,#chapter-list-10',
+    type: 1,
+    getImgs: async function(context) {
+      const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
+      const strArr = []
+      for (const item of group) {
+        strArr.push(item[1])
+        strArr.push(item[2])
+      }
+      const josnRes = await request('get', this.homepage + 'js/config.js')
+      const josnContext = josnRes.responseText
+      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+      let imgarr = JSON.parse(strArr[0])
+      if (imgarr[0].search('http') === -1) {
+        imgarr = imgarr.map((item) => {
+          return imageDomian + '/' + strArr[1] + item
+        })
+      }
+      return imgarr
+    }
+  },
+  {
     domain: 'ac.qq.com',
     homepage: 'https://ac.qq.com/',
     webName: '腾讯漫画',
