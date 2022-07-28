@@ -244,6 +244,38 @@ const comicsWebInfo = [
       const imgArray = JSON.parse(imgStr)
       return imgArray
     }
+  },
+  {
+    domain: 'www.haoman8.com',
+    homepage: 'https://www.haoman8.com/',
+    webName: '好漫8',
+    comicNameCss: '.content .title',
+    chapterCss: '#j_chapter_list',
+    type: 1,
+    getImgs: function(context) {
+      const group = context.matchAll(/data-echo="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[1])
+      }
+      return imgArray
+    }
+  },
+  {
+    domain: 'www.mh5.org',
+    homepage: 'https://www.mh5.org/',
+    webName: '漫画屋',
+    comicNameCss: '.comic-title.j-comic-title',
+    chapterCss: '.chapter__list-box.clearfix',
+    type: 1,
+    getImgs: function(context) {
+      const group = context.matchAll(/data-original="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[1])
+      }
+      return imgArray
+    }
   }
 ]
 
