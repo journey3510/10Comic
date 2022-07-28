@@ -25,6 +25,7 @@
 
 
 ### 更新记录
+  - 2022/7/28 <span style="margin:0 10px;">v1.0.9</span> 新增好漫8、漫画屋
   - 2022/7/27 <span style="margin:0 10px;">v1.0.8</span> 新增古风漫画网（另一个域名网站）
   - 2022/7/26 <span style="margin:0 10px;">v1.0.7</span> 新增漫画星球
   - 2022/7/23 <span style="margin:0 10px;">v1.0.6</span> 新增腾讯漫画
