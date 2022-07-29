@@ -91,7 +91,7 @@ const comicsWebInfo = [
   },
   {
     domain: 'www.wuxiamh.com',
-    homepage: 'http://www.wuxiamh.com/',
+    homepage: 'https://www.wuxiamh.com/',
     webName: '武侠漫画网（电脑）',
     comicNameCss: '.title h1',
     chapterCss: '#chapter-list-1',
@@ -275,6 +275,19 @@ const comicsWebInfo = [
         imgArray.push(item[1])
       }
       return imgArray
+    }
+  },
+  {
+    domain: 'www.2mzx.com',
+    homepage: 'https://www.2mzx.com/',
+    webName: '27漫画网',
+    comicNameCss: '.bar .position strong',
+    chapterCss: '#play_0 #chapter-list-1',
+    type: 1,
+    getImgs: async function(context) {
+      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+      const imgs = eval(imgStr)
+      return imgs
     }
   }
 ]
