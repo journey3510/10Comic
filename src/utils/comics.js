@@ -32,9 +32,9 @@ const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.kmwu6.com',
-    homepage: 'http://www.kmwu6.com/',
-    webName: '酷漫屋6',
+    domain: 'www.kumw5.com',
+    homepage: 'http://www.kumw5.com/',
+    webName: '酷漫屋',
     comicNameCss: '.info h1',
     chapterCss: '#detail-list-select-1',
     type: 1,
@@ -91,7 +91,7 @@ const comicsWebInfo = [
   },
   {
     domain: 'www.wuxiamh.com',
-    homepage: 'http://www.wuxiamh.com/',
+    homepage: 'https://www.wuxiamh.com/',
     webName: '武侠漫画网（电脑）',
     comicNameCss: '.title h1',
     chapterCss: '#chapter-list-1',
@@ -166,6 +166,32 @@ const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.123gf.com',
+    homepage: 'https://www.123gf.com/',
+    webName: '古风漫画网 2',
+    comicNameCss: '.book-title h1 span',
+    chapterCss: '#chapter-list-1,#chapter-list-10',
+    type: 1,
+    getImgs: async function(context) {
+      const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
+      const strArr = []
+      for (const item of group) {
+        strArr.push(item[1])
+        strArr.push(item[2])
+      }
+      const josnRes = await request('get', this.homepage + 'js/config.js')
+      const josnContext = josnRes.responseText
+      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+      let imgarr = JSON.parse(strArr[0])
+      if (imgarr[0].search('http') === -1) {
+        imgarr = imgarr.map((item) => {
+          return imageDomian + '/' + strArr[1] + item
+        })
+      }
+      return imgarr
+    }
+  },
+  {
     domain: 'ac.qq.com',
     homepage: 'https://ac.qq.com/',
     webName: '腾讯漫画',
@@ -196,6 +222,72 @@ const comicsWebInfo = [
         imgarr.push(element.url)
       })
       return imgarr
+    }
+  },
+  {
+    domain: 'www.mhxqiu1.com',
+    homepage: 'http://www.mhxqiu1.com/',
+    webName: '漫画星球',
+    comicNameCss: '.cy_title h1',
+    chapterCss: '.cy_plist #mh-chapter-list-ol-0',
+    type: 1,
+    getImgs: function(context) {
+      const group = context.matchAll(/(function.*?return \S})(\(.*?{}\))/g)
+      const func = []
+      for (const item of group) {
+        func.push(item[1])
+        func.push(item[2])
+      }
+      const code = '(' + func[0] + ')' + func[1]
+      let imgStr = eval(code)
+      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      const imgArray = JSON.parse(imgStr)
+      return imgArray
+    }
+  },
+  {
+    domain: 'www.haoman8.com',
+    homepage: 'https://www.haoman8.com/',
+    webName: '好漫8',
+    comicNameCss: '.content .title',
+    chapterCss: '#j_chapter_list',
+    type: 1,
+    getImgs: function(context) {
+      const group = context.matchAll(/data-echo="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[1])
+      }
+      return imgArray
+    }
+  },
+  {
+    domain: 'www.mh5.org',
+    homepage: 'https://www.mh5.org/',
+    webName: '漫画屋',
+    comicNameCss: '.comic-title.j-comic-title',
+    chapterCss: '.chapter__list-box.clearfix',
+    type: 1,
+    getImgs: function(context) {
+      const group = context.matchAll(/data-original="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[1])
+      }
+      return imgArray
+    }
+  },
+  {
+    domain: 'www.2mzx.com',
+    homepage: 'https://www.2mzx.com/',
+    webName: '27漫画网',
+    comicNameCss: '.bar .position strong',
+    chapterCss: '#play_0 #chapter-list-1',
+    type: 1,
+    getImgs: async function(context) {
+      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+      const imgs = eval(imgStr)
+      return imgs
     }
   }
 ]
