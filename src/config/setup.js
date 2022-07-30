@@ -4,8 +4,7 @@ import { AppVersion, isDev } from '@/config/index'
 const configDefault = {
   version: AppVersion,
   maxChapterNum: 3,
-  maxPictureNum: 3,
-  testdata: 'eee'
+  maxPictureNum: 3
 }
 
 export const appinit = () => {

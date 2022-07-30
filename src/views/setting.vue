@@ -87,6 +87,7 @@ export default {
     getAllData() {
       try {
         this.maxChapterNum = GM_getValue('maxChapterNum')
+        this.maxPictureNum = GM_getValue('maxPictureNum')
       // eslint-disable-next-line no-empty
       } catch (error) {}
     },
