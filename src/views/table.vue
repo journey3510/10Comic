@@ -93,6 +93,8 @@
 <script>
 
 import { currentComics } from '@/utils/comics'
+import { getStorage } from '@/config/setup'
+
 import { Toast } from 'vant'
 
 export default {
@@ -120,7 +122,6 @@ export default {
     getInfo() {
       try {
         this.currentComics = currentComics
-
         if (currentComics === null) {
           return
         }
@@ -128,7 +129,9 @@ export default {
         this.webname = currentComics.webName
         this.comicName = document.querySelector(comicNameCss).innerText
       // eslint-disable-next-line no-empty
-      } catch (error) {}
+      } catch (error) {
+        // console.log('error: ', error)
+      }
     },
     selectAll() {
       this.$refs.checkboxGroup.toggleAll(false)
