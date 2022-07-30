@@ -172,6 +172,7 @@ const comicsWebInfo = [
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-1,#chapter-list-10',
     type: 1,
+    readCssText: '.img_info {display: none;}.tbCenter img {border: 0px;}',
     getImgs: async function(context) {
       const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
       const strArr = []
@@ -189,6 +190,9 @@ const comicsWebInfo = [
         })
       }
       return imgarr
+    },
+    readFun: function() {
+      const aaa = document.querySelectorAll('.img_info')
     }
   },
   {

@@ -3,7 +3,7 @@
 
     <div id="setpart">
       <van-cell-group title="下载" inset>
-        <van-cell label="* 刷新生效">
+        <van-cell label="* 刷新生效" center>
           <template #title>
             <span style="width: 300px" class="custom-title">最大下载章节数</span>
           </template>
@@ -21,12 +21,9 @@
               </template>
             </van-slider>
           </template>
-
-          <div class="custom-button">{{ dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd }}</div>
-
         </van-cell>
 
-        <van-cell label="* 刷新生效">
+        <van-cell label="* 刷新生效" center>
           <template #title>
             <span style="width: 300px" class="custom-title">每章最大下载图片数</span>
           </template>
@@ -37,7 +34,6 @@
               class="rightslider"
               :min="1"
               :max="5"
-
               @change="onChangeData('maxPictureNum', maxPictureNum)"
             >
               <template #button>
@@ -45,11 +41,42 @@
               </template>
             </van-slider>
           </template>
-
-          <br>
         </van-cell>
 
       </van-cell-group>
+
+      <van-cell-group title="原网站阅读修改" inset>
+        <van-cell label="建议浏览长条漫画时开启" center>
+          <template #title>
+            <span class="custom-title">图片拼接</span>
+
+            <van-popover
+              id="thebtn11"
+              v-model="showPopover"
+              placement="bottom-end"
+              trigger="click"
+              get-container="#thebtn11"
+              style="z-index: 99999999999999999999;"
+            >
+              <span class="popoverText">ddddddssssssssssssssssssssssddddd</span>
+              <template #reference>
+                <van-icon id="xxxx" name="info-o" color="red" />
+
+              </template>
+            </van-popover>
+
+          </template>
+
+          <template #default>
+            <van-checkbox
+              v-model="imgSplicing"
+              class="rightbutton"
+              @change="webImgSplicing"
+            />
+          </template>
+        </van-cell>
+      </van-cell-group>
+
     </div>
 
     <div id="set-bottom">
@@ -66,7 +93,10 @@
 
 <script>
 /* eslint-disable no-undef */
+import { currentComics } from '@/utils/comics'
 import { setinit, setStorage } from '@/config/setup'
+import { loadStyle } from '@/utils/index'
+
 import { Dialog } from 'vant'
 
 export default {
@@ -74,7 +104,10 @@ export default {
   data() {
     return {
       maxChapterNum: 1,
-      maxPictureNum: 2
+      maxPictureNum: 2,
+      imgSplicing: true,
+      //
+      showPopover: false
     }
   },
   mounted() {
@@ -84,11 +117,33 @@ export default {
     onChangeData(key, value) {
       setStorage(key, value)
     },
+    webImgSplicing(value) {
+      const splicingimgstyle = document.getElementById('splicingimgstyle')
+      if (value === true && currentComics.readCssText !== undefined) {
+        if (splicingimgstyle) {
+          splicingimgstyle.innerText = currentComics.readCssText
+        } else {
+          loadStyle('', 'splicingimgstyle', currentComics.readCssText)
+        }
+      } else {
+        if (splicingimgstyle) {
+          splicingimgstyle.innerText = ''
+        }
+      }
+      this.onChangeData('imgSplicing', value)
+    },
+    exeFun(imgSplicing) {
+      this.webImgSplicing(imgSplicing)
+    },
     getAllData() {
       try {
         this.maxChapterNum = GM_getValue('maxChapterNum')
+        this.maxPictureNum = GM_getValue('maxPictureNum')
+        this.imgSplicing = GM_getValue('imgSplicing')
       // eslint-disable-next-line no-empty
       } catch (error) {}
+      // 获取数据后执行其他方法
+      this.exeFun(this.imgSplicing)
     },
     async allInit() {
       Dialog.confirm({
@@ -125,10 +180,11 @@ export default {
     .van-cell {
       padding: 10px 1px;
 
+      // 修改滑动条
       .rightslider {
         margin: 10px 15px;
         width: 150px;
-
+          // 滑动按钮
           .custom-button {
             width: 26px;
             color: #fff;
@@ -139,6 +195,17 @@ export default {
             border-radius: 100px;
           }
        }
+
+      // 右侧按钮
+      .rightbutton {
+        flex-direction: row-reverse;
+      }
+
+      .popoverText {
+        background-color: red;
+        // margin-left: 30px;
+        padding: 10px 10px;
+      }
     }
   }
 

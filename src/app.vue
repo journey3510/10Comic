@@ -65,6 +65,18 @@
       type="primary"
       @click="test"
     /> -->
+    <van-popover
+      id="thebtn"
+      v-model="showPopover"
+      placement="top"
+      trigger="click"
+    >
+      <span>ddddddddddd</span>
+      <template #reference>
+        <van-icon name="info-o" color="red" />
+
+      </template>
+    </van-popover>
   </div>
 </template>
 
@@ -91,7 +103,10 @@ export default {
       isHide: true,
       active: 1,
       titles: ['漫画网站', '选择章节', '下载', '设置'],
-      comicInfo: {}
+      comicInfo: {},
+
+      //
+      showPopover: true
     }
   },
   computed: {
@@ -141,12 +156,12 @@ export default {
   background: rgba(0, 0, 0, 0.1);
 }
 
-// #thebtn {
-//   position: fixed;
-//   top: 150px;
-//   right: 600px;
-//   z-index: 90000 !important;
-// }
+#thebtn {
+  position: fixed;
+  top: 150px;
+  right: 600px;
+  z-index: 90000 !important;
+}
 </style>
 
 <style lang="scss" scoped>

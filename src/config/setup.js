@@ -5,7 +5,7 @@ const configDefault = {
   version: AppVersion,
   maxChapterNum: 3,
   maxPictureNum: 3,
-  testdata: 'eee'
+  imgSplicing: true
 }
 
 export const appinit = () => {
