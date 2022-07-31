@@ -65,6 +65,8 @@
       type="primary"
       @click="test"
     /> -->
+    <!-- <el-button id="thebtn" icon="el-icon-search" circle /> -->
+    <el-button id="thebtn" type="primary">主要按钮</el-button>
   </div>
 </template>
 
@@ -141,12 +143,12 @@ export default {
   background: rgba(0, 0, 0, 0.1);
 }
 
-// #thebtn {
-//   position: fixed;
-//   top: 150px;
-//   right: 600px;
-//   z-index: 90000 !important;
-// }
+#thebtn {
+  position: fixed;
+  top: 150px;
+  right: 600px;
+  z-index: 90000 !important;
+}
 </style>
 
 <style lang="scss" scoped>
