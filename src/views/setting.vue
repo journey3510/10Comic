@@ -46,22 +46,25 @@
       </van-cell-group>
 
       <van-cell-group id="webpart" title="原网站阅读样式修改" inset>
-        <van-cell label="去除部分漫画网站图片上下间隔/建议浏览长条漫画时开启" center>
+        <van-cell label="去除部分漫画网站图片上下间隔" center>
           <template #title>
             <span class="custom-title">图片拼接</span>
 
             <van-popover
-              id="thebtn11"
               v-model="showPopover"
-              placement="bottom-end"
-              trigger="click"
+              placement="bottom-start"
               get-container="#webpart"
+              :offset="[-2,0]"
               :close-on-click-outside="true"
             >
               <code class="popoverText">建议浏览长条漫画时开启</code>
               <template #reference>
-                <van-icon name="info-o" color="red" />
-
+                <van-icon
+                  name="info-o"
+                  color="red"
+                  @mouseover="showPopover = true"
+                  @mouseleave="showPopover = false"
+                />
               </template>
             </van-popover>
 
