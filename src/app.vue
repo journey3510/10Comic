@@ -65,7 +65,6 @@
       type="primary"
       @click="test"
     /> -->
-
   </div>
 </template>
 
@@ -142,12 +141,12 @@ export default {
   background: rgba(0, 0, 0, 0.1);
 }
 
-// #thebtn {
-//   position: fixed;
-//   top: 150px;
-//   right: 600px;
-//   z-index: 90000 !important;
-// }
+#thebtn {
+  position: fixed;
+  top: 150px;
+  right: 600px;
+  z-index: 90000 !important;
+}
 </style>
 
 <style lang="scss" scoped>
