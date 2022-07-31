@@ -39,6 +39,7 @@
 // @connect      byteimg.com
 //
 // @match        *://www.36manga.com/*
+// @connect      arc-theday.com
 //
 // @match        *://www.gufengmanhua.com/*
 // @connect      gufengmanhua.com
@@ -63,7 +64,6 @@
 // @connect      huayingrenren.cn
 //
 // @connect      *
-// @connect      arc-theday.com
 // @connect      xiaoqinre.com
 // @connect      laimidao.com
 // @connect      izhegu.com

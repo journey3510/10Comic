@@ -9,6 +9,20 @@ $lingColor: #66ccff88;
 }
 
 
+
+.van-popover--light {
+  color: #8d8de7 !important;
+  .van-popover__arrow {
+    color: #d9d9d9 !important;
+  }
+}
+.van-popover__content {
+  border: 1px solid !important;
+  padding: 2px 9px !important;
+    
+}
+
+
 * {
   padding: 0;
   margin: 0;

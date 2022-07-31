@@ -2,7 +2,7 @@
   <div class="setindex">
 
     <div id="setpart">
-      <van-cell-group title="下载" inset>
+      <van-cell-group id="downpart" title="下载" inset>
         <van-cell label="* 刷新生效" center>
           <template #title>
             <span style="width: 300px" class="custom-title">最大下载章节数</span>
@@ -45,8 +45,8 @@
 
       </van-cell-group>
 
-      <van-cell-group title="原网站阅读修改" inset>
-        <van-cell label="建议浏览长条漫画时开启" center>
+      <van-cell-group id="webpart" title="原网站阅读样式修改" inset>
+        <van-cell label="去除部分漫画网站图片上下间隔/建议浏览长条漫画时开启" center>
           <template #title>
             <span class="custom-title">图片拼接</span>
 
@@ -55,12 +55,12 @@
               v-model="showPopover"
               placement="bottom-end"
               trigger="click"
-              get-container="#thebtn11"
-              style="z-index: 99999999999999999999;"
+              get-container="#webpart"
+              :close-on-click-outside="true"
             >
-              <span class="popoverText">ddddddssssssssssssssssssssssddddd</span>
+              <code class="popoverText">建议浏览长条漫画时开启</code>
               <template #reference>
-                <van-icon id="xxxx" name="info-o" color="red" />
+                <van-icon name="info-o" color="red" />
 
               </template>
             </van-popover>
@@ -177,8 +177,17 @@ export default {
     border-radius: 15px;
     background-color: #ffffff;
     overflow: auto;
+
+    .van-cell-group__title {
+      color: #78a5ff;
+      font-size: 15px;
+    }
+
     .van-cell {
       padding: 10px 1px;
+      .custom-title {
+
+      }
 
       // 修改滑动条
       .rightslider {
@@ -202,7 +211,9 @@ export default {
       }
 
       .popoverText {
-        background-color: red;
+        display: block;
+        margin: 10px 10px;
+        background-color: red !important;
         // margin-left: 30px;
         padding: 10px 10px;
       }
