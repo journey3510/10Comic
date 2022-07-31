@@ -40,6 +40,15 @@ module.exports = () => {
           ]
         },
         {
+          test: /\.less$/i,
+          use: [
+            // compiles Less to CSS
+            'style-loader',
+            'css-loader',
+            'less-loader'
+          ]
+        },
+        {
           test: /\.(png|svg|jpg|gif)$/,
           use: [
             'file-loader'
@@ -53,7 +62,8 @@ module.exports = () => {
               'scss': [
                 'style-loader',
                 'css-loader',
-                'sass-loader'
+                'sass-loader',
+                'less-loader'
               ]
             }
           }
