@@ -100,7 +100,7 @@ export default {
       AppName,
       AppVersion,
       show: true,
-      isHide: true,
+      isHide: false,
       active: 1,
       titles: ['漫画网站', '选择章节', '下载', '设置'],
       comicInfo: {},
