@@ -30,6 +30,33 @@ const comicsWebInfo = [
       }
       return imgArray
     }
+  }, {
+    domain: 'www.dmzj.com',
+    homepage: 'https://www.dmzj.com/',
+    webName: '动漫之家2',
+    comicNameCss: '.comic_deCon h1 a',
+    chapterCss: '.list_con_li.autoHeight',
+    type: 1,
+    getImgs: async function(context) {
+      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      const func = []
+      for (const item of group) {
+        func.push(item[1])
+        func.push(item[2])
+      }
+      console.log('func: ', func)
+      const code = '(' + func[0] + ')' + func[1]
+      let imgStr = eval(code)
+      console.log('imgStr: ', imgStr)
+      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      let imgArray = JSON.parse(imgStr)
+      if (imgArray[0].search('http') === -1) {
+        imgArray = imgArray.map((item) => {
+          return 'https://images.dmzj.com/' + item
+        })
+      }
+      return imgArray
+    }
   },
   {
     domain: 'www.kumw5.com',
@@ -190,9 +217,6 @@ const comicsWebInfo = [
         })
       }
       return imgarr
-    },
-    readFun: function() {
-      const aaa = document.querySelectorAll('.img_info')
     }
   },
   {

@@ -1,5 +1,5 @@
 import JSZip from 'jszip'
-import { getHtml } from '@/utils/index'
+import { getHtml, downFile } from '@/utils/index'
 
 // 多个任务并行执行的队列
 // https://juejin.cn/post/6844903961728647181
@@ -14,6 +14,11 @@ export default class Queue {
     this.pictureNum = maxPictureNum || 2
   }
 
+  imgDown(url, fileName) {
+
+  }
+
+  // 压缩下载方式
   downloadFile(fileName, content) {
     const a = document.createElement('a')
     const url = window.URL.createObjectURL(content)

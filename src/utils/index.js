@@ -56,3 +56,24 @@ export const request = async(method, url, responseType) => {
     })
   })
 }
+
+export const downFile = async(url, name) => {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-undef
+    GM_download({
+      url,
+      name,
+      onload: result => {
+        console.log(result)
+        resolve(true)
+      },
+      onerror: result => {
+        resolve(false)
+      },
+      ontimeout: result => {
+        resolve(false)
+      }
+    })
+  })
+}
+
