@@ -36,7 +36,6 @@
               />
             </div>
           </div>
-
         </div>
 
       </van-collapse-item>
@@ -64,7 +63,7 @@
             class="downitem"
           >
             <div class="itemname">
-              <span class="custom-title">{{ item }}</span>
+              <span class="custom-title" :class="{ 'hasError': item.hasError }">{{ item.chapterName }}</span>
             </div>
             <van-divider
               :style="{ margin:'11px 0px', padding: '0 0px',height: '1px' }"
@@ -92,7 +91,8 @@ export default {
         'workeredList': ''
       },
       maxChapterNum: 3,
-      maxPictureNum: 2
+      maxPictureNum: 2,
+      zipDownFlag: true
     }
   },
   watch: {
@@ -109,7 +109,8 @@ export default {
       if (this.queue.worker === '') {
         this.maxChapterNum = await getStorage('maxChapterNum')
         this.maxPictureNum = await getStorage('maxPictureNum')
-        this.queue = new Queue(this.maxChapterNum, this.maxPictureNum)
+        this.zipDownFlag = await getStorage('zipDownFlag')
+        this.queue = new Queue(this.maxChapterNum, this.maxPictureNum, this.zipDownFlag)
       }
       this.queue.addList(arr)
       this.queue.run()
@@ -141,6 +142,9 @@ export default {
       display: flex;
       justify-content: space-between;
       margin: 2px 5px;
+      .hasError {
+        color: red;
+      }
     }
 
   }
