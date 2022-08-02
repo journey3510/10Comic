@@ -3,7 +3,7 @@
 
     <div id="setpart">
       <van-cell-group id="downpart" title="下载" inset>
-        <van-cell label="* 刷新生效" center>
+        <van-cell label="*下载前生效" center>
           <template #title>
             <span style="width: 300px" class="custom-title">最大下载章节数</span>
           </template>
@@ -23,7 +23,7 @@
           </template>
         </van-cell>
 
-        <van-cell label="* 刷新生效" center>
+        <van-cell label="*下载前生效" center>
           <template #title>
             <span style="width: 300px" class="custom-title">每章最大下载图片数</span>
           </template>
@@ -43,6 +43,36 @@
           </template>
         </van-cell>
 
+        <van-cell label="*下载前生效, 不勾选则下载图片" center>
+          <template #title>
+            <span class="custom-title">压缩下载</span>
+            <van-popover
+              v-model="zipDownPopover"
+              placement="right"
+              get-container="#downpart"
+              :offset="[-8,10]"
+              :close-on-click-outside="true"
+            >
+              <code class="popoverText">如需保存在文件夹需要设置油猴下载模式为浏览器API</code>
+              <template #reference>
+                <van-icon
+                  name="info-o"
+                  color="red"
+                  @mouseover="zipDownPopover = true"
+                  @mouseleave="zipDownPopover = false"
+                />
+              </template>
+            </van-popover>
+          </template>
+
+          <template #default>
+            <van-checkbox
+              v-model="zipDownFlag"
+              class="rightbutton"
+              @change="onChangeData('zipDownFlag', zipDownFlag)"
+            />
+          </template>
+        </van-cell>
       </van-cell-group>
 
       <van-cell-group id="webpart" title="原网站阅读样式修改" inset>
@@ -67,12 +97,11 @@
                 />
               </template>
             </van-popover>
-
           </template>
 
           <template #default>
             <van-checkbox
-              v-model="imgSplicing"
+              v-model="imgSplicingFlag"
               class="rightbutton"
               @change="webImgSplicing"
             />
@@ -108,8 +137,10 @@ export default {
     return {
       maxChapterNum: 1,
       maxPictureNum: 2,
-      imgSplicing: true,
+      zipDownFlag: true,
+      imgSplicingFlag: true,
       //
+      zipDownPopover: false,
       showPopover: false
     }
   },
@@ -133,20 +164,22 @@ export default {
           splicingimgstyle.innerText = ''
         }
       }
-      this.onChangeData('imgSplicing', value)
+      this.onChangeData('imgSplicingFlag', value)
     },
-    exeFun(imgSplicing) {
-      this.webImgSplicing(imgSplicing)
+
+    exeFun(flag) {
+      this.webImgSplicing(flag)
     },
     getAllData() {
       try {
         this.maxChapterNum = GM_getValue('maxChapterNum')
         this.maxPictureNum = GM_getValue('maxPictureNum')
-        this.imgSplicing = GM_getValue('imgSplicing')
+        this.zipDownFlag = GM_getValue('zipDownFlag')
+        this.imgSplicingFlag = GM_getValue('imgSplicingFlag')
       // eslint-disable-next-line no-empty
       } catch (error) {}
       // 获取数据后执行其他方法
-      this.exeFun(this.imgSplicing)
+      this.exeFun(this.imgSplicingFlag)
     },
     async allInit() {
       Dialog.confirm({
@@ -216,6 +249,8 @@ export default {
       .popoverText {
         display: block;
         margin: 10px 10px;
+        font-size: 12px;
+        transform: scale(0.8) !important;
         background-color: red !important;
         // margin-left: 30px;
         padding: 10px 10px;

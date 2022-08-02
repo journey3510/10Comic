@@ -5,7 +5,8 @@ const configDefault = {
   version: AppVersion,
   maxChapterNum: 3,
   maxPictureNum: 3,
-  imgSplicing: true
+  zipDownFlag: true,
+  imgSplicingFlag: true
 }
 
 export const appinit = () => {

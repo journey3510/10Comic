@@ -5,26 +5,20 @@ import { getHtml, downFile } from '@/utils/index'
 // https://juejin.cn/post/6844903961728647181
 
 export default class Queue {
-  constructor(workerLen, maxPictureNum) {
+  constructor(workerLen, maxPictureNum, zipDownFlag) {
     this.workerLen = workerLen || 3 // 同时执行的任务数
+    this.pictureNum = maxPictureNum || 2 // 章节最大下载图片数量
+    this.zipDownFlag = zipDownFlag || false // 是否压缩下载
     this.list = [] // 任务队列
     this.workeredList = [] // 已完成的任务
     this.worker = new Array(this.workerLen) // 正在执行的任务
     this.workerimg = new Array(this.workerLen) // 存储下载的图片数据
-    this.pictureNum = maxPictureNum || 2
-  }
-
-  imgDown(url, fileName) {
-
   }
 
   // 压缩下载方式
-  downloadFile(fileName, content) {
-    const a = document.createElement('a')
+  async downloadFile(fileName, content) {
     const url = window.URL.createObjectURL(content)
-    a.href = url
-    a.download = fileName
-    a.click()
+    await downFile(url, fileName)
     window.URL.revokeObjectURL(url)
   }
 
@@ -33,34 +27,52 @@ export default class Queue {
      * @param { number } index
      */
   async * exeDown(index) {
-    const downtype = this.worker[index].type
+    const readtype = this.worker[index].type
     const chapterName = this.worker[index].chapterName
     const _this = this
-    if (downtype === 1) {
+
+    function afterDown(index) {
+      const hasError = _this.worker[index].hasError
+      _this.worker[index] = undefined
+      _this.workeredList.push({ chapterName, hasError })
+      _this.workeredList.push(chapterName)
+      _this.run()
+    }
+
+    if (readtype === 1) {
       const url = this.worker[index].url
-      const imgs = await getHtml(url)
+      let imgs = []
+      try {
+        imgs = await getHtml(url)
+      } catch (error) {
+        this.worker[index].hasError = true
+      }
       this.worker[index].imgs = imgs
       this.worker[index].number = imgs.length
 
-      // yield this.downAll(index, chapterName, imgs)
-      yield this.downOne(index, chapterName, imgs)
-        .then(function() {
-          // 任务执行完毕后，再次分配任务并执行任务
-          setTimeout(() => {
-            _this.worker[index] = undefined
-            _this.workeredList.push(chapterName)
-            _this.run()
-          }, 500)
-        })
+      if (this.zipDownFlag) {
+        yield this.zipDown(index)
+          .then(function() {
+            afterDown(index)
+          })
+      } else {
+        yield this.directDown(index)
+          .then(function() {
+            afterDown(index)
+          })
+      }
     } else {
-      yield this.downOne2(index)
-        .then(function() {
-          setTimeout(() => {
-            _this.worker[index] = undefined
-            _this.workeredList.push(chapterName)
-            _this.run()
-          }, 500)
-        })
+      if (this.zipDownFlag) {
+        yield this.zipDown2(index)
+          .then(function() {
+            afterDown(index)
+          })
+      } else {
+        yield this.directDown2(index)
+          .then(function() {
+            afterDown(index)
+          })
+      }
     }
   }
 
@@ -79,7 +91,36 @@ export default class Queue {
     this.worker.pop()
   }
 
-  // 请求图片
+  // 下载图片 Promise
+  addImgDownPromise(index, imgurl, name) {
+    return new Promise((resolve, reject) => {
+      const _this = this
+
+      const suffix = this.getSuffix(imgurl)
+      const newName = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + name + '.' + suffix
+      // eslint-disable-next-line no-undef
+      GM_download({
+        url: imgurl,
+        name: newName,
+        onload: result => {
+          _this.worker[index].currentnum = _this.worker[index].currentnum + 1
+          _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
+          _this.refresh()
+          resolve(true)
+        },
+        onerror: result => {
+          console.log('onerror: ', result)
+          resolve(false)
+        },
+        ontimeout: result => {
+          console.log('ontimeout: ', result)
+          resolve(false)
+        }
+      })
+    })
+  }
+
+  // 请求图片 Promise
   addImgPromise(index, imgurl) {
     return new Promise((resolve, reject) => {
       const _this = this
@@ -111,8 +152,8 @@ export default class Queue {
     })
   }
 
-  // 网站单页阅读方式  下载
-  async downOne2(workerId) {
+  // 网站翻页阅读方式  压缩下载
+  async zipDown2(workerId) {
     const url = this.worker[workerId].url
     const { imgUrl, nextPageUrl, number } = await getHtml(url)
     this.worker[workerId].number = number
@@ -136,7 +177,7 @@ export default class Queue {
 
     if (nextPageUrl !== '') {
       this.worker[workerId].url = nextPageUrl
-      return this.downOne2(workerId)
+      return this.zipDown2(workerId)
     }
 
     const result = await this.makeZip(workerId)
@@ -145,8 +186,8 @@ export default class Queue {
     })
   }
 
-  // 网站卷轴阅读方式  下载
-  async downOne(workerId) {
+  // 网站卷轴阅读方式  压缩下载
+  async zipDown(workerId) {
     const imgs = this.worker[workerId].imgs
     const promise = []
     let len = imgs.length
@@ -164,12 +205,67 @@ export default class Queue {
     })
 
     if (this.worker[workerId].imgs.length > 0) {
-      return this.downOne(workerId)
+      return this.zipDown(workerId)
     }
 
     const result = await this.makeZip(workerId)
     return new Promise((resolve, reject) => {
       resolve(result)
+    })
+  }
+
+  // 网站卷轴阅读方式  直接下载
+  async directDown(workerId) {
+    const imgs = this.worker[workerId].imgs
+    const promise = []
+    let len = imgs.length
+    let pictureNum = this.pictureNum
+    while (pictureNum--) {
+      if (len > 0) {
+        const name = this.worker[workerId].imgIndex + 1
+        promise.push(this.addImgDownPromise(workerId, imgs[0], name))
+        this.worker[workerId].imgIndex++
+        this.worker[workerId].imgs.shift()
+        len--
+      }
+    }
+    await Promise.all(promise)
+    if (this.worker[workerId].imgs.length > 0) {
+      return this.directDown(workerId)
+    }
+
+    return new Promise((resolve, reject) => {
+      resolve(1)
+    })
+  }
+
+  // 网站翻页阅读方式  直接下载
+  async directDown2(workerId) {
+    const url = this.worker[workerId].url
+    const { imgUrl, nextPageUrl, number } = await getHtml(url)
+    this.worker[workerId].number = number
+
+    while (imgUrl.length > 0) {
+      // eslint-disable-next-line prefer-const
+      let promise = []
+      for (let index = this.pictureNum; index > 0; index--) {
+        if (imgUrl[0] === undefined) {
+          break
+        }
+        const name = this.worker[workerId].imgIndex + 1
+        promise.push(this.addImgDownPromise(workerId, imgUrl[0], name))
+        imgUrl.shift()
+      }
+      await Promise.all(promise)
+    }
+
+    if (nextPageUrl !== '') {
+      this.worker[workerId].url = nextPageUrl
+      return this.directDown2(workerId)
+    }
+
+    return new Promise((resolve, reject) => {
+      resolve(1)
     })
   }
 
@@ -191,7 +287,9 @@ export default class Queue {
           url: item.url,
           progress: 0,
           type: item.type,
-          func: this.exeDown(i)
+          func: this.exeDown(i),
+          imgIndex: 0,
+          hasError: false
         }
         this.workerimg[i] = []
         this.worker[i] = worker
@@ -243,7 +341,8 @@ export default class Queue {
           level: 9
         }
       }).then((zipblob) => {
-        this.downloadFile(comicName + '_' + chapterName, zipblob)
+        const name = comicName + '\\' + chapterName + '.zip'
+        this.downloadFile(name, zipblob)
         resolve()
         return
       })

@@ -35,7 +35,7 @@ const comicsWebInfo = [
     homepage: 'https://www.dmzj.com/',
     webName: '动漫之家2',
     comicNameCss: '.comic_deCon h1 a',
-    chapterCss: '.list_con_li.autoHeight',
+    chapterCss: '.tab-content-selected .list_con_li.autoHeight',
     type: 1,
     getImgs: async function(context) {
       const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
@@ -44,15 +44,13 @@ const comicsWebInfo = [
         func.push(item[1])
         func.push(item[2])
       }
-      console.log('func: ', func)
       const code = '(' + func[0] + ')' + func[1]
       let imgStr = eval(code)
-      console.log('imgStr: ', imgStr)
-      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
-      let imgArray = JSON.parse(imgStr)
+      imgStr = imgStr.match(/page_url":"(.*?)","sum_pages/)[1]
+      let imgArray = imgStr.split('\\r\\n')
       if (imgArray[0].search('http') === -1) {
         imgArray = imgArray.map((item) => {
-          return 'https://images.dmzj.com/' + item
+          return 'https://images.dmzj.com/' + item.replace(/\\/g, '')
         })
       }
       return imgArray
