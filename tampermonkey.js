@@ -12,11 +12,13 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
+// @grant        GM_download
 // @grant        GM.getValue
 // @grant        GM.setValue
 // @grant        GM.setClipboard
 // @grant        GM.info
 // @grant        GM.xmlHttpRequest
+// @grant        GM.download
 // @resource   vantcss   https://unpkg.com/vant@2.12/lib/index.css
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/jszip/3.7.1/jszip.min.js
@@ -32,7 +34,7 @@
 // @match        *://www.wuxiamh.com/*
 // @connect      169gouwu.com
 //
-// @match        *://manhua.dmzj.com/*
+// @match        *://*.dmzj.com/*
 // @connect      dmzj.com
 //
 // @match        *://qiximh1.com/*
