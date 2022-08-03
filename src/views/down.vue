@@ -58,7 +58,7 @@
       <van-collapse-item title="已下载" name="3">
         <div id="downlist">
           <div
-            v-for="(item,index) in queue.workeredList"
+            v-for="(item,index) in historyData"
             :key="index"
             class="downitem"
           >
@@ -79,6 +79,7 @@
 <script>
 import Queue from '@/utils/queue'
 import { getStorage } from '@/config/setup'
+import { setLocalData, getLocalData } from '@/utils/index'
 
 export default {
   name: 'Down',
@@ -92,7 +93,8 @@ export default {
       },
       maxChapterNum: 3,
       maxPictureNum: 2,
-      zipDownFlag: true
+      zipDownFlag: true,
+      historyData: null
     }
   },
   watch: {
@@ -103,6 +105,7 @@ export default {
     this.$bus.$on('selectDown', this.downInit)
   },
   created() {
+    this.getHistoryData()
   },
   methods: {
     async downInit(arr) {
@@ -112,8 +115,14 @@ export default {
         this.zipDownFlag = await getStorage('zipDownFlag')
         this.queue = new Queue(this.maxChapterNum, this.maxPictureNum, this.zipDownFlag)
       }
-      this.queue.addList(arr)
-      this.queue.run()
+      // console.log(this.queue.Vue)
+      console.log('this.queue.Vue: ', this.queue.Vue)
+      // this.queue.addList(arr)
+      // this.queue.run()
+    },
+    getHistoryData() {
+      console.log('this', this)
+      this.historyData = getLocalData('10AppDownHistory') || []
     }
   }
 }
