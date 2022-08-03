@@ -1,5 +1,5 @@
 import JSZip from 'jszip'
-import { getHtml, downFile } from '@/utils/index'
+import { getHtml, downFile, setLocalData, getLocalData } from '@/utils/index'
 
 // 多个任务并行执行的队列
 // https://juejin.cn/post/6844903961728647181
@@ -13,6 +13,7 @@ export default class Queue {
     this.workeredList = [] // 已完成的任务
     this.worker = new Array(this.workerLen) // 正在执行的任务
     this.workerimg = new Array(this.workerLen) // 存储下载的图片数据
+    this.Vue = 'vue'
   }
 
   // 压缩下载方式
@@ -32,7 +33,11 @@ export default class Queue {
     const _this = this
 
     function afterDown(index) {
-      const hasError = _this.worker[index].hasError
+      const { comicName, hasError } = this.worker[index]
+      let historyData = getLocalData('10AppDownHistory') || []
+      historyData = JSON.stringify(historyData)
+      historyData.push({ comicName, chapterName, hasError })
+      setLocalData('10AppDownHistory', historyData)
       _this.worker[index] = undefined
       _this.workeredList.push({ chapterName, hasError })
       _this.workeredList.push(chapterName)
