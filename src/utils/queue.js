@@ -5,15 +5,14 @@ import { getHtml, downFile, setLocalData, getLocalData } from '@/utils/index'
 // https://juejin.cn/post/6844903961728647181
 
 export default class Queue {
-  constructor(workerLen, maxPictureNum, zipDownFlag) {
+  constructor(workerLen, maxPictureNum, zipDownFlag, vue) {
     this.workerLen = workerLen || 3 // 同时执行的任务数
     this.pictureNum = maxPictureNum || 2 // 章节最大下载图片数量
     this.zipDownFlag = zipDownFlag || false // 是否压缩下载
     this.list = [] // 任务队列
-    this.workeredList = [] // 已完成的任务
     this.worker = new Array(this.workerLen) // 正在执行的任务
     this.workerimg = new Array(this.workerLen) // 存储下载的图片数据
-    this.Vue = 'vue'
+    this.Vue = vue
   }
 
   // 压缩下载方式
@@ -33,14 +32,15 @@ export default class Queue {
     const _this = this
 
     function afterDown(index) {
-      const { comicName, hasError } = this.worker[index]
-      let historyData = getLocalData('10AppDownHistory') || []
+      const { comicName, hasError } = _this.worker[index]
+      const comicPageUrl = window.location.href
+      let historyData = getLocalData('10AppDownHistory') || '[]'
+      historyData = JSON.parse(historyData)
+      historyData.unshift({ comicName, chapterName, comicPageUrl, hasError })
       historyData = JSON.stringify(historyData)
-      historyData.push({ comicName, chapterName, hasError })
       setLocalData('10AppDownHistory', historyData)
+      _this.Vue.getHistoryData()
       _this.worker[index] = undefined
-      _this.workeredList.push({ chapterName, hasError })
-      _this.workeredList.push(chapterName)
       _this.run()
     }
 
@@ -92,6 +92,7 @@ export default class Queue {
   }
 
   refresh() {
+    // this.worker.splice(0, 0)
     this.worker.push('')
     this.worker.pop()
   }

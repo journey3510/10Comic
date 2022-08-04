@@ -138,7 +138,7 @@ export default {
       maxChapterNum: 1,
       maxPictureNum: 2,
       zipDownFlag: true,
-      imgSplicingFlag: true,
+      imgSplicingFlag: false,
       //
       zipDownPopover: false,
       showPopover: false
