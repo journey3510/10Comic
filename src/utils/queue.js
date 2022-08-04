@@ -1,5 +1,6 @@
 import JSZip from 'jszip'
-import { getHtml, downFile, setLocalData, getLocalData } from '@/utils/index'
+import { getHtml, downFile } from '@/utils/index'
+import { setStorage, getStorage } from '@/config/setup'
 
 // 多个任务并行执行的队列
 // https://juejin.cn/post/6844903961728647181
@@ -31,14 +32,14 @@ export default class Queue {
     const chapterName = this.worker[index].chapterName
     const _this = this
 
-    function afterDown(index) {
+    async function afterDown(index) {
       const { comicName, hasError } = _this.worker[index]
       const comicPageUrl = window.location.href
-      let historyData = getLocalData('10AppDownHistory') || '[]'
+      let historyData = await getStorage('downHistory') || '[]'
       historyData = JSON.parse(historyData)
       historyData.unshift({ comicName, chapterName, comicPageUrl, hasError })
       historyData = JSON.stringify(historyData)
-      setLocalData('10AppDownHistory', historyData)
+      await setStorage('downHistory', historyData)
       _this.Vue.getHistoryData()
       _this.worker[index] = undefined
       _this.run()

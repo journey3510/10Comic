@@ -76,11 +76,3 @@ export const downFile = async(url, name) => {
   })
 }
 
-// localStorage
-export const setLocalData = (key, value) => {
-  window.localStorage.setItem(key, value)
-}
-
-export const getLocalData = (key) => {
-  return window.localStorage.getItem(key)
-}

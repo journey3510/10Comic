@@ -101,8 +101,7 @@
 
 <script>
 import Queue from '@/utils/queue'
-import { getStorage } from '@/config/setup'
-import { setLocalData, getLocalData } from '@/utils/index'
+import { setStorage, getStorage } from '@/config/setup'
 
 import { Dialog } from 'vant'
 
@@ -148,13 +147,14 @@ export default {
       this.queue.addList(arr)
       this.queue.run()
     },
-    getHistoryData() {
-      this.historyData = JSON.parse(getLocalData('10AppDownHistory') || '[]')
+    async getHistoryData() {
+      const data = await getStorage('downHistory')
+      this.historyData = JSON.parse(data || '[]')
     },
     deleteHistoryData(index) {
       this.historyData.splice(index, 1)
       const data = JSON.stringify(this.historyData)
-      setLocalData('10AppDownHistory', data)
+      setStorage('downHistory', data)
     },
     deleteAllHistoryData() {
       Dialog.confirm({
@@ -163,7 +163,7 @@ export default {
       })
         .then(() => {
           this.historyData.splice(0, this.historyData.length)
-          setLocalData('10AppDownHistory', '[]')
+          setStorage('downHistory', '[]')
         })
         .catch(() => {
           // on cancel
