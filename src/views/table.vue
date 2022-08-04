@@ -93,7 +93,6 @@
 <script>
 
 import { currentComics } from '@/utils/comics'
-import { getStorage } from '@/config/setup'
 
 import { Toast } from 'vant'
 
@@ -122,15 +121,15 @@ export default {
     getInfo() {
       try {
         this.currentComics = currentComics
-        console.log('this.currentComics: ', this.currentComics)
         if (currentComics === null) {
           return
         }
         const comicNameCss = this.currentComics.comicNameCss
-        console.log('comicNameCss: ', comicNameCss)
         this.webname = currentComics.webName
         this.comicName = document.querySelector(comicNameCss).innerText
-        console.log('this.comicName: ', this.comicName)
+        //
+        this.$bus.$emit('getComicName', this.comicName)
+
       // eslint-disable-next-line no-empty
       } catch (error) {
         console.log('error: ', error)

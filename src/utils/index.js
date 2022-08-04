@@ -64,7 +64,6 @@ export const downFile = async(url, name) => {
       url,
       name,
       onload: result => {
-        console.log(result)
         resolve(true)
       },
       onerror: result => {
@@ -79,7 +78,6 @@ export const downFile = async(url, name) => {
 
 // localStorage
 export const setLocalData = (key, value) => {
-  console.log('key: ', key)
   window.localStorage.setItem(key, value)
 }
 
