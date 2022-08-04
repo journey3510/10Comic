@@ -6,7 +6,8 @@ const configDefault = {
   maxChapterNum: 3,
   maxPictureNum: 3,
   zipDownFlag: true,
-  imgSplicingFlag: true
+  imgSplicingFlag: true,
+  downHistory: '[]'
 }
 
 export const appinit = () => {
