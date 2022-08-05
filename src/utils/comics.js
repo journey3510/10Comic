@@ -11,7 +11,7 @@ const comicsWebInfo = [
     webName: '动漫之家',
     comicNameCss: '.odd_anim_title_m .anim_title_text h1',
     chapterCss: '.cartoon_online_border',
-    type: 1,
+    readtype: 1,
     getImgs: async function(context) {
       const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       const func = []
@@ -36,7 +36,7 @@ const comicsWebInfo = [
     webName: '动漫之家2',
     comicNameCss: '.comic_deCon h1 a',
     chapterCss: '.tab-content-selected .list_con_li.autoHeight',
-    type: 1,
+    readtype: 1,
     getImgs: async function(context) {
       const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       const func = []
@@ -62,7 +62,7 @@ const comicsWebInfo = [
     webName: '酷漫屋',
     comicNameCss: '.info h1',
     chapterCss: '#detail-list-select-1',
-    type: 1,
+    readtype: 1,
     getImgs: function(context) {
       const reg = /var km[^>]*_img_url='[^>]*'/gi
       const s1 = context.match(reg)
@@ -83,7 +83,7 @@ const comicsWebInfo = [
     webName: '百漫谷',
     comicNameCss: '.fed-part-eone.fed-font-xvi a',
     chapterCss: '.fed-play-item.fed-drop-item.fed-visible .fed-part-rows:nth-child(2)',
-    type: 1,
+    readtype: 1,
     getImgs: async function(context) {
       const txtUrl = context.match(/http(\S*).txt/gi)[0]
       const txtRes = await request('get', txtUrl)
@@ -98,7 +98,7 @@ const comicsWebInfo = [
     webName: '武侠漫画（手机）',
     comicNameCss: '.view-sub.autoHeight .title',
     chapterCss: '#chapter-list-1',
-    type: 0,
+    readtype: 0,
     nextpageRgeCss: '.action-list li:nth-child(3) a',
     getImgs: async function(context) {
       const imgobj = context.matchAll(/><mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
@@ -120,7 +120,7 @@ const comicsWebInfo = [
     webName: '武侠漫画网（电脑）',
     comicNameCss: '.title h1',
     chapterCss: '#chapter-list-1',
-    type: 1,
+    readtype: 1,
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
       const imgs = eval(imgStr)
@@ -134,7 +134,7 @@ const comicsWebInfo = [
     webName: '七夕漫画',
     comicNameCss: '.comic_name .name',
     chapterCss: '.catalog_list.row_catalog_list',
-    type: 1,
+    readtype: 1,
     getImgs: function(context) {
       const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       const func = []
@@ -155,7 +155,7 @@ const comicsWebInfo = [
     webName: '36漫画网',
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-4 li:not(:first-of-type)',
-    type: 1,
+    readtype: 1,
     getImgs: function(context) {
       const group = context.matchAll(/chapterImages = ([\s\S]+?);var chapterPath = "([\s\S]+?)";var chapterPrice/g)
       let imgarr = []
@@ -178,7 +178,7 @@ const comicsWebInfo = [
     webName: '古风漫画网',
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-1,#chapter-list-10',
-    type: 1,
+    readtype: 1,
     getImgs: function(context) {
       const imgStr = context.match(/chapterImages = ([\s\S]+?);var chapterPath/)[1]
       let imgarr = JSON.parse(imgStr)
@@ -196,7 +196,7 @@ const comicsWebInfo = [
     webName: '古风漫画网 2',
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-1,#chapter-list-10',
-    type: 1,
+    readtype: 1,
     readCssText: '.img_info {display: none;}.tbCenter img {border: 0px;}',
     getImgs: async function(context) {
       const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
@@ -223,7 +223,7 @@ const comicsWebInfo = [
     webName: '腾讯漫画',
     comicNameCss: '.works-intro-title.ui-left strong',
     chapterCss: '.chapter-page-all.works-chapter-list',
-    type: 1,
+    readtype: 1,
     hasSpend: true,
     freeCss: '.ui-icon-free',
     payCss: '.ui-icon-pay',
@@ -256,7 +256,7 @@ const comicsWebInfo = [
     webName: '漫画星球',
     comicNameCss: '.cy_title h1',
     chapterCss: '.cy_plist #mh-chapter-list-ol-0',
-    type: 1,
+    readtype: 1,
     getImgs: function(context) {
       const group = context.matchAll(/(function.*?return \S})(\(.*?{}\))/g)
       const func = []
@@ -277,7 +277,7 @@ const comicsWebInfo = [
     webName: '好漫8',
     comicNameCss: '.content .title',
     chapterCss: '#j_chapter_list',
-    type: 1,
+    readtype: 1,
     getImgs: function(context) {
       const group = context.matchAll(/data-echo="(.*?)"/g)
       const imgArray = []
@@ -293,7 +293,7 @@ const comicsWebInfo = [
     webName: '漫画屋',
     comicNameCss: '.comic-title.j-comic-title',
     chapterCss: '.chapter__list-box.clearfix',
-    type: 1,
+    readtype: 1,
     getImgs: function(context) {
       const group = context.matchAll(/data-original="(.*?)"/g)
       const imgArray = []
@@ -309,7 +309,7 @@ const comicsWebInfo = [
     webName: '27漫画网',
     comicNameCss: '.bar .position strong',
     chapterCss: '#play_0 #chapter-list-1',
-    type: 1,
+    readtype: 1,
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
       const imgs = eval(imgStr)

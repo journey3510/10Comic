@@ -48,6 +48,7 @@ export const setStorage = async(key, value) => {
 }
 
 export const getStorage = async(key) => {
+  console.log('key: ', key)
   return new Promise((resolve, reject) => {
     const value = GM_getValue(key)
     resolve(value)

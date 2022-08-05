@@ -43,7 +43,7 @@
           </template>
         </van-cell>
 
-        <van-cell label="*下载前生效, 不勾选则下载图片" center>
+        <van-cell label="*默认设置, 不勾选则下载图片" center>
           <template #title>
             <span class="custom-title">压缩下载</span>
             <van-popover

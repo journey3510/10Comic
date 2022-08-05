@@ -85,7 +85,7 @@
                 >{{ item.comicName }}</van-tag>
                 <span class="custom-title chapterspan" :class="{ 'hasError': item.hasError }">{{ item.chapterName }}</span>
               </div>
-              <van-icon :style="{cursor:'pointer'}" name="delete-o" size="18px" @click="deleteHistoryData(index)" />
+              <van-icon :style="{cursor:'pointer'}" name="delete-o" size="18px" @click="deleteHistoryData(index, item.id)" />
 
             </div>
             <van-divider
@@ -142,7 +142,7 @@ export default {
         this.maxChapterNum = await getStorage('maxChapterNum')
         this.maxPictureNum = await getStorage('maxPictureNum')
         this.zipDownFlag = await getStorage('zipDownFlag')
-        this.queue = new Queue(this.maxChapterNum, this.maxPictureNum, this.zipDownFlag, this)
+        this.queue = new Queue(this.maxChapterNum, this.maxPictureNum, this)
       }
       this.queue.addList(arr)
       this.queue.run()
@@ -151,9 +151,12 @@ export default {
       const data = await getStorage('downHistory')
       this.historyData = JSON.parse(data || '[]')
     },
-    deleteHistoryData(index) {
+    async deleteHistoryData(index, id) {
       this.historyData.splice(index, 1)
-      const data = JSON.stringify(this.historyData)
+      let data = await getStorage('downHistory')
+      let historyData = JSON.parse(data || '[]')
+      historyData = historyData.filter((item) => item.id !== id)
+      data = JSON.stringify(historyData)
       setStorage('downHistory', data)
     },
     deleteAllHistoryData() {
