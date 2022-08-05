@@ -17,7 +17,7 @@
           <Home />
         </van-swipe-item>
         <van-swipe-item class="swipeitem">
-          <Table />
+          <Table id="chapterpage" />
         </van-swipe-item>
         <van-swipe-item class="swipeitem">
           <Down />
@@ -201,6 +201,12 @@ export default {
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
   overflow: hidden;
+}
+
+#chapterpage {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 #border-top-set {

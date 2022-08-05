@@ -1,5 +1,26 @@
 <template>
   <div id="comiclist">
+    <!-- 下载选项弹窗 -->
+    <van-popup
+      v-model="show"
+      get-container="#chapterpage"
+      round
+      position="top"
+      :style="{ position: 'absolute' , width: '100%', height: '30%',borderTop: '1px solid #fcadad' }"
+    >
+      <van-cell-group title="选项" :style="{display: 'flex',width: '250px', margin: '10px auto'}" inset>
+        <van-cell title="本次压缩下载">
+          <template #right-icon>
+            <van-checkbox
+              v-model="zipDownFlag"
+              label-position="left"
+              class="rightbutton"
+            />
+          </template>
+        </van-cell>
+      </van-cell-group>
+    </van-popup>
+
     <!-- 编辑选项 -->
     <div id="editItem">
       <div>
@@ -16,6 +37,14 @@
           @click="CancelSelect"
         >取消</van-button>
       </div>
+
+      <van-icon
+        :style="{cursor: 'pointer'}"
+        name="more-o"
+        color="#ee0000"
+        size="25"
+        @click="()=>{this.show = !this.show}"
+      />
 
       <van-button
         style="width:80px;"
@@ -86,13 +115,13 @@
         </van-checkbox-group>
       </van-cell-group>
     </div>
-
   </div>
 </template>
 
 <script>
 
 import { currentComics } from '@/utils/comics'
+import { getStorage } from '@/config/setup'
 
 import { Toast } from 'vant'
 
@@ -106,19 +135,21 @@ export default {
 
       showSelectList: false,
       overlayShow: false,
+      show: false,
 
       currentComics: '',
       webname: '未匹配',
       comicName: '------',
 
-      paylogoArr: []
+      paylogoArr: [],
+      zipDownFlag: true
     }
   },
   mounted() {
     this.getInfo()
   },
   methods: {
-    getInfo() {
+    async getInfo() {
       try {
         this.currentComics = currentComics
         if (currentComics === null) {
@@ -127,13 +158,16 @@ export default {
         const comicNameCss = this.currentComics.comicNameCss
         this.webname = currentComics.webName
         this.comicName = document.querySelector(comicNameCss).innerText
-        //
         this.$bus.$emit('getComicName', this.comicName)
+        //
+        this.zipDownFlag = await getStorage('zipDownFlag')
+        console.log('this.zipDownFlag: ', this.zipDownFlag)
 
       // eslint-disable-next-line no-empty
       } catch (error) {
         console.log('error: ', error)
       }
+      return
     },
     selectAll() {
       this.$refs.checkboxGroup.toggleAll(false)
@@ -173,7 +207,7 @@ export default {
         const nodeList = document.querySelectorAll(chapterCss)
         nodeList.forEach(dom => {
           const urls = dom.querySelectorAll('a')
-          const type = currentComics.type
+          const readtype = currentComics.readtype
           urls.forEach((element, index) => {
             let chapterName = element.innerText.replace(/\n|\r/g, '')
             chapterName = chapterName.trim()
@@ -181,7 +215,7 @@ export default {
               comicName: this.comicName,
               chapterName: chapterName,
               url: element.href,
-              type: type
+              readtype
             }
             if (currentComics.hasSpend) {
               data.isPay = this.paylogoArr[index]
@@ -205,8 +239,11 @@ export default {
         })
         return
       }
+
       this.selectResult.forEach(num => {
-        this.downResult.push(this.list[num])
+        const item = this.list[num]
+        item.zipDownFlag = this.zipDownFlag
+        this.downResult.push(item)
       })
       this.$bus.$emit('selectDown', this.downResult)
       this.$bus.$emit('changTab', 2)

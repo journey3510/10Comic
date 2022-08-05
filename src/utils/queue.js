@@ -6,13 +6,12 @@ import { setStorage, getStorage } from '@/config/setup'
 // https://juejin.cn/post/6844903961728647181
 
 export default class Queue {
-  constructor(workerLen, maxPictureNum, zipDownFlag, vue) {
+  constructor(workerLen, maxPictureNum, vue) {
     this.workerLen = workerLen || 3 // 同时执行的任务数
     this.pictureNum = maxPictureNum || 2 // 章节最大下载图片数量
-    this.zipDownFlag = zipDownFlag || false // 是否压缩下载
     this.list = [] // 任务队列
     this.worker = new Array(this.workerLen) // 正在执行的任务
-    this.workerimg = new Array(this.workerLen) // 存储下载的图片数据
+    this.workerDownInfo = new Array(this.workerLen) // 存储下载信息
     this.Vue = vue
   }
 
@@ -28,8 +27,7 @@ export default class Queue {
      * @param { number } index
      */
   async * exeDown(index) {
-    const readtype = this.worker[index].type
-    const chapterName = this.worker[index].chapterName
+    const { readtype, chapterName } = this.worker[index]
     const _this = this
 
     async function afterDown(index) {
@@ -37,7 +35,8 @@ export default class Queue {
       const comicPageUrl = window.location.href
       let historyData = await getStorage('downHistory') || '[]'
       historyData = JSON.parse(historyData)
-      historyData.unshift({ comicName, chapterName, comicPageUrl, hasError })
+      const id = (new Date()).getTime()
+      historyData.unshift({ id, comicName, chapterName, comicPageUrl, hasError })
       historyData = JSON.stringify(historyData)
       await setStorage('downHistory', historyData)
       _this.Vue.getHistoryData()
@@ -55,30 +54,16 @@ export default class Queue {
       }
       this.worker[index].imgs = imgs
       this.worker[index].number = imgs.length
-
-      if (this.zipDownFlag) {
-        yield this.zipDown(index)
-          .then(function() {
-            afterDown(index)
-          })
-      } else {
-        yield this.directDown(index)
-          .then(function() {
-            afterDown(index)
-          })
-      }
+      yield this.down(index)
+        .then(function() {
+          afterDown(index)
+        })
+        //
     } else {
-      if (this.zipDownFlag) {
-        yield this.zipDown2(index)
-          .then(function() {
-            afterDown(index)
-          })
-      } else {
-        yield this.directDown2(index)
-          .then(function() {
-            afterDown(index)
-          })
-      }
+      yield this.down2(index)
+        .then(function() {
+          afterDown(index)
+        })
     }
   }
 
@@ -93,9 +78,9 @@ export default class Queue {
   }
 
   refresh() {
-    // this.worker.splice(0, 0)
-    this.worker.push('')
-    this.worker.pop()
+    this.worker.splice(0, 0)
+    // this.worker.push('')
+    // this.worker.pop()
   }
 
   // 下载图片 Promise
@@ -159,9 +144,9 @@ export default class Queue {
     })
   }
 
-  // 网站翻页阅读方式  压缩下载
-  async zipDown2(workerId) {
-    const url = this.worker[workerId].url
+  // 网站翻页阅读方式
+  async down2(workerId) {
+    const { url, zipDownFlag } = this.worker[workerId]
     const { imgUrl, nextPageUrl, number } = await getHtml(url)
     this.worker[workerId].number = number
 
@@ -172,108 +157,79 @@ export default class Queue {
         if (imgUrl[0] === undefined) {
           break
         }
-        promise.push(this.addImgPromise(workerId, imgUrl[0]))
+        if (zipDownFlag) {
+          promise.push(this.addImgPromise(workerId, imgUrl[0]))
+        } else {
+          const name = this.worker[workerId].imgIndex + 1
+          promise.push(this.addImgDownPromise(workerId, imgUrl[0], name))
+        }
         imgUrl.shift()
       }
 
       const res = await Promise.all(promise)
       res.forEach(element => {
-        this.workerimg[workerId].push(element)
+        this.workerDownInfo[workerId].push(element)
       })
     }
 
     if (nextPageUrl !== '') {
       this.worker[workerId].url = nextPageUrl
-      return this.zipDown2(workerId)
+      return this.down2(workerId)
     }
 
-    const result = await this.makeZip(workerId)
-    return new Promise((resolve, reject) => {
-      resolve(result)
-    })
+    // 是否压缩
+    if (zipDownFlag) {
+      const result = await this.makeZip(workerId)
+      return new Promise((resolve, reject) => {
+        resolve(result)
+      })
+    } else {
+      return new Promise((resolve, reject) => {
+        resolve(1)
+      })
+    }
   }
 
-  // 网站卷轴阅读方式  压缩下载
-  async zipDown(workerId) {
-    const imgs = this.worker[workerId].imgs
+  // 网站卷轴阅读方式
+  async down(workerId) {
+    const { imgs, zipDownFlag } = this.worker[workerId]
     const promise = []
     let len = imgs.length
     let pictureNum = this.pictureNum
-    while (pictureNum--) {
-      if (len > 0) {
+
+    while (pictureNum-- && len > 0) {
+      // 是否压缩
+      if (zipDownFlag) {
         promise.push(this.addImgPromise(workerId, imgs[0]))
-        this.worker[workerId].imgs.shift()
-        len--
-      }
-    }
-    const res = await Promise.all(promise)
-    res.forEach(element => {
-      this.workerimg[workerId].push(element)
-    })
-
-    if (this.worker[workerId].imgs.length > 0) {
-      return this.zipDown(workerId)
-    }
-
-    const result = await this.makeZip(workerId)
-    return new Promise((resolve, reject) => {
-      resolve(result)
-    })
-  }
-
-  // 网站卷轴阅读方式  直接下载
-  async directDown(workerId) {
-    const imgs = this.worker[workerId].imgs
-    const promise = []
-    let len = imgs.length
-    let pictureNum = this.pictureNum
-    while (pictureNum--) {
-      if (len > 0) {
+      } else {
         const name = this.worker[workerId].imgIndex + 1
         promise.push(this.addImgDownPromise(workerId, imgs[0], name))
         this.worker[workerId].imgIndex++
-        this.worker[workerId].imgs.shift()
-        len--
       }
+      this.worker[workerId].imgs.shift()
+      len--
     }
-    await Promise.all(promise)
+    const res = await Promise.all(promise)
+
+    res.forEach(element => {
+      this.workerDownInfo[workerId].push(element)
+    })
+
     if (this.worker[workerId].imgs.length > 0) {
-      return this.directDown(workerId)
+      return this.down(workerId)
     }
 
-    return new Promise((resolve, reject) => {
-      resolve(1)
-    })
-  }
-
-  // 网站翻页阅读方式  直接下载
-  async directDown2(workerId) {
-    const url = this.worker[workerId].url
-    const { imgUrl, nextPageUrl, number } = await getHtml(url)
-    this.worker[workerId].number = number
-
-    while (imgUrl.length > 0) {
-      // eslint-disable-next-line prefer-const
-      let promise = []
-      for (let index = this.pictureNum; index > 0; index--) {
-        if (imgUrl[0] === undefined) {
-          break
-        }
-        const name = this.worker[workerId].imgIndex + 1
-        promise.push(this.addImgDownPromise(workerId, imgUrl[0], name))
-        imgUrl.shift()
-      }
-      await Promise.all(promise)
+    // 是否压缩
+    if (zipDownFlag) {
+      const result = await this.makeZip(workerId)
+      return new Promise((resolve, reject) => {
+        resolve(result)
+      })
+    } else {
+      return new Promise((resolve, reject) => {
+        resolve(1)
+      })
     }
-
-    if (nextPageUrl !== '') {
-      this.worker[workerId].url = nextPageUrl
-      return this.directDown2(workerId)
-    }
-
-    return new Promise((resolve, reject) => {
-      resolve(1)
-    })
   }
 
   // 分配并执行任务
@@ -293,12 +249,13 @@ export default class Queue {
           imgs: [],
           url: item.url,
           progress: 0,
-          type: item.type,
+          readtype: item.readtype,
           func: this.exeDown(i),
+          zipDownFlag: item.zipDownFlag,
           imgIndex: 0,
           hasError: false
         }
-        this.workerimg[i] = []
+        this.workerDownInfo[i] = []
         this.worker[i] = worker
         this.list.pop()
         runIndex.push(i)
@@ -325,13 +282,10 @@ export default class Queue {
 
   // 压缩
   async makeZip(workerId) {
-    const comicName = this.worker[workerId].comicName
-    const chapterName = this.worker[workerId].chapterName
-
+    const { comicName, chapterName } = this.worker[workerId]
     return new Promise((resolve, reject) => {
       const zip = new JSZip()
-
-      this.workerimg[workerId].forEach((item, index) => {
+      this.workerDownInfo[workerId].forEach((item, index) => {
         const imgblob = item.blob
         const suffix = item.suffix
         if (imgblob === 1 || imgblob === 0) {
