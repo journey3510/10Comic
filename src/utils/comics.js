@@ -63,6 +63,7 @@ const comicsWebInfo = [
     comicNameCss: '.info h1',
     chapterCss: '#detail-list-select-1',
     readtype: 1,
+    iswork: true,
     getImgs: function(context) {
       const reg = /var km[^>]*_img_url='[^>]*'/gi
       const s1 = context.match(reg)
@@ -99,6 +100,7 @@ const comicsWebInfo = [
     comicNameCss: '.view-sub.autoHeight .title',
     chapterCss: '#chapter-list-1',
     readtype: 0,
+    iswork: false,
     nextpageRgeCss: '.action-list li:nth-child(3) a',
     getImgs: async function(context) {
       const imgobj = context.matchAll(/><mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
@@ -121,6 +123,7 @@ const comicsWebInfo = [
     comicNameCss: '.title h1',
     chapterCss: '#chapter-list-1',
     readtype: 1,
+    iswork: false,
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
       const imgs = eval(imgStr)
@@ -156,6 +159,7 @@ const comicsWebInfo = [
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-4 li:not(:first-of-type)',
     readtype: 1,
+    iswork: false,
     getImgs: function(context) {
       const group = context.matchAll(/chapterImages = ([\s\S]+?);var chapterPath = "([\s\S]+?)";var chapterPrice/g)
       let imgarr = []
@@ -310,9 +314,39 @@ const comicsWebInfo = [
     comicNameCss: '.bar .position strong',
     chapterCss: '#play_0 #chapter-list-1',
     readtype: 1,
+    iswork: false,
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
       const imgs = eval(imgStr)
+      return imgs
+    }
+  },
+  {
+    domain: 'www.zuimh.com',
+    homepage: 'https://www.zuimh.com/',
+    webName: '最漫画',
+    comicNameCss: '.book-detail .book-title h1 span',
+    chapterCss: '.chapter-body.clearfix #chapter-list-1',
+    readtype: 1,
+    readCssText: '.img_info {display: none;}.tbCenter img {border: 0px;}',
+    getImgs: async function(context) {
+      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+      const imgs = eval(imgStr)
+      return imgs
+    }
+  },
+  {
+    domain: 'www.qianwee.com',
+    homepage: 'https://www.qianwee.com/',
+    webName: '前未漫画',
+    comicNameCss: '.comic_deCon.autoHeight h1',
+    chapterCss: '.zj_list_con #chapter-list-1',
+    readtype: 1,
+    readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
+    getImgs: async function(context) {
+      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+      const imgs = eval(imgStr)
+      console.log('imgs: ', imgs)
       return imgs
     }
   }
@@ -323,7 +357,8 @@ export const getWebList = () => {
   comicsWebInfo.forEach(element => {
     list.push({
       name: element.webName,
-      url: element.homepage
+      url: element.homepage,
+      iswork: element.iswork
     })
   })
   return list
