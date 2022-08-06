@@ -346,7 +346,6 @@ const comicsWebInfo = [
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
       const imgs = eval(imgStr)
-      console.log('imgs: ', imgs)
       return imgs
     }
   }
