@@ -55,12 +55,12 @@
               v-model="zipDownPopover"
               placement="right"
               get-container="#downpart"
-              :offset="[-8,10]"
+              :offset="[-18,10]"
               :close-on-click-outside="true"
             >
               <div>
-                <code class="popoverText">* 如需保存在文件夹需要设置油猴下载模式为浏览器API</code><br>
-                <code class="popoverText">* 如有较多油猴弹窗提示跨域,建议取消勾选直接下载</code>
+                <code class="popovertext">* 如需保存在文件夹需要设置油猴下载模式为浏览器API</code><br>
+                <code class="popovertext">* 如有较多油猴弹窗提示跨域,建议取消勾选直接下载</code>
               </div>
               <template #reference>
                 <van-icon
@@ -100,7 +100,7 @@
               :offset="[-2,0]"
               :close-on-click-outside="true"
             >
-              <code class="popoverText">建议浏览长条漫画时开启</code>
+              <code class="popovertext">建议浏览长条漫画时开启</code>
               <template #reference>
                 <van-icon
                   name="info-o"
@@ -264,15 +264,6 @@ export default {
           }
        }
 
-      .popoverText {
-        display: block;
-        margin: 10px 10px;
-        font-size: 12px;
-        transform: scale(0.8) !important;
-        background-color: red !important;
-        // margin-left: 30px;
-        padding: 10px 10px;
-      }
     }
   }
 
