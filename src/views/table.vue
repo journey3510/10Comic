@@ -38,13 +38,16 @@
         >取消</van-button>
       </div>
 
-      <van-icon
-        :style="{cursor: 'pointer'}"
-        name="more-o"
-        color="#ee0000"
-        size="25"
-        @click="()=>{this.show = !this.show}"
-      />
+      <div>
+        选
+        <van-icon
+          :style="{cursor: 'pointer'}"
+          name="more-o"
+          color="#ee0000"
+          size="25"
+          @click="()=>{this.show = !this.show}"
+        /> 项
+      </div>
 
       <van-button
         style="width:80px;"
@@ -80,7 +83,6 @@
         <van-cell title="网站" :value="webname" />
         <van-cell title="漫画" :value="comicName" />
       </van-cell-group>
-
     </div>
 
     <van-overlay id="overlayDom" :show="overlayShow" />
@@ -161,8 +163,6 @@ export default {
         this.$bus.$emit('getComicName', this.comicName)
         //
         this.zipDownFlag = await getStorage('zipDownFlag')
-        console.log('this.zipDownFlag: ', this.zipDownFlag)
-
       // eslint-disable-next-line no-empty
       } catch (error) {
         console.log('error: ', error)

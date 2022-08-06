@@ -4,10 +4,20 @@
       <van-cell
         v-for="(item, index) in comicList"
         :key="index"
-        :title="item.name"
         is-link
         @click="jump(item.url)"
-      />
+      >
+        <template #title>
+          <span>{{ item.name }}</span>
+          <van-icon
+            v-if="item.iswork === false"
+            title="？可访问 ？"
+            name="info-o"
+            color="red"
+          />
+        </template>
+
+      </van-cell>
     </van-cell-group>
   </div>
 </template>
@@ -38,5 +48,7 @@ export default {
 <style lang="scss" scoped>
 .homeindex {
   margin-top: 20px;
+  overflow-y: auto;
+  max-height: 675px;
 }
 </style>

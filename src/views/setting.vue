@@ -43,7 +43,12 @@
           </template>
         </van-cell>
 
-        <van-cell label="*默认设置, 不勾选则下载图片" center>
+        <van-cell
+          title-class="cellleftvalue"
+          value-class="cellrightvalue"
+          label="*本次启动默认设置, 不勾选则下载图片"
+          center
+        >
           <template #title>
             <span class="custom-title">压缩下载</span>
             <van-popover
@@ -53,7 +58,10 @@
               :offset="[-8,10]"
               :close-on-click-outside="true"
             >
-              <code class="popoverText">如需保存在文件夹需要设置油猴下载模式为浏览器API</code>
+              <div>
+                <code class="popoverText">* 如需保存在文件夹需要设置油猴下载模式为浏览器API</code><br>
+                <code class="popoverText">* 如有较多油猴弹窗提示跨域,建议取消勾选直接下载</code>
+              </div>
               <template #reference>
                 <van-icon
                   name="info-o"
@@ -76,7 +84,12 @@
       </van-cell-group>
 
       <van-cell-group id="webpart" title="原网站阅读样式修改" inset>
-        <van-cell label="去除部分漫画网站图片上下间隔" center>
+        <van-cell
+          title-class="cellleftvalue"
+          value-class="cellrightvalue"
+          label="去除部分漫画网站图片上下间隔"
+          center
+        >
           <template #title>
             <span class="custom-title">图片拼接</span>
 
@@ -221,8 +234,18 @@ export default {
 
     .van-cell {
       padding: 10px 1px;
+      .cellleftvalue {
+        flex: 1;
+      }
+      .cellrightvalue {
+        flex: 0.2 !important;
+      }
+      // 右侧按钮
+      .rightbutton {
+        flex-direction: row-reverse;
+      }
       .custom-title {
-
+        text-align: left;
       }
 
       // 修改滑动条
@@ -240,11 +263,6 @@ export default {
             border-radius: 100px;
           }
        }
-
-      // 右侧按钮
-      .rightbutton {
-        flex-direction: row-reverse;
-      }
 
       .popoverText {
         display: block;

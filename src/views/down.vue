@@ -29,12 +29,12 @@
               <van-progress
                 ref="progress"
                 :percentage="item.progress"
-                style="width: 100%;margin-top:5px;"
+                style="width: 100%;margin-top:10px;"
                 pivot-color="#66ccff"
                 color="linear-gradient(to right, #66ccff22, ##66ccff)"
               />
               <van-divider
-                :style="{ margin:'11px 0px', padding: '0 0px',height: '1px' }"
+                :style="{ margin:'13px 0px', padding: '0 0px',height: '1px' }"
               />
             </div>
           </div>
@@ -52,7 +52,7 @@
               <span class="custom-title">{{ item.chapterName }}</span>
             </div>
             <van-divider
-              :style="{ margin:'11px 0px', padding: '0 0px',height: '1px' }"
+              :style="{ margin:'8px 0px', padding: '0 0px',height: '1px' }"
             />
           </div>
         </div>
@@ -80,6 +80,7 @@
               <div>
                 <van-tag
                   type="primary"
+                  :title="item.comicName"
                   class="comicnametag"
                   @click="jump(item.comicPageUrl)"
                 >{{ item.comicName }}</van-tag>
@@ -89,7 +90,7 @@
 
             </div>
             <van-divider
-              :style="{ margin:'11px 0px', padding: '0 0px',height: '1px' }"
+              :style="{ margin:'8px 0px', padding: '0 0px',height: '1px' }"
             />
           </div>
         </div>
@@ -200,16 +201,19 @@ export default {
 }
 
 #downlist {
-  margin: 10px 0px;
-  padding: 5px 5px;
+  margin: 10px 5px;
+  padding: 5px 0px;
   border-radius: 15px;
+  width: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   max-height: 500px;
   // 下载项
   .downitem {
-    // padding: 1px 10px;
     display: flex;
     flex-direction: column;
+    width: 98%;
+
     .itemname {
       display: flex;
       justify-content: space-between;
@@ -221,7 +225,6 @@ export default {
         text-overflow:ellipsis;
         overflow:hidden;
         cursor: pointer;
-
       }
       .chapterspan {
         display:inline-block;

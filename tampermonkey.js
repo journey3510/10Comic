@@ -67,6 +67,14 @@
 // @connect      hnsrht.com
 // @connect      huayingrenren.cn
 //
+// @match        *://www.zuimh.com/*
+// @connect      pinmh.com
+// @connect      ejujiu.com
+// @connect      dodomh.com
+//
+// @match        *://www.qianwee.com/*
+// @connect      qianwee.com
+// @connect      szssjg.com
 // @connect      *
 // @connect      laimidao.com
 // @connect      izhegu.com
