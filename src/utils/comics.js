@@ -1,8 +1,44 @@
+
 /* eslint-disable no-undef */
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
+
+
+
 import { request } from '@/utils/index'
+import { getStorage } from '@/config/setup'
+
+/*
+[
+  {
+    domain，String,  域名,
+    homepage，String, 网站主页,
+    webName，String, 网站名,
+    comicNameCss，String, 漫画名的CSS选择器,
+    chapterCss，String, 含有所有章节链接的dom的CSS选择器,
+    readtype， Number, 值:1 -卷轴阅读或SPA网页, 值:0 -翻页阅读
+    iswork， Boolean,  网站是否正常运行
+    getImgs， Function,
+      * @description: 获取章节图片的方法
+      * @param {*} context  某一章节的请求正文String
+      * @return_1 {*} imgArray
+          * readtype == 1时，要求返回imgArray 数组 含章节所有图片地址
+          * 例如  ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
+      * @return_2 {*} {}
+          * 返回imgArray 数组 含章节所图片地址
+          * readtype == 0时，要求{ imgUrl, nextPageUrl, number }
+          * 例如  { imgUrl: ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
+                    nextPageUrl: 'http://xx.xx.xx/xx.html'
+                    number: 
+                  }
+
+  },
+  {…………},{…………}
+]
+*/
+
+let userWebInfo = []
 
 const comicsWebInfo = [
   {
@@ -360,7 +396,7 @@ const comicsWebInfo = [
       const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       const func = []
       for (const item of group) {
-        func.push(item[1])
+        func.push(item[1])I
         func.push(item[2])
       }
       const code = '(' + func[0] + ')' + func[1]
@@ -372,8 +408,10 @@ const comicsWebInfo = [
   }
 ]
 
-export const getWebList = () => {
+export const getWebList = async() => {
   const list = []
+  userWebInfo = await eval(getStorage('userWebInfo') || [])
+  console.log('userWebInfo: ', userWebInfo)
   comicsWebInfo.forEach(element => {
     list.push({
       name: element.webName,
@@ -381,7 +419,7 @@ export const getWebList = () => {
       iswork: element.iswork
     })
   })
-  return list
+  return { userWebInfo, list }
 }
 
 export let currentComics = null
