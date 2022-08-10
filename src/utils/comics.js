@@ -348,6 +348,27 @@ const comicsWebInfo = [
       const imgs = eval(imgStr)
       return imgs
     }
+  },
+  {
+    domain: 'www.sixmh7.com',
+    homepage: 'http://www.sixmh7.com/',
+    webName: '六漫画',
+    comicNameCss: '#intro_l > div.cy_title > h1',
+    chapterCss: '.cy_zhangjie .cy_plist',
+    readtype: 1,
+    getImgs: async function(context) {
+      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      const func = []
+      for (const item of group) {
+        func.push(item[1])
+        func.push(item[2])
+      }
+      const code = '(' + func[0] + ')' + func[1]
+      let imgStr = eval(code)
+      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      const imgArray = JSON.parse(imgStr)
+      return imgArray
+    }
   }
 ]
 

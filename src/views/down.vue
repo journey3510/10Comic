@@ -220,7 +220,8 @@ export default {
       margin: 2px 5px;
       .comicnametag {
         display:inline-block;
-        max-width: 55px;
+        width:60px;
+        max-width: 60px;
         white-space: nowrap;
         text-overflow:ellipsis;
         overflow:hidden;
