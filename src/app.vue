@@ -105,8 +105,7 @@ export default {
     }
   },
   created() {
-    appinit()
-    matchWeb(window.location.href)
+    this.Init()
   },
   mounted() {
     this.$bus.$on('changTab', (val) => { this.active = val })
@@ -117,6 +116,10 @@ export default {
     },
     hide() {
       this.isHide = !this.isHide
+    },
+    async Init() {
+      appinit()
+      matchWeb(window.location.href)
     },
     test(e) {
 

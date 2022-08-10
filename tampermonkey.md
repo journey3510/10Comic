@@ -1,3 +1,11 @@
+<!--
+ * @Author: journey3510 1426173674@qq.com
+ * @Date: 2022-08-10 14:06:10
+ * @LastEditors: journey3510 1426173674@qq.com
+ * @LastEditTime: 2022-08-11 00:33:15
+ * @FilePath: \tampermonkey-comic-vue2.0\tampermonkey.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 ## 漫画下载
 
 ### 功能
@@ -36,6 +44,7 @@
   - 如压缩下载有较多油猴弹窗提示跨域,建议直接下载
 
 ### 更新记录
+  - 2022/8/12 *v1.1.7*  自定义添加漫源
   - 2022/8/10 *v1.1.5*  新增六漫画
   - 2022/8/6 *v1.1.4*  部分漫画网站访问错误添加标识提示,新增最漫画、前未漫画
   - 2022/8/5 *v1.1.3*  修复多开窗口删除个别记录可能出错bug，优化下载
@@ -43,6 +52,54 @@
   - 2022/8/2 *v1.1.1*  可更改下载方式(直接下载/压缩下载)，个别漫画网站修改阅读样式(图片上下拼接)
   - 2022/7/29 *v1.1.0*  更新设置内容，可设置每章最大下载图片数，可重置设置数据、优化下载提高速度
 
+### 自定义添加漫源
+- JOSN 字段说明 
+```json
+[
+  {
+    domain，String,  域名,
+    homepage，String, 网站主页,
+    webName，String, 网站名,
+    comicNameCss，String, 漫画名的CSS选择器,
+    chapterCss，String, 含有所有章节链接的dom的CSS选择器,
+    readtype， Number, 值:1 -卷轴阅读或SPA网页, 值:0 -翻页阅读
+    iswork， Boolean,  网站是否正常运行
+    getImgs，async Function, 
+      * @description: 获取章节图片的方法
+      * @param {String} context  某一章节的请求正文，
+      * @return_1 {Array} imgArray
+          * readtype == 1时，要求返回imgArray 数组 含章节所有图片地址
+          * 例如  ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
+      * @return_2 {Object} 
+          * readtype == 0时，要求返回{ imgUrl, nextPageUrl, number }
+          * {imgUrl-当前页的图片地址,nextPageUrl-下一页地址,number-总图片数量}
+          * 例如  { 
+              imgUrl: ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
+              nextPageUrl: 'http://xx.xx.xx/xx.html'
+              number: 12
+            }
+  }
+]
+```
+- JOSN 举例
+
+```json
+[
+  {
+    domain: 'xx.xx.com',
+    homepage: 'https://xx.xx.com/',
+    webName: 'xxx',
+    comicNameCss: '.oddtitle_m .title_text h1',
+    chapterCss: '.online_border',
+    readtype: 1,
+    getImgs: async function(context) {
+      const imgStr = context.match(/xx正则xx/g)
+      const imgs = eval(imgStr)
+      return imgs
+    }
+  },{……},{……},{……}
+]
+```
 
 ### 感谢
   - [Tampermonkey-Vue](https://github.com/huangxubo23/tampermonkey-vue)
