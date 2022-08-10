@@ -75,10 +75,12 @@
 // @match        *://www.qianwee.com/*
 // @connect      qianwee.com
 // @connect      szssjg.com
+//
+// @match        *://www.sixmh7.com/*
+// @connect      byteimg.com
 // @connect      *
 // @connect      laimidao.com
 // @connect      izhegu.com
 // @connect      nicefee.com
 // @license      MIT
 // ==/UserScript==
-
