@@ -1,5 +1,5 @@
 <template>
-  <div id="comiclist">
+  <div ref="comiclist" class="comiclist">
     <!-- 下载选项弹窗 -->
     <van-popup
       v-model="show"
@@ -92,7 +92,6 @@
       v-if="showSelectList"
       id="select-list"
     >
-
       <van-cell-group
         style="border-radius: 25px;"
         inset
@@ -134,6 +133,9 @@ export default {
       list: [],
       selectResult: [],
       downResult: [],
+      minListIndex: null,
+      maxListIndex: null,
+      onShfit: false,
 
       showSelectList: false,
       overlayShow: false,
@@ -148,6 +150,7 @@ export default {
     }
   },
   mounted() {
+    this.watchKeyEvent()
     this.getInfo()
   },
   methods: {
@@ -183,10 +186,40 @@ export default {
     },
     CancelSelect() {
       this.$refs.checkboxGroup.toggleAll(false)
+      this.minListIndex = null
+      this.maxListIndex = null
     },
-
     radioSelect(index) {
-      // console.log('index', this.selectResult)
+      if (this.minListIndex === null || index < this.minListIndex) {
+        this.minListIndex = index
+      }
+      if (this.maxListIndex === null || index > this.maxListIndex) {
+        this.maxListIndex = index
+      }
+      if (this.minListIndex !== this.maxListIndex && this.onShfit) {
+        for (let i = this.minListIndex; i < this.maxListIndex; i++) {
+          if (this.list[i].url !== 'javascript:void();' && !this.selectResult.includes(i)) {
+            this.selectResult.push(i)
+          }
+        }
+      }
+    },
+    watchKeyEvent() {
+      const setKeyStatus = (keyCode, status) => {
+        switch (keyCode) {
+          case 16:
+            if (this.onShfit === status) return
+            this.onShfit = status
+            break
+        }
+      }
+      const dom = this.$refs.comiclist
+      dom.onkeydown = (e) => {
+        setKeyStatus(e.keyCode, true)
+      }
+      dom.onkeyup = (e) => {
+        setKeyStatus(e.keyCode, false)
+      }
     },
     async getSelectList() {
       this.overlayShow = true
@@ -239,7 +272,6 @@ export default {
         })
         return
       }
-
       this.selectResult.forEach(num => {
         const item = this.list[num]
         item.zipDownFlag = this.zipDownFlag
@@ -260,7 +292,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#comiclist {
+.comiclist {
   margin-top:  15px;
   border-radius: 15px;
   position: relative;
