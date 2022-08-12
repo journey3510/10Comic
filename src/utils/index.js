@@ -26,6 +26,10 @@ export const getHtml = async(url) => {
         method: 'get',
         url: url,
         onload: function(res) {
+          if (typeof currentComics.getImgs === 'string') {
+            // eslint-disable-next-line no-eval
+            currentComics.getImgs = eval('(function(){return ' + currentComics.getImgs + ' })()')
+          }
           const imgs = currentComics.getImgs(res.response)
           resolve(imgs)
         },

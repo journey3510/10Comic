@@ -3,9 +3,6 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-
-
-
 import { request } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
@@ -30,7 +27,7 @@ import { getStorage } from '@/config/setup'
           * readtype == 0时，要求{ imgUrl, nextPageUrl, number }
           * 例如  { imgUrl: ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
                     nextPageUrl: 'http://xx.xx.xx/xx.html'
-                    number: 
+                    number:
                   }
 
   },
@@ -396,7 +393,7 @@ const comicsWebInfo = [
       const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       const func = []
       for (const item of group) {
-        func.push(item[1])I
+        func.push(item[1])
         func.push(item[2])
       }
       const code = '(' + func[0] + ')' + func[1]
@@ -411,7 +408,7 @@ const comicsWebInfo = [
 export const getWebList = async() => {
   const list = []
   userWebInfo = await eval(getStorage('userWebInfo') || [])
-  console.log('userWebInfo: ', userWebInfo)
+  // console.log('userWebInfo: ', userWebInfo)
   comicsWebInfo.forEach(element => {
     list.push({
       name: element.webName,
