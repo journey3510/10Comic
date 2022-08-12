@@ -90,8 +90,8 @@ export default {
       AppName,
       AppVersion,
       show: true,
-      isHide: true,
-      active: 1,
+      isHide: false,
+      active: 3,
       titles: ['漫画网站', '选择章节', '下载', '设置'],
       comicInfo: {}
     }
@@ -160,7 +160,7 @@ export default {
   z-index: 9999;
   right: 0;
   top: 50%;
-  height: 800px;
+  height: @appHeight;
   width: @appWidth;
   background-color: #f8f8f8;
   transform: translateY(-50%);
@@ -177,7 +177,7 @@ export default {
   background-color: #66ccff96;
   cursor: pointer;
   position: absolute;
-  right: 420px;
+  right: @appWidth;
   top: 50%;
   // transform: translateY(-50%);
   text-align: center;
@@ -192,10 +192,10 @@ export default {
   }
 }
 .card--hide {
-  right: -415px;
+  right:  -@appWidth + 5px;
   .card__btn {
     border-radius: 0 30px 30px 0;
-    right: 420px;
+    right: @appWidth;
       transform: rotate(180deg);
     svg {
     }

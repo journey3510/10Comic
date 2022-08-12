@@ -21,8 +21,8 @@
 // @grant        GM.download
 // @resource   vantcss   https://unpkg.com/vant@2.12/lib/index.css
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js
-// @require      https://cdn.bootcdn.net/ajax/libs/jszip/3.7.1/jszip.min.js
 // @require      https://unpkg.com/vant@2.12/lib/vant.min.js
+// @require      https://cdn.bootcdn.net/ajax/libs/jszip/3.7.1/jszip.min.js
 //
 // @match        *://www.kumw5.com/*
 // @connect      kumw5.com
