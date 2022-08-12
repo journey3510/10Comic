@@ -1,3 +1,4 @@
+/* eslint-disable no-eval */
 /* eslint-disable no-undef */
 import { AppVersion, isDev } from '@/config/index'
 
@@ -16,7 +17,8 @@ const configDefault = {
       comicNameCss: '.odd_anim_title_m .anim_title_text h1',
       chapterCss: '.cartoon_online_border',
       readtype: 1,
-      getImgs: async function(context) {
+      testReg: '/dsadde/g',
+      getImgs: `async function(context) {
         const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
         const func = []
         for (const item of group) {
@@ -33,7 +35,7 @@ const configDefault = {
           })
         }
         return imgArray
-      }
+      }`
     }
   ]
 }

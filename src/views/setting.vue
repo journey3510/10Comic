@@ -1,137 +1,182 @@
 <template>
   <div class="setindex">
 
-    <div id="setpart">
-      <van-cell-group id="downpart" title="下载" inset>
-        <van-cell label="*下载前生效" center>
-          <template #title>
-            <span style="width: 300px" class="custom-title">最大下载章节数</span>
-          </template>
-
-          <template #default>
-            <van-slider
-              v-model="maxChapterNum"
-              class="rightslider"
-              :min="1"
-              :max="5"
-              @change="onChangeData('maxChapterNum', maxChapterNum)"
-            >
-              <template #button>
-                <div class="custom-button">{{ maxChapterNum }}</div>
+    <van-swipe
+      ref="swipe2"
+      class="my-swipe"
+      style="cursor: default;"
+      :initial-swipe="0"
+      :duration="5"
+      :show-indicators="false"
+    >
+      <!-- :touchable="false" -->
+      <van-swipe-item class="swipeitem">
+        <div id="setpart">
+          <van-cell-group id="downpart" title="下载" inset>
+            <van-cell label="*下载前生效" center>
+              <template #title>
+                <span style="width: 300px" class="custom-title">最大下载章节数</span>
               </template>
-            </van-slider>
-          </template>
-        </van-cell>
 
-        <van-cell label="*下载前生效" center>
-          <template #title>
-            <span style="width: 300px" class="custom-title">每章最大下载图片数</span>
-          </template>
-
-          <template #default>
-            <van-slider
-              v-model="maxPictureNum"
-              class="rightslider"
-              :min="1"
-              :max="5"
-              @change="onChangeData('maxPictureNum', maxPictureNum)"
-            >
-              <template #button>
-                <div class="custom-button">{{ maxPictureNum }}</div>
+              <template #default>
+                <van-slider
+                  v-model="maxChapterNum"
+                  class="rightslider"
+                  :min="1"
+                  :max="5"
+                  @change="onChangeData('maxChapterNum', maxChapterNum)"
+                >
+                  <template #button>
+                    <div class="custom-button">{{ maxChapterNum }}</div>
+                  </template>
+                </van-slider>
               </template>
-            </van-slider>
-          </template>
-        </van-cell>
+            </van-cell>
 
-        <van-cell
-          title-class="cellleftvalue"
-          value-class="cellrightvalue"
-          label="*本次启动默认设置, 不勾选则下载图片"
-          center
-        >
-          <template #title>
-            <span class="custom-title">压缩下载</span>
-            <van-popover
-              v-model="zipDownPopover"
-              placement="right"
-              get-container="#downpart"
-              :offset="[-18,10]"
-              :close-on-click-outside="true"
+            <van-cell label="*下载前生效" center>
+              <template #title>
+                <span style="width: 300px" class="custom-title">每章最大下载图片数</span>
+              </template>
+
+              <template #default>
+                <van-slider
+                  v-model="maxPictureNum"
+                  class="rightslider"
+                  :min="1"
+                  :max="5"
+                  @change="onChangeData('maxPictureNum', maxPictureNum)"
+                >
+                  <template #button>
+                    <div class="custom-button">{{ maxPictureNum }}</div>
+                  </template>
+                </van-slider>
+              </template>
+            </van-cell>
+
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              label="*本次启动默认设置, 不勾选则下载图片"
+              center
             >
-              <div>
-                <code class="popovertext">* 如需保存在文件夹需要设置油猴下载模式为浏览器API</code><br>
-                <code class="popovertext">* 如有较多油猴弹窗提示跨域,建议取消勾选直接下载</code>
-              </div>
-              <template #reference>
-                <van-icon
-                  name="info-o"
-                  color="red"
-                  @mouseover="zipDownPopover = true"
-                  @mouseleave="zipDownPopover = false"
+              <template #title>
+                <span class="custom-title">压缩下载</span>
+                <van-popover
+                  v-model="zipDownPopover"
+                  placement="right"
+                  get-container="#downpart"
+                  :offset="[-18,10]"
+                  :close-on-click-outside="true"
+                >
+                  <div>
+                    <code class="popovertext">* 如需保存在文件夹需要设置油猴下载模式为浏览器API</code><br>
+                    <code class="popovertext">* 如有较多油猴弹窗提示跨域,建议取消勾选直接下载</code>
+                  </div>
+                  <template #reference>
+                    <van-icon
+                      name="info-o"
+                      color="red"
+                      @mouseover="zipDownPopover = true"
+                      @mouseleave="zipDownPopover = false"
+                    />
+                  </template>
+                </van-popover>
+              </template>
+
+              <template #default>
+                <van-checkbox
+                  v-model="zipDownFlag"
+                  class="rightbutton"
+                  @change="onChangeData('zipDownFlag', zipDownFlag)"
                 />
               </template>
-            </van-popover>
-          </template>
+            </van-cell>
+          </van-cell-group>
 
-          <template #default>
-            <van-checkbox
-              v-model="zipDownFlag"
-              class="rightbutton"
-              @change="onChangeData('zipDownFlag', zipDownFlag)"
-            />
-          </template>
-        </van-cell>
-      </van-cell-group>
-
-      <van-cell-group id="webpart" title="原网站阅读样式修改" inset>
-        <van-cell
-          title-class="cellleftvalue"
-          value-class="cellrightvalue"
-          label="去除部分漫画网站图片上下间隔"
-          center
-        >
-          <template #title>
-            <span class="custom-title">图片拼接</span>
-
-            <van-popover
-              v-model="showPopover"
-              placement="bottom-start"
-              get-container="#webpart"
-              :offset="[-2,0]"
-              :close-on-click-outside="true"
+          <van-cell-group id="webpart" title="原网站阅读样式修改" inset>
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              label="去除部分漫画网站图片上下间隔"
+              center
             >
-              <code class="popovertext">建议浏览长条漫画时开启</code>
-              <template #reference>
-                <van-icon
-                  name="info-o"
-                  color="red"
-                  @mouseover="showPopover = true"
-                  @mouseleave="showPopover = false"
+              <template #title>
+                <span class="custom-title">图片拼接</span>
+
+                <van-popover
+                  v-model="showPopover"
+                  placement="bottom-start"
+                  get-container="#webpart"
+                  :offset="[-2,0]"
+                  :close-on-click-outside="true"
+                >
+                  <code class="popovertext">建议浏览长条漫画时开启</code>
+                  <template #reference>
+                    <van-icon
+                      name="info-o"
+                      color="red"
+                      @mouseover="showPopover = true"
+                      @mouseleave="showPopover = false"
+                    />
+                  </template>
+                </van-popover>
+              </template>
+
+              <template #default>
+                <van-checkbox
+                  v-model="imgSplicingFlag"
+                  class="rightbutton"
+                  @change="webImgSplicing"
                 />
               </template>
-            </van-popover>
-          </template>
+            </van-cell>
+          </van-cell-group>
 
-          <template #default>
-            <van-checkbox
-              v-model="imgSplicingFlag"
-              class="rightbutton"
-              @change="webImgSplicing"
+          <van-cell-group id="webpart" title="自定义源" inset>
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              title="导入"
+              is-link
+              center
+              @click="changeSwipe(1)"
             />
-          </template>
-        </van-cell>
-      </van-cell-group>
+          </van-cell-group>
+        </div>
 
-    </div>
+        <div id="set-bottom">
+          <van-button
+            :style="{width: '120px',background: '#ee000055'}"
+            round
+            @click="allInit"
+          >全部重置</van-button>
+        </div>
+      </van-swipe-item>
 
-    <div id="set-bottom">
-      <van-button
-        :style="{width: '120px',background: '#ee000055'}"
-        round
-        @click="allInit"
-      >全部重置</van-button>
+      <van-swipe-item :style="{marginBottom: '15px',cursor: 'pointer',flex: 1}" class="swipeitem">
+        <div>
+          <div
+            :style="{marginBottom: '15px',cursor: 'pointer',flex: 1}"
+            @click="changeSwipe(0)"
+          >
+            <van-icon name="arrow-left" /> 返回
+          </div>
+          <textarea
+            id=""
+            ref="codeTextarea"
+            v-model="codeText"
+            style="resize:none;"
+            name="2"
+            cols="45"
+            rows="10"
+          />
 
-    </div>
+          <input type="button" value="" @click="getCode">
+          <input type="button" value="" @click="changeSwipe(0)">
+        </div>
+      </van-swipe-item>
+
+    </van-swipe>
 
   </div>
 </template>
@@ -152,9 +197,11 @@ export default {
       maxPictureNum: 2,
       zipDownFlag: true,
       imgSplicingFlag: false,
+      codeText: '',
       //
       zipDownPopover: false,
       showPopover: false
+
     }
   },
   mounted() {
@@ -179,7 +226,14 @@ export default {
       }
       this.onChangeData('imgSplicingFlag', value)
     },
-
+    changeSwipe(val) {
+      this.$refs.swipe2.swipeTo(val)
+    },
+    getCode() {
+      console.log(this.codeText)
+      const a = JSON.parse(this.codeText)
+      console.log(a)
+    },
     exeFun(flag) {
       this.webImgSplicing(flag)
     },
@@ -215,17 +269,30 @@ export default {
 <style lang="scss" scoped>
 .setindex {
   display: flex;
-  flex-direction: column;
-  margin: 20px 15px 30px 15px;
+  // flex-direction: column;
+  // margin: 20px 15px 30px 15px;
   height: 680px;
   max-height: 680px;
-  justify-content: space-between;
+  // justify-content: space-between;
+
+  .swipeitem {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid red;
+    // width: 100%;
+    // margin: 20px 30px 15px 18px;
+    flex: 1;
+    height: 680px;
+    max-height: 680px;
+    justify-content: space-between;
+  }
 
   #setpart {
     flex-direction: row;
     border-radius: 15px;
     background-color: #ffffff;
     overflow: auto;
+    width: 100%;
 
     .van-cell-group__title {
       color: #78a5ff;
@@ -263,8 +330,8 @@ export default {
             border-radius: 100px;
           }
        }
-
     }
+
   }
 
   #set-bottom {

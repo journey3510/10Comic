@@ -74,6 +74,8 @@ import Table from '@/views/table.vue'
 import Setting from '@/views/setting.vue'
 import Down from '@/views/down.vue'
 
+import './styles/global.less'
+
 import { AppName, AppVersion } from './config'
 import { matchWeb } from './utils/comics'
 import { appinit } from './config/setup.js'
@@ -152,14 +154,14 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .card {
   position: fixed;
   z-index: 9999;
   right: 0;
   top: 50%;
   height: 800px;
-  width: 420px;
+  width: @appWidth;
   background-color: #f8f8f8;
   transform: translateY(-50%);
   border: solid 1px #66ccffee;
