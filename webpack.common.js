@@ -6,6 +6,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 // const pathResolve = (dir) => {
 //   return path.resolve(__dirname, '..', dir)
 // }
+const less = path.resolve(__dirname, 'src/styles/global.less')
 
 module.exports = () => {
   const entryFile = process.env.TAMPERMONKEY_ENTRY_FILE
@@ -42,10 +43,18 @@ module.exports = () => {
         {
           test: /\.less$/i,
           use: [
-            // compiles Less to CSS
             'style-loader',
             'css-loader',
-            'less-loader'
+            {
+              loader: 'less-loader',
+              options: {
+                lessOptions: {
+                  modifyVars: {
+                    hack: `true; @import "${less}"`
+                  }
+                }
+              }
+            }
           ]
         },
         {

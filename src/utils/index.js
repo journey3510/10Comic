@@ -2,20 +2,26 @@ import { currentComics } from '@/utils/comics'
 
 export const loadStyle = (url, name, text) => {
   const head = document.getElementsByTagName('head')[0]
-  if (url !== '') {
+  const style = document.createElement('style')
+  style.name = name
+  style.id = name
+  style.innerText = text
+  head.appendChild(style)
+}
+
+export const loadStyle2 = (url) => {
+  return new Promise((resolve, reject) => {
+    const head = document.getElementsByTagName('head')[0]
     const link = document.createElement('link')
     link.rel = 'stylesheet'
     link.type = 'text/css'
     link.href = url
     link.media = 'all'
     head.appendChild(link)
-  } else {
-    const style = document.createElement('style')
-    style.name = name
-    style.id = name
-    style.innerText = text
-    head.appendChild(style)
-  }
+    setTimeout(() => {
+      resolve(true)
+    }, 1200)
+  })
 }
 
 export const getHtml = async(url) => {
