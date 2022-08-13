@@ -41,7 +41,10 @@ export default class Queue {
       await setStorage('downHistory', historyData)
       _this.Vue.getHistoryData()
       _this.worker[index] = undefined
-      _this.run()
+      // 休息下？
+      setTimeout(() => {
+        _this.run()
+      }, 2000)
     }
 
     if (readtype === 1) {
@@ -79,8 +82,6 @@ export default class Queue {
 
   refresh() {
     this.worker.splice(0, 0)
-    // this.worker.push('')
-    // this.worker.pop()
   }
 
   // 下载图片 Promise
@@ -174,7 +175,12 @@ export default class Queue {
 
     if (nextPageUrl !== '') {
       this.worker[workerId].url = nextPageUrl
-      return this.down2(workerId)
+      return new Promise((resolve, reject) => {
+        // 休息一下？
+        setTimeout(() => {
+          resolve(this.down2(workerId))
+        }, 1000)
+      })
     }
 
     // 是否压缩
@@ -216,7 +222,12 @@ export default class Queue {
     })
 
     if (this.worker[workerId].imgs.length > 0) {
-      return this.down(workerId)
+      return new Promise((resolve, reject) => {
+        // 休息一下？
+        setTimeout(() => {
+          resolve(this.down(workerId))
+        }, 1000)
+      })
     }
 
     // 是否压缩

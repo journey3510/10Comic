@@ -57,6 +57,7 @@ export const appinit = async() => {
       }
     }
     GM_setValue('version', AppVersion)
+    GM_setValue('maxChapterNum', 2)
     resolve(1)
   })
 }

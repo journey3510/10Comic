@@ -296,7 +296,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .comiclist {
   margin-top:  15px;
   border-radius: 15px;
@@ -315,7 +315,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 3px 20px !important;
-  color: red;
+  color: @lingColor;
   flex-wrap: wrap;
 }
 
