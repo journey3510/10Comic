@@ -19,17 +19,20 @@
               </template>
 
               <template #default>
-                <van-slider
-                  v-model="maxChapterNum"
-                  class="rightslider"
-                  :min="1"
-                  :max="5"
-                  @change="onChangeData('maxChapterNum', maxChapterNum)"
-                >
-                  <template #button>
-                    <div class="custom-button">{{ maxChapterNum }}</div>
-                  </template>
-                </van-slider>
+                <div style="display: flex;">
+                  1&nbsp;
+                  <van-slider
+                    v-model="maxChapterNum"
+                    class="rightslider"
+                    :min="1"
+                    :max="3"
+                    @change="onChangeData('maxChapterNum', maxChapterNum)"
+                  >
+                    <template #button>
+                      <div class="custom-button">{{ maxChapterNum }}</div>
+                    </template>
+                  </van-slider>&nbsp;3
+                </div>
               </template>
             </van-cell>
 
@@ -39,17 +42,20 @@
               </template>
 
               <template #default>
-                <van-slider
-                  v-model="maxPictureNum"
-                  class="rightslider"
-                  :min="1"
-                  :max="5"
-                  @change="onChangeData('maxPictureNum', maxPictureNum)"
-                >
-                  <template #button>
-                    <div class="custom-button">{{ maxPictureNum }}</div>
-                  </template>
-                </van-slider>
+                <div style="display: flex;">
+                  1&nbsp;
+                  <van-slider
+                    v-model="maxPictureNum"
+                    class="rightslider"
+                    :min="1"
+                    :max="5"
+                    @change="onChangeData('maxPictureNum', maxPictureNum)"
+                  >
+                    <template #button>
+                      <div class="custom-button">{{ maxPictureNum }}</div>
+                    </template>
+                  </van-slider>&nbsp;5
+                </div>
               </template>
             </van-cell>
 
@@ -137,6 +143,7 @@
               title-class="cellleftvalue"
               value-class="cellrightvalue"
               title="导入"
+              label="点击进入"
               is-link
               center
               @click="changeSwipe(1)"
@@ -156,26 +163,29 @@
       <van-swipe-item :style="{marginBottom: '15px',cursor: 'pointer',flex: 1}" class="swipeitem">
         <div>
           <div
-            :style="{marginBottom: '15px',cursor: 'pointer',flex: 1}"
+            id="setup-return"
             @click="changeSwipe(0)"
           >
             <van-icon name="arrow-left" /> 返回
           </div>
-          <textarea
-            id=""
-            ref="codeTextarea"
-            v-model="codeText"
-            style="resize:none;"
-            name="2"
-            cols="45"
-            rows="10"
-          />
-
-          <input type="button" value="" @click="getCode">
-          <input type="button" value="" @click="changeSwipe(0)">
+          <!--  -->
+          <div>
+            <textarea
+              id="codeTextarea"
+              ref="codeTextarea"
+              v-model="codeText"
+              style="resize:none;"
+              :style="{width: '97%'}"
+              rows="10"
+            /> <br>
+            <van-button
+              type="primary"
+              size="mini"
+              @click="getCode"
+            >确定</van-button>
+          </div>
         </div>
       </van-swipe-item>
-
     </van-swipe>
 
   </div>
@@ -213,6 +223,7 @@ export default {
     },
     webImgSplicing(value) {
       const splicingimgstyle = document.getElementById('splicingimgstyle')
+      console.log('currentComics: ', currentComics)
       if (value === true && currentComics.readCssText !== undefined) {
         if (splicingimgstyle) {
           splicingimgstyle.innerText = currentComics.readCssText
@@ -266,10 +277,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .setindex {
   display: flex;
-  // flex-direction: column;
   // margin: 20px 15px 30px 15px;
   height: 680px;
   max-height: 680px;
@@ -278,13 +288,20 @@ export default {
   .swipeitem {
     display: flex;
     flex-direction: column;
-    border: 1px solid red;
-    // width: 100%;
-    // margin: 20px 30px 15px 18px;
+    margin: 20px 18px 15px 18px;
     flex: 1;
     height: 680px;
     max-height: 680px;
     justify-content: space-between;
+    #setup-return{
+      flex: 1;
+      margin-bottom: 15px;
+      cursor: pointer;
+      font-size: 17px;
+    }
+    #setup-return:hover{
+      color: @lingColor;
+    }
   }
 
   #setpart {
@@ -318,13 +335,13 @@ export default {
       // 修改滑动条
       .rightslider {
         margin: 10px 15px;
-        width: 150px;
+        width: 120px;
           // 滑动按钮
           .custom-button {
-            width: 26px;
+            width: 20px;
             color: #fff;
             font-size: 10px;
-            line-height: 18px;
+            line-height: 15px;
             text-align: center;
             background-color: #ee0a24;
             border-radius: 100px;

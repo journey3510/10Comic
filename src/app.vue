@@ -91,7 +91,7 @@ export default {
       AppVersion,
       show: true,
       isHide: false,
-      active: 3,
+      active: 1,
       titles: ['漫画网站', '选择章节', '下载', '设置'],
       comicInfo: {}
     }

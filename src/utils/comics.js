@@ -429,11 +429,21 @@ export const matchWeb = (url) => {
   } else {
     hname = ''
   }
+  // 原漫画列表匹配
   for (let i = 0; i < comicsWebInfo.length; i++) {
     if (comicsWebInfo[i].domain === hname) {
       currentComics = comicsWebInfo[i]
       break
     }
   }
+  // // 导入列表匹配
+  // if (currentComics === null) {
+  //   for (let a = 0; a < userWebInfo.length; a++) {
+  //     if (userWebInfo[a].domain === hname) {
+  //       currentComics = userWebInfo[a]
+  //       break
+  //     }
+  //   }
+  // }
 }
 

@@ -2,40 +2,19 @@
   <div class="homeindex">
     <div
       id="selectId"
-      :style="{width: '200px',position: 'relative',margin:'-10px 0 0 13px',zIndex: 999999}"
+      :style="{width: '200px',position: 'relative',margin:'-5px 0 2px 15px',zIndex: 999999}"
       @mouseleave="leaveCollapse"
     >
       <van-collapse v-model="activeNames">
         <van-collapse-item class="xxx" :title="checkTitle" name="1">
-          <div @click="checkContent(1)">dddd</div>
-          <div>dddd</div>
-          <div>dddd</div>
+          <div @click="checkContent(1, '原漫画列表')">原漫画列表</div>
+          <br>
+          <div @click="checkContent(2, '导入列表')">导入列表</div>
         </van-collapse-item>
       </van-collapse>
     </div>
 
-    <!-- <div>
-      <van-cell-group inset>
-        <van-cell
-          v-for="(item, index) in userWebInfo"
-          :key="index"
-          is-link
-          @click="jump(item.url)"
-        >
-          <template #title>
-            <span>{{ item.webName }}</span>
-            <van-icon
-              v-if="item.iswork === false"
-              title="？可访问 ？"
-              name="info-o"
-              color="red"
-            />
-          </template>
-        </van-cell>
-      </van-cell-group>
-    </div> -->
-
-    <van-cell-group inset>
+    <van-cell-group v-if="checkValue == 1" inset>
       <van-cell
         v-for="(item, index) in comicList"
         :key="index"
@@ -53,6 +32,27 @@
         </template>
       </van-cell>
     </van-cell-group>
+
+    <div v-if="checkValue == 2">
+      <van-cell-group inset>
+        <van-cell
+          v-for="(item, index) in userWebInfo"
+          :key="index"
+          is-link
+          @click="jump(item.homepage)"
+        >
+          <template #title>
+            <span>{{ item.webName }}</span>
+            <van-icon
+              v-if="item.iswork === false"
+              title="？可访问 ？"
+              name="info-o"
+              color="red"
+            />
+          </template>
+        </van-cell>
+      </van-cell-group>
+    </div>
   </div>
 </template>
 
@@ -68,7 +68,8 @@ export default {
       userWebInfo: [],
       //
       activeNames: [1],
-      checkTitle: 'sss'
+      checkValue: 1,
+      checkTitle: '原漫画列表'
 
     }
   },
@@ -79,10 +80,11 @@ export default {
     async getWeb() {
       this.comicList = (await getWebList()).list
       this.userWebInfo = (await getWebList()).userWebInfo
-      console.log('this.userWebInfo : ', this.userWebInfo)
+      // console.log('this.userWebInfo : ', this.userWebInfo)
     },
-    checkContent(val) {
-      this.checkTitle = val
+    checkContent(val, title) {
+      this.checkValue = val
+      this.checkTitle = title
       this.activeNames = []
     },
     leaveCollapse() {
@@ -97,20 +99,25 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .homeindex {
-  margin-top: 20px;
+  margin-top: 12px;
   overflow-y: auto;
   max-height: 675px;
   min-height: 600px;
   #selectId {
-     >>> .van-collapse-item__wrapper{
-      border: 1px solid red !important;
-      border-right: 1px solid red;
-      border-bottom: 1px solid red;
-      border-radius: 5px;
+    margin-top: 10px;
+    /deep/ .van-collapse-item__wrapper{
+      position: absolute;
+      width: 100%;
+      .van-collapse-item__content {
+        background-color: #eeeeee !important;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+      }
+
       .van-collapse-item__content div:hover {
-          background-color: red;
+        color: red;
       }
     }
   }
