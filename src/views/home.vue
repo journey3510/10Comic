@@ -7,9 +7,9 @@
     >
       <van-collapse v-model="activeNames">
         <van-collapse-item class="xxx" :title="checkTitle" name="1">
-          <div @click="checkContent(1, '原漫画列表')">原漫画列表</div>
+          <div @click="checkContent(1, '原列表')">原列表</div>
           <br>
-          <div @click="checkContent(2, '导入列表')">导入列表</div>
+          <div @click="checkContent(2, '导入规则列表')">导入规则列表</div>
         </van-collapse-item>
       </van-collapse>
     </div>
@@ -69,18 +69,21 @@ export default {
       //
       activeNames: [1],
       checkValue: 1,
-      checkTitle: '原漫画列表'
+      checkTitle: '原列表'
 
     }
   },
-  mounted() {
+  created() {
     this.getWeb()
   },
+  mounted() {
+    this.$bus.$on('getWeb', this.getWeb)
+  },
   methods: {
-    async getWeb() {
-      this.comicList = (await getWebList()).list
-      this.userWebInfo = (await getWebList()).userWebInfo
-      // console.log('this.userWebInfo : ', this.userWebInfo)
+    getWeb() {
+      const { list, userWebInfo } = getWebList()
+      this.comicList = list
+      this.userWebInfo = userWebInfo
     },
     checkContent(val, title) {
       this.checkValue = val
@@ -88,7 +91,6 @@ export default {
       this.activeNames = []
     },
     leaveCollapse() {
-      console.log(111)
       this.activeNames = []
     },
     jump(url) {

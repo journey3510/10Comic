@@ -138,15 +138,22 @@
             </van-cell>
           </van-cell-group>
 
-          <van-cell-group id="webpart" title="自定义源" inset>
+          <van-cell-group id="webpart" title="自定义规则" inset>
             <van-cell
               title-class="cellleftvalue"
               value-class="cellrightvalue"
-              title="导入"
-              label="点击进入"
+              title="导入规则"
               is-link
               center
               @click="changeSwipe(1)"
+            />
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              title="清空导入的规则"
+              is-link
+              center
+              @click="deleteAllUserWeb()"
             />
           </van-cell-group>
         </div>
@@ -168,22 +175,8 @@
           >
             <van-icon name="arrow-left" /> 返回
           </div>
-          <!--  -->
-          <div>
-            <textarea
-              id="codeTextarea"
-              ref="codeTextarea"
-              v-model="codeText"
-              style="resize:none;"
-              :style="{width: '97%'}"
-              rows="10"
-            /> <br>
-            <van-button
-              type="primary"
-              size="mini"
-              @click="getCode"
-            >确定</van-button>
-          </div>
+          <!-- 组件 -->
+          <import-page v-if="setupOtherPage === 1" />
         </div>
       </van-swipe-item>
     </van-swipe>
@@ -199,23 +192,29 @@ import { loadStyle } from '@/utils/index'
 
 import { Dialog } from 'vant'
 
+import importPage from '@/components/importPage.vue'
+
 export default {
   name: 'Setting',
+  components: {
+    importPage
+  },
   data() {
     return {
       maxChapterNum: 1,
       maxPictureNum: 2,
       zipDownFlag: true,
       imgSplicingFlag: false,
-      codeText: '',
       //
       zipDownPopover: false,
-      showPopover: false
+      showPopover: false,
+      setupOtherPage: 0
 
     }
   },
   mounted() {
     this.getAllData()
+    this.$bus.$on('changeSetupFirstPage', () => { this.changeSwipe(0) })
   },
   methods: {
     onChangeData(key, value) {
@@ -223,8 +222,7 @@ export default {
     },
     webImgSplicing(value) {
       const splicingimgstyle = document.getElementById('splicingimgstyle')
-      console.log('currentComics: ', currentComics)
-      if (value === true && currentComics.readCssText !== undefined) {
+      if (value === true && currentComics && currentComics.readCssText !== undefined) {
         if (splicingimgstyle) {
           splicingimgstyle.innerText = currentComics.readCssText
         } else {
@@ -239,11 +237,7 @@ export default {
     },
     changeSwipe(val) {
       this.$refs.swipe2.swipeTo(val)
-    },
-    getCode() {
-      console.log(this.codeText)
-      const a = JSON.parse(this.codeText)
-      console.log(a)
+      this.setupOtherPage = val
     },
     exeFun(flag) {
       this.webImgSplicing(flag)
@@ -272,6 +266,19 @@ export default {
         .catch(() => {
           // on cancel
         })
+    },
+    deleteAllUserWeb() {
+      Dialog.confirm({
+        getContainer: '.card',
+        message: '确认清空'
+      })
+        .then(() => {
+          setStorage('userWebInfo', [])
+          this.$bus.$emit('getWeb')
+        })
+        .catch(() => {
+          // on cancel
+        })
     }
   }
 }
@@ -280,11 +287,8 @@ export default {
 <style lang="less" scoped>
 .setindex {
   display: flex;
-  // margin: 20px 15px 30px 15px;
   height: 680px;
   max-height: 680px;
-  // justify-content: space-between;
-
   .swipeitem {
     display: flex;
     flex-direction: column;
@@ -348,7 +352,6 @@ export default {
           }
        }
     }
-
   }
 
   #set-bottom {
@@ -356,8 +359,5 @@ export default {
     justify-content: center;
     margin-bottom: 20px;
   }
-
 }
-
 </style>
-

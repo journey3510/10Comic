@@ -6,37 +6,6 @@
 import { request } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
-/*
-[
-  {
-    domain，String,  域名,
-    homepage，String, 网站主页,
-    webName，String, 网站名,
-    comicNameCss，String, 漫画名的CSS选择器,
-    chapterCss，String, 含有所有章节链接的dom的CSS选择器,
-    readtype， Number, 值:1 -卷轴阅读或SPA网页, 值:0 -翻页阅读
-    iswork， Boolean,  网站是否正常运行
-    getImgs， Function,
-      * @description: 获取章节图片的方法
-      * @param {*} context  某一章节的请求正文String
-      * @return_1 {*} imgArray
-          * readtype == 1时，要求返回imgArray 数组 含章节所有图片地址
-          * 例如  ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
-      * @return_2 {*} {}
-          * 返回imgArray 数组 含章节所图片地址
-          * readtype == 0时，要求{ imgUrl, nextPageUrl, number }
-          * 例如  { imgUrl: ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
-                    nextPageUrl: 'http://xx.xx.xx/xx.html'
-                    number:
-                  }
-
-  },
-  {…………},{…………}
-]
-*/
-
-let userWebInfo = []
-
 const comicsWebInfo = [
   {
     domain: 'manhua.dmzj.com',
@@ -368,20 +337,21 @@ const comicsWebInfo = [
       return imgs
     }
   },
-  {
-    domain: 'www.qianwee.com',
-    homepage: 'https://www.qianwee.com/',
-    webName: '前未漫画',
-    comicNameCss: '.comic_deCon.autoHeight h1',
-    chapterCss: '.zj_list_con #chapter-list-1',
-    readtype: 1,
-    readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
-    getImgs: async function(context) {
-      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
-      const imgs = eval(imgStr)
-      return imgs
-    }
-  },
+  // {
+  //   domain: 'www.qianwee.com',
+  //   homepage: 'https://www.qianwee.com/',
+  //   webName: '前未漫画',
+  //   comicNameCss: '.comic_deCon.autoHeight h1',
+  //   chapterCss: '.zj_list_con #chapter-list-1',
+  //   readtype: 1,
+  //   readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
+  //   getImgs: async function(context) {
+  //     const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+  //     console.log('imgStr: ', imgStr)
+  //     const imgs = eval(imgStr)
+  //     return imgs
+  //   }
+  // },
   {
     domain: 'www.sixmh7.com',
     homepage: 'http://www.sixmh7.com/',
@@ -405,10 +375,9 @@ const comicsWebInfo = [
   }
 ]
 
-export const getWebList = async() => {
+export const getWebList = () => {
   const list = []
-  userWebInfo = await eval(getStorage('userWebInfo') || [])
-  // console.log('userWebInfo: ', userWebInfo)
+  const userWebInfo = eval(getStorage('userWebInfo') || [])
   comicsWebInfo.forEach(element => {
     list.push({
       name: element.webName,
@@ -416,7 +385,7 @@ export const getWebList = async() => {
       iswork: element.iswork
     })
   })
-  return { userWebInfo, list }
+  return { list, userWebInfo }
 }
 
 export let currentComics = null
@@ -436,14 +405,19 @@ export const matchWeb = (url) => {
       break
     }
   }
-  // // 导入列表匹配
-  // if (currentComics === null) {
-  //   for (let a = 0; a < userWebInfo.length; a++) {
-  //     if (userWebInfo[a].domain === hname) {
-  //       currentComics = userWebInfo[a]
-  //       break
-  //     }
-  //   }
-  // }
+  // 导入规则列表匹配
+  if (currentComics === null) {
+    const userWebInfo = eval(getStorage('userWebInfo') || [])
+    for (let a = 0; a < userWebInfo.length; a++) {
+      if (userWebInfo[a].domain === hname) {
+        currentComics = userWebInfo[a]
+        break
+      }
+    }
+    if (currentComics !== null && typeof currentComics.getImgs === 'string') {
+      // eslint-disable-next-line no-eval
+      currentComics.getImgs = eval('(function(){return ' + currentComics.getImgs + ' })()')
+    }
+  }
 }
 

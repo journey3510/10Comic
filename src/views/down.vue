@@ -138,23 +138,23 @@ export default {
     getComicName(value) {
       if (value !== '------') { this.comicName = value }
     },
-    async downInit(arr) {
+    downInit(arr) {
       if (this.queue.worker === '') {
-        this.maxChapterNum = await getStorage('maxChapterNum')
-        this.maxPictureNum = await getStorage('maxPictureNum')
-        this.zipDownFlag = await getStorage('zipDownFlag')
+        this.maxChapterNum = getStorage('maxChapterNum')
+        this.maxPictureNum = getStorage('maxPictureNum')
+        this.zipDownFlag = getStorage('zipDownFlag')
         this.queue = new Queue(this.maxChapterNum, this.maxPictureNum, this)
       }
       this.queue.addList(arr)
       this.queue.run()
     },
-    async getHistoryData() {
-      const data = await getStorage('downHistory')
+    getHistoryData() {
+      const data = getStorage('downHistory')
       this.historyData = JSON.parse(data || '[]')
     },
-    async deleteHistoryData(index, id) {
+    deleteHistoryData(index, id) {
       this.historyData.splice(index, 1)
-      let data = await getStorage('downHistory')
+      let data = getStorage('downHistory')
       let historyData = JSON.parse(data || '[]')
       historyData = historyData.filter((item) => item.id !== id)
       data = JSON.stringify(historyData)

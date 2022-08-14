@@ -78,7 +78,7 @@ import './styles/global.less'
 
 import { AppName, AppVersion } from './config'
 import { matchWeb } from './utils/comics'
-import { appinit } from './config/setup.js'
+import { appLoadinit } from './config/setup.js'
 
 export default {
   name: 'App',
@@ -90,7 +90,7 @@ export default {
       AppName,
       AppVersion,
       show: true,
-      isHide: false,
+      isHide: true,
       active: 1,
       titles: ['漫画网站', '选择章节', '下载', '设置'],
       comicInfo: {}
@@ -120,7 +120,7 @@ export default {
       this.isHide = !this.isHide
     },
     async Init() {
-      appinit()
+      appLoadinit()
       matchWeb(window.location.href)
     },
     test(e) {

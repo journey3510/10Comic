@@ -159,7 +159,7 @@ export default {
     this.getInfo()
   },
   methods: {
-    async getInfo() {
+    getInfo() {
       try {
         this.currentComics = currentComics
         if (currentComics === null) {
@@ -170,10 +170,10 @@ export default {
         this.comicName = document.querySelector(comicNameCss).innerText
         this.$bus.$emit('getComicName', this.comicName)
         //
-        this.zipDownFlag = await getStorage('zipDownFlag')
+        this.zipDownFlag = getStorage('zipDownFlag')
       // eslint-disable-next-line no-empty
       } catch (error) {
-        console.log('error: ', error)
+        // console.log('error: ', error)
       }
       return
     },
