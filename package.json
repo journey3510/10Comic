@@ -1,7 +1,7 @@
 {
   "name": "tampermonkey-comic",
   "version": "1.1.7",
-  "description": "油猴漫画下载插件",
+  "description": "油猴图片漫画下载插件",
   "author": "journey3510",
   "private": true,
   "main": "/src/main.js",

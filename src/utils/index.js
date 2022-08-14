@@ -24,27 +24,18 @@ export const loadStyle2 = (url) => {
   })
 }
 
-export const getHtml = async(url) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-    // eslint-disable-next-line no-undef
-      GM_xmlhttpRequest({
-        method: 'get',
-        url: url,
-        onload: function(res) {
-          if (typeof currentComics.getImgs === 'string') {
-            // eslint-disable-next-line no-eval
-            currentComics.getImgs = eval('(function(){return ' + currentComics.getImgs + ' })()')
-          }
-          const imgs = currentComics.getImgs(res.response)
-          resolve(imgs)
-        },
-        onerror: function(e) {
-          reject(e)
-        }
-      })
-    }, 200)
-  })
+export const getImage = async(url) => {
+  const { response } = await request('get', url)
+  try {
+    const imgs = await currentComics.getImgs(response)
+    return new Promise((resolve, reject) => {
+      resolve(imgs)
+    })
+  } catch (error) {
+    return new Promise((resolve, reject) => {
+      reject([])
+    })
+  }
 }
 
 export const request = async(method, url, responseType) => {

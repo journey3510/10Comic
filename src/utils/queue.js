@@ -1,5 +1,5 @@
 import JSZip from 'jszip'
-import { getHtml, downFile } from '@/utils/index'
+import { getImage, downFile } from '@/utils/index'
 import { setStorage, getStorage } from '@/config/setup'
 
 // 多个任务并行执行的队列
@@ -33,12 +33,12 @@ export default class Queue {
     async function afterDown(index) {
       const { comicName, hasError } = _this.worker[index]
       const comicPageUrl = window.location.href
-      let historyData = await getStorage('downHistory') || '[]'
+      let historyData = getStorage('downHistory') || '[]'
       historyData = JSON.parse(historyData)
       const id = (new Date()).getTime()
       historyData.unshift({ id, comicName, chapterName, comicPageUrl, hasError })
       historyData = JSON.stringify(historyData)
-      await setStorage('downHistory', historyData)
+      setStorage('downHistory', historyData)
       _this.Vue.getHistoryData()
       _this.worker[index] = undefined
       // 休息下？
@@ -51,10 +51,11 @@ export default class Queue {
       const url = this.worker[index].url
       let imgs = []
       try {
-        imgs = await getHtml(url)
+        imgs = await getImage(url)
       } catch (error) {
         this.worker[index].hasError = true
       }
+      imgs === [] ? this.worker[index].hasError = true : ''
       this.worker[index].imgs = imgs
       this.worker[index].number = imgs.length
       yield this.down(index)
@@ -148,7 +149,7 @@ export default class Queue {
   // 网站翻页阅读方式
   async down2(workerId) {
     const { url, zipDownFlag } = this.worker[workerId]
-    const { imgUrl, nextPageUrl, number } = await getHtml(url)
+    const { imgUrl, nextPageUrl, number } = await getImage(url)
     this.worker[workerId].number = number
 
     while (imgUrl.length > 0) {
