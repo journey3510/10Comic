@@ -337,21 +337,20 @@ const comicsWebInfo = [
       return imgs
     }
   },
-  // {
-  //   domain: 'www.qianwee.com',
-  //   homepage: 'https://www.qianwee.com/',
-  //   webName: '前未漫画',
-  //   comicNameCss: '.comic_deCon.autoHeight h1',
-  //   chapterCss: '.zj_list_con #chapter-list-1',
-  //   readtype: 1,
-  //   readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
-  //   getImgs: async function(context) {
-  //     const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
-  //     console.log('imgStr: ', imgStr)
-  //     const imgs = eval(imgStr)
-  //     return imgs
-  //   }
-  // },
+  {
+    domain: 'www.qianwee.com',
+    homepage: 'https://www.qianwee.com/',
+    webName: '前未漫画',
+    comicNameCss: '.comic_deCon.autoHeight h1',
+    chapterCss: '.zj_list_con #chapter-list-1',
+    readtype: 1,
+    readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
+    getImgs: async function(context) {
+      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+      const imgs = eval(imgStr)
+      return imgs
+    }
+  },
   {
     domain: 'www.sixmh7.com',
     homepage: 'http://www.sixmh7.com/',
@@ -371,6 +370,33 @@ const comicsWebInfo = [
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       const imgArray = JSON.parse(imgStr)
       return imgArray
+    }
+  },
+  {
+    domain: 'www.mhxin.com',
+    homepage: 'https://www.mhxin.com/',
+    webName: '漫画芯',
+    comicNameCss: '.wrap_intro_l_comic .comic_deCon h1',
+    chapterCss: '.zj_list_con #chapter-list-1',
+    readtype: 1,
+    readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
+    getImgs: async function(context) {
+      const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
+      const strArr = []
+      for (const item of group) {
+        strArr.push(item[1])
+        strArr.push(item[2])
+      }
+      let imgarr = JSON.parse(strArr[0])
+      if (imgarr[0].search('http') === -1) {
+        const josnRes = await request('get', this.homepage + 'js/config.js')
+        const josnContext = josnRes.responseText
+        const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+        imgarr = imgarr.map((item) => {
+          return imageDomian + '/' + strArr[1] + item
+        })
+      }
+      return imgarr
     }
   }
 ]
