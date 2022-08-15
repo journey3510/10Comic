@@ -9,7 +9,8 @@ const configDefault = {
   zipDownFlag: true,
   imgSplicingFlag: true,
   downHistory: '[]',
-  userWebInfo: []
+  userWebInfo: [],
+  imgIndexBitNum: 3
 }
 
 export const appLoadinit = () => {

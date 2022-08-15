@@ -77,3 +77,13 @@ export const downFile = async(url, name) => {
   })
 }
 
+export const addZeroForNum = (num, bitNum) => {
+  let newNum = num + ''
+  if (newNum.length < bitNum) {
+    const zeroStr = new Array(bitNum + 1).join('0')
+    newNum = zeroStr + newNum
+    newNum = newNum.slice(-bitNum)
+    return newNum
+  }
+  return newNum
+}
