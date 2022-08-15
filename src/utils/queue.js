@@ -1,17 +1,18 @@
 import JSZip from 'jszip'
-import { getImage, downFile } from '@/utils/index'
+import { getImage, downFile, addZeroForNum } from '@/utils/index'
 import { setStorage, getStorage } from '@/config/setup'
 
 // 多个任务并行执行的队列
 // https://juejin.cn/post/6844903961728647181
 
 export default class Queue {
-  constructor(workerLen, maxPictureNum, vue) {
+  constructor(workerLen, maxPictureNum, imgIndexBitNum, vue) {
     this.workerLen = workerLen || 3 // 同时执行的任务数
     this.pictureNum = maxPictureNum || 2 // 章节最大下载图片数量
     this.list = [] // 任务队列
     this.worker = new Array(this.workerLen) // 正在执行的任务
     this.workerDownInfo = new Array(this.workerLen) // 存储下载信息
+    this.imgIndexBitNum = imgIndexBitNum // 图片序号位数
     this.Vue = vue
   }
 
@@ -86,12 +87,12 @@ export default class Queue {
   }
 
   // 下载图片 Promise
-  addImgDownPromise(index, imgurl, name) {
+  addImgDownPromise(index, imgurl, imgIndex) {
     return new Promise((resolve, reject) => {
       const _this = this
 
       const suffix = this.getSuffix(imgurl)
-      const newName = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + name + '.' + suffix
+      const newName = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + suffix
       // eslint-disable-next-line no-undef
       GM_download({
         url: imgurl,
@@ -162,8 +163,8 @@ export default class Queue {
         if (zipDownFlag) {
           promise.push(this.addImgPromise(workerId, imgUrl[0]))
         } else {
-          const name = this.worker[workerId].imgIndex + 1
-          promise.push(this.addImgDownPromise(workerId, imgUrl[0], name))
+          const imgIndex = this.worker[workerId].imgIndex + 1
+          promise.push(this.addImgDownPromise(workerId, imgUrl[0], imgIndex))
         }
         imgUrl.shift()
       }
@@ -209,8 +210,8 @@ export default class Queue {
       if (zipDownFlag) {
         promise.push(this.addImgPromise(workerId, imgs[0]))
       } else {
-        const name = this.worker[workerId].imgIndex + 1
-        promise.push(this.addImgDownPromise(workerId, imgs[0], name))
+        const imgIndex = this.worker[workerId].imgIndex + 1
+        promise.push(this.addImgDownPromise(workerId, imgs[0], imgIndex))
         this.worker[workerId].imgIndex++
       }
       this.worker[workerId].imgs.shift()
@@ -301,10 +302,10 @@ export default class Queue {
         const imgblob = item.blob
         const suffix = item.suffix
         if (imgblob === 1 || imgblob === 0) {
-          zip.file(parseInt(index + 1) + '.xx', '', { blob: true })
+          zip.file(addZeroForNum(index + 1, this.imgIndexBitNum) + '.xx', '', { blob: true })
           return
         }
-        zip.file(parseInt(index + 1) + '.' + suffix, imgblob, { blob: true })
+        zip.file(addZeroForNum(index + 1, this.imgIndexBitNum) + '.' + suffix, imgblob, { blob: true })
       })
 
       zip.generateAsync({

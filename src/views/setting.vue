@@ -97,6 +97,49 @@
                 />
               </template>
             </van-cell>
+
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              label="*本次启动默认设置,修改刷新生效"
+              center
+            >
+              <template #title>
+                <span class="custom-title">图片序号最少位数</span>
+                <van-popover
+                  v-model="addZeroHint"
+                  placement="right"
+                  get-container="#downpart"
+                  :offset="[-5,5]"
+                  :close-on-click-outside="true"
+                >
+                  <div>
+                    <code class="popovertext">* 不足则向前补充"0"</code><br>
+                    <code class="popovertext">* 选择1，则默认数字序号</code>
+                  </div>
+                  <template #reference>
+                    <van-icon
+                      name="info-o"
+                      color="red"
+                      @mouseover="addZeroHint = true"
+                      @mouseleave="addZeroHint = false"
+                    />
+                  </template>
+                </van-popover>
+              </template>
+
+              <template #default>
+
+                <van-stepper
+                  v-model="imgIndexBitNum"
+                  class="rightbutton"
+                  max="5"
+                  integer
+                  button-size="20px"
+                  @change="onChangeData('imgIndexBitNum', imgIndexBitNum)"
+                />
+              </template>
+            </van-cell>
           </van-cell-group>
 
           <van-cell-group id="webpart" title="原网站阅读样式修改" inset>
@@ -108,7 +151,6 @@
             >
               <template #title>
                 <span class="custom-title">图片拼接</span>
-
                 <van-popover
                   v-model="showPopover"
                   placement="bottom-start"
@@ -204,9 +246,11 @@ export default {
       maxChapterNum: 1,
       maxPictureNum: 2,
       zipDownFlag: true,
+      imgIndexBitNum: 3,
       imgSplicingFlag: false,
       //
       zipDownPopover: false,
+      addZeroHint: false,
       showPopover: false,
       setupOtherPage: 0
 
@@ -247,6 +291,7 @@ export default {
         this.maxChapterNum = GM_getValue('maxChapterNum')
         this.maxPictureNum = GM_getValue('maxPictureNum')
         this.zipDownFlag = GM_getValue('zipDownFlag')
+        this.imgIndexBitNum = GM_getValue('imgIndexBitNum')
         this.imgSplicingFlag = GM_getValue('imgSplicingFlag')
       // eslint-disable-next-line no-empty
       } catch (error) {}
@@ -326,7 +371,7 @@ export default {
         flex: 1;
       }
       .cellrightvalue {
-        flex: 0.2 !important;
+        flex: 0.5 !important;
       }
       // 右侧按钮
       .rightbutton {
