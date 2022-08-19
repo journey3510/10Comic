@@ -163,7 +163,7 @@ export default class Queue {
         if (zipDownFlag) {
           promise.push(this.addImgPromise(workerId, imgUrl[0]))
         } else {
-          const imgIndex = this.worker[workerId].imgIndex + 1
+          const imgIndex = ++this.worker[workerId].imgIndex
           promise.push(this.addImgDownPromise(workerId, imgUrl[0], imgIndex))
         }
         imgUrl.shift()
