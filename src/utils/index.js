@@ -88,3 +88,11 @@ export const addZeroForNum = (num, bitNum) => {
   }
   return newNum
 }
+
+export const parseToDOM = (str) => {
+  var div = document.createElement('div')
+  if (typeof str === 'string') {
+    div.innerHTML = str
+  }
+  return div
+}
