@@ -16,13 +16,13 @@
 
     <van-cell-group v-if="checkValue == 1" inset>
       <van-cell
-        v-for="(item, index) in comicList"
+        v-for="(item, index) in originalInfo"
         :key="index"
         is-link
-        @click="jump(item.url)"
+        @click="jump(item.homepage)"
       >
         <template #title>
-          <span>{{ item.name }}</span>
+          <span>{{ item.webName }}</span>
           <van-icon
             v-if="item.iswork === false"
             title="？可访问 ？"
@@ -64,7 +64,7 @@ export default {
   name: 'Index',
   data() {
     return {
-      comicList: [],
+      originalInfo: [],
       userWebInfo: [],
       //
       activeNames: [1],
@@ -81,8 +81,8 @@ export default {
   },
   methods: {
     getWeb() {
-      const { list, userWebInfo } = getWebList()
-      this.comicList = list
+      const { originalInfo, userWebInfo } = getWebList()
+      this.originalInfo = originalInfo
       this.userWebInfo = userWebInfo
     },
     checkContent(val, title) {
