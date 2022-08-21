@@ -121,6 +121,13 @@
         </van-checkbox-group>
       </van-cell-group>
     </div>
+
+    <van-button
+      type="primary"
+      size="mini"
+      @click="test"
+    >取消</van-button>
+
   </div>
 </template>
 
@@ -159,6 +166,9 @@ export default {
     this.getInfo()
   },
   methods: {
+    test() {
+      const a = currentComics.searchFun('海贼王')
+    },
     getInfo() {
       try {
         this.currentComics = currentComics

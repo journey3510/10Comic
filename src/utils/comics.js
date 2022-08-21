@@ -3,7 +3,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request } from '@/utils/index'
+import { request, parseToDOM } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
 const comicsWebInfo = [
@@ -233,6 +233,16 @@ const comicsWebInfo = [
     hasSpend: true,
     freeCss: '.ui-icon-free',
     payCss: '.ui-icon-pay',
+    searchFun: async function(keyword) {
+      const searchUrl = this.homepage + 'Comic/searchList?search=' + keyword
+      const { responseText } = await request('get', searchUrl)
+      const dom = parseToDOM(responseText).querySelector('.mod_book_list')
+
+      dom.forEach(element => {
+
+      })
+      console.log('dom: ', dom)
+    },
     getImgs: function(context) {
       let nonce = context.match(/<script>\s*window.*?=(.*?)?;/)[1]
       nonce = eval(nonce)
