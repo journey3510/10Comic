@@ -402,16 +402,9 @@ const comicsWebInfo = [
 ]
 
 export const getWebList = () => {
-  const list = []
   const userWebInfo = eval(getStorage('userWebInfo') || [])
-  comicsWebInfo.forEach(element => {
-    list.push({
-      name: element.webName,
-      url: element.homepage,
-      iswork: element.iswork
-    })
-  })
-  return { list, userWebInfo }
+  const originalInfo = comicsWebInfo
+  return { originalInfo, userWebInfo }
 }
 
 export let currentComics = null
