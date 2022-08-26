@@ -126,14 +126,20 @@
       type="primary"
       size="mini"
       @click="test"
-    >取消</van-button>
+    >test</van-button>
+
+    <van-button
+      type="primary"
+      size="mini"
+      @click="testall"
+    >all</van-button>
 
   </div>
 </template>
 
 <script>
 
-import { currentComics } from '@/utils/comics'
+import { currentComics, search } from '@/utils/comics'
 import { getStorage } from '@/config/setup'
 
 import { Toast } from 'vant'
@@ -166,8 +172,12 @@ export default {
     this.getInfo()
   },
   methods: {
-    test() {
-      const a = currentComics.searchFun('海贼王')
+    async testall() {
+
+    },
+    async test(word) {
+      const a = await search('海贼王')
+      console.log('a: ', a)
     },
     getInfo() {
       try {
