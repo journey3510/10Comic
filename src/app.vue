@@ -150,14 +150,14 @@ export default {
   position: fixed;
   top: 150px;
   right: 600px;
-  z-index: 90000 !important;
+  z-index: 999999 !important;
 }
 </style>
 
 <style lang="less" scoped>
 .card {
   position: fixed;
-  z-index: 9999;
+  z-index: 999999 !important;
   right: 0;
   top: 50%;
   height: @appHeight;

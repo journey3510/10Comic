@@ -81,9 +81,24 @@ const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.darpou.com',
+    homepage: 'https://www.darpou.com/',
+    webName: '百漫谷(简)',
+    comicNameCss: '.fed-part-eone.fed-font-xvi a',
+    chapterCss: '.fed-play-item.fed-drop-item.fed-visible .fed-part-rows:nth-child(2)',
+    readtype: 1,
+    getImgs: async function(context) {
+      const txtUrl = context.match(/http(\S*).txt/gi)[0]
+      const txtRes = await request('get', txtUrl)
+      const txtContext = txtRes.responseText
+      const imgReg = /http(\S*)jpg/g
+      return txtContext.match(imgReg)
+    }
+  },
+  {
     domain: 'darpou.com',
     homepage: 'https://darpou.com/',
-    webName: '百漫谷',
+    webName: '百漫谷(繁)',
     comicNameCss: '.fed-part-eone.fed-font-xvi a',
     chapterCss: '.fed-play-item.fed-drop-item.fed-visible .fed-part-rows:nth-child(2)',
     readtype: 1,
@@ -397,6 +412,49 @@ const comicsWebInfo = [
         })
       }
       return imgarr
+    }
+  },
+  {
+    domain: 'www.mhxin.com',
+    homepage: 'https://www.mhxin.com/',
+    webName: '漫画芯',
+    comicNameCss: '.wrap_intro_l_comic .comic_deCon h1',
+    chapterCss: '.zj_list_con #chapter-list-1',
+    readtype: 1,
+    readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
+    getImgs: async function(context) {
+      const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
+      const strArr = []
+      for (const item of group) {
+        strArr.push(item[1])
+        strArr.push(item[2])
+      }
+      let imgarr = JSON.parse(strArr[0])
+      if (imgarr[0].search('http') === -1) {
+        const josnRes = await request('get', this.homepage + 'js/config.js')
+        const josnContext = josnRes.responseText
+        const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+        imgarr = imgarr.map((item) => {
+          return imageDomian + '/' + strArr[1] + item
+        })
+      }
+      return imgarr
+    }
+  },
+  {
+    domain: 'www.pkssj.com',
+    homepage: 'https://www.pkssj.com/',
+    webName: '包子漫画',
+    comicNameCss: '.comics-detail__info > .comics-detail__title',
+    chapterCss: '#chapter-items',
+    readtype: 1,
+    getImgs: async function(context) {
+      const group = context.matchAll(/<img.*src="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[1])
+      }
+      return imgArray
     }
   }
 ]

@@ -2,7 +2,7 @@
 // @name         __APP_NAME__
 // @namespace    http://tampermonkey2.net/
 // @version      __APP_VERSION__
-// @description  漫画分章节下载(可直接下载/压缩下载)，并记录下载历史，适用于 酷漫屋、百漫谷、武侠漫画、动漫之家、七夕漫画、36漫画网、古风漫画网、腾讯漫画、漫画星球、好漫8、漫画屋、27漫画网、最漫画、前未漫画、六漫画、漫画芯；对个别漫画网站修改阅读样式；可按需编写规定的定义规则JSON导入以支持其他漫画网站；
+// @description  漫画分章节下载(可直接下载/压缩下载)，并记录下载历史，适用于 酷漫屋、百漫谷、武侠漫画、动漫之家、七夕漫画、36漫画网、古风漫画网、腾讯漫画、漫画星球、好漫8、漫画屋、27漫画网、最漫画、前未漫画、六漫画、漫画芯、包子漫画；对个别漫画网站修改阅读样式；可按需编写规定的定义规则JSON导入以支持其他漫画网站；
 // @author       journey3510
 // @run-at       document-end
 // @grant        GM_getValue
@@ -27,6 +27,7 @@
 // @match        *://www.kumw5.com/*
 // @connect      kumw5.com
 //
+// @match        *://www.darpou.com/*
 // @match        *://darpou.com/*
 // @connect      manga8.xyz
 //
@@ -81,6 +82,9 @@
 //
 // @match        *://www.mhxin.com/*
 // @connect      mhxin.com
+//
+// @match        *://www.pkssj.com/*
+// @connect      manhuatu.cc
 //
 // @connect      *
 // @connect      laimidao.com
