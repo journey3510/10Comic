@@ -91,6 +91,7 @@ export default class Queue {
     return new Promise((resolve, reject) => {
       const _this = this
 
+      console.log('imgurl: ', imgurl)
       const suffix = this.getSuffix(imgurl)
       const newName = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + suffix
       // eslint-disable-next-line no-undef
@@ -217,7 +218,7 @@ export default class Queue {
       this.worker[workerId].imgs.shift()
       len--
     }
-    const res = await Promise.all(promise)
+    const res = await Promise.all()
 
     res.forEach(element => {
       this.workerDownInfo[workerId].push(element)

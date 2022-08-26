@@ -236,12 +236,21 @@ const comicsWebInfo = [
     searchFun: async function(keyword) {
       const searchUrl = this.homepage + 'Comic/searchList?search=' + keyword
       const { responseText } = await request('get', searchUrl)
+      console.log('responseText: ', responseText)
       const dom = parseToDOM(responseText).querySelector('.mod_book_list')
-
-      dom.forEach(element => {
-
+      const domList = dom.querySelectorAll('li')
+      const searchList = []
+      domList.forEach(element => {
+        const obj = {}
+        obj.name = element.querySelector('a').title
+        obj.url = this.homepage + element.querySelector('a').pathname
+        obj.imageUrl = element.querySelector('img').dataset.original
+        searchList.push(obj)
       })
-      console.log('dom: ', dom)
+      return new Promise((resolve, reject) => {
+        resolve()
+        // return searchList
+      })
     },
     getImgs: function(context) {
       let nonce = context.match(/<script>\s*window.*?=(.*?)?;/)[1]
@@ -448,5 +457,23 @@ export const matchWeb = (url) => {
       currentComics.getImgs = eval('(function(){return ' + currentComics.getImgs + ' })()')
     }
   }
+}
+
+export const search = async(keyword) => {
+  const searchInfo = []
+  const promise = []
+  comicsWebInfo.forEach(item => {
+    if (item.searchFun) {
+      // promise.push(item.searchFun(keyword))
+      const findres = item.searchFun(keyword)
+      searchInfo.push({
+        webName: item.webName,
+        findres
+      })
+    }
+  })
+  return new Promise((resolve, reject) => {
+    resolve(searchInfo)
+  })
 }
 
