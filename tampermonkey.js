@@ -7,18 +7,14 @@
 // @run-at       document-end
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @grant        GM_deleteValue
 // @grant        GM_setClipboard
 // @grant        GM_info
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @grant        GM_download
-// @grant        GM.getValue
-// @grant        GM.setValue
-// @grant        GM.setClipboard
-// @grant        GM.info
-// @grant        GM.xmlHttpRequest
-// @grant        GM.download
+// @grant        GM_registerMenuCommand
 // @resource   vantcss   https://unpkg.com/vant@2.12/lib/index.css
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js
 // @require      https://unpkg.com/vant@2.12/lib/vant.min.js

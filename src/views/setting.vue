@@ -12,6 +12,66 @@
       <!-- :touchable="false" -->
       <van-swipe-item class="swipeitem">
         <div id="setpart">
+
+          <van-cell-group id="app-loadset" title="app加载" inset>
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              center
+            >
+              <template #title>
+                <span class="custom-title">随网页加载UI界面</span>
+                <van-popover
+                  v-model="showUiPopover"
+                  placement="right-start"
+                  get-container="#app-loadset"
+                  :offset="[-2,10]"
+                  :close-on-click-outside="true"
+                >
+                  <code class="popovertext">关闭后可通过快捷键唤起</code>
+                  <template #reference>
+                    <van-icon
+                      name="info-o"
+                      color="red"
+                      @mouseover="showUiPopover = true"
+                      @mouseleave="showUiPopover = false"
+                    />
+                  </template>
+                </van-popover>
+              </template>
+
+              <template #default>
+                <van-checkbox
+                  v-model="appLoadDefault.isShowUI"
+                  class="rightbutton"
+                  @change="onChangeData('appLoadDefault', appLoadDefault.isShowUI, 'isShowUI')"
+                />
+              </template>
+            </van-cell>
+
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              center
+            >
+              <template #title>
+                <span class="custom-title">加载界面快捷键</span>
+              </template>
+
+              <template #default>
+                <div>
+                  <code style="width: 35px;">Alt + </code>
+                  <input
+                    id="hot-key-input"
+                    v-model="appLoadDefault.loadHotKey"
+                    class="rightbutton"
+                    @input="loadHotKeyChange"
+                  >
+                </div>
+              </template>
+            </van-cell>
+          </van-cell-group>
+
           <van-cell-group id="downpart" title="下载" inset>
             <van-cell label="*下载前生效" center>
               <template #title>
@@ -153,9 +213,9 @@
                 <span class="custom-title">图片拼接</span>
                 <van-popover
                   v-model="showPopover"
-                  placement="bottom-start"
+                  placement="right-start"
                   get-container="#webpart"
-                  :offset="[-2,0]"
+                  :offset="[0,10]"
                   :close-on-click-outside="true"
                 >
                   <code class="popovertext">建议浏览长条漫画时开启</code>
@@ -203,6 +263,7 @@
         <div id="set-bottom">
           <van-button
             :style="{width: '120px',background: '#ee000055'}"
+            size="small"
             round
             @click="allInit"
           >全部重置</van-button>
@@ -243,6 +304,10 @@ export default {
   },
   data() {
     return {
+      appLoadDefault: {
+        isShowUI: true,
+        loadHotKey: ''
+      },
       maxChapterNum: 1,
       maxPictureNum: 2,
       zipDownFlag: true,
@@ -252,6 +317,7 @@ export default {
       zipDownPopover: false,
       addZeroHint: false,
       showPopover: false,
+      showUiPopover: false,
       setupOtherPage: 0
 
     }
@@ -261,8 +327,14 @@ export default {
     this.$bus.$on('changeSetupFirstPage', () => { this.changeSwipe(0) })
   },
   methods: {
-    onChangeData(key, value) {
-      setStorage(key, value)
+    onChangeData(key, value, key2) {
+      setStorage(key, value, key2)
+    },
+    loadHotKeyChange(obj) {
+      if (obj.data) {
+        this.appLoadDefault.loadHotKey = obj.data.toUpperCase()
+        this.onChangeData('appLoadDefault', this.appLoadDefault.loadHotKey, 'loadHotKey')
+      }
     },
     webImgSplicing(value) {
       const splicingimgstyle = document.getElementById('splicingimgstyle')
@@ -293,6 +365,8 @@ export default {
         this.zipDownFlag = GM_getValue('zipDownFlag')
         this.imgIndexBitNum = GM_getValue('imgIndexBitNum')
         this.imgSplicingFlag = GM_getValue('imgSplicingFlag')
+        //
+        this.appLoadDefault = GM_getValue('appLoadDefault')
       // eslint-disable-next-line no-empty
       } catch (error) {}
       // 获取数据后执行其他方法
@@ -332,8 +406,6 @@ export default {
 <style lang="less" scoped>
 .setindex {
   display: flex;
-  height: 680px;
-  max-height: 680px;
   .swipeitem {
     display: flex;
     flex-direction: column;
@@ -380,6 +452,15 @@ export default {
       .custom-title {
         text-align: left;
       }
+      #hot-key-input {
+        width: 35px;
+        height: 18px;
+        margin-right: 2px;
+        border: 1px #66ccff solid;
+        border-radius: 10px;
+        text-align: center;
+        background: #fff;
+      }
 
       // 修改滑动条
       .rightslider {
@@ -402,7 +483,8 @@ export default {
   #set-bottom {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-top: 7px;
+    margin-bottom: 5px;
   }
 }
 </style>
