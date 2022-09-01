@@ -1,17 +1,25 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-eval */
 /* eslint-disable no-undef */
 import { AppVersion, isDev } from '@/config/index'
 
 const configDefault = {
   version: AppVersion,
+  appLoadDefault: {
+    isShowUI: true,
+    loadHotKey: 'V' // alt + loadHotKey
+  },
   maxChapterNum: 2,
   maxPictureNum: 3,
   zipDownFlag: true,
+  imgIndexBitNum: 3,
   imgSplicingFlag: true,
   downHistory: '[]',
-  userWebInfo: [],
-  imgIndexBitNum: 3
+  userWebInfo: []
 }
+
+// 废弃变量  暂无
+const abandonDefault = []
 
 export const appLoadinit = () => {
   if (isDev) {
@@ -28,9 +36,16 @@ export const appLoadinit = () => {
       GM_setValue(key, configDefault[key])
     }
   }
+  // 去除废弃变量存储数量
+  abandonDefault.forEach(word => {
+    if (GM_getValue(word) !== undefined) {
+      GM_deleteValue(word)
+    }
+  })
+
   GM_setValue('version', AppVersion)
   GM_setValue('maxChapterNum', 2)
-  return
+  return true
 }
 
 export const setinit = async() => {
@@ -45,7 +60,12 @@ export const setinit = async() => {
   })
 }
 
-export const setStorage = (key, value) => {
+export const setStorage = (key, value, key2 = null) => {
+  if (key2) {
+    const obj = GM_getValue(key)
+    obj[key2] = value
+    value = obj
+  }
   GM_setValue(key, value)
   return true
 }
