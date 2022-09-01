@@ -74,11 +74,7 @@ import Table from '@/views/table.vue'
 import Setting from '@/views/setting.vue'
 import Down from '@/views/down.vue'
 
-import './styles/global.less'
-
-import { AppName, AppVersion } from './config'
 import { matchWeb } from './utils/comics'
-import { appLoadinit } from './config/setup.js'
 
 export default {
   name: 'App',
@@ -87,8 +83,6 @@ export default {
   },
   data() {
     return {
-      AppName,
-      AppVersion,
       show: true,
       isHide: true,
       active: 1,
@@ -120,7 +114,6 @@ export default {
       this.isHide = !this.isHide
     },
     async Init() {
-      appLoadinit()
       matchWeb(window.location.href)
     },
     test(e) {
@@ -131,6 +124,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 * {
   margin: 0;
   padding: 0;
@@ -150,14 +144,14 @@ export default {
   position: fixed;
   top: 150px;
   right: 600px;
-  z-index: 90000 !important;
+  z-index: 999999 !important;
 }
 </style>
 
 <style lang="less" scoped>
 .card {
   position: fixed;
-  z-index: 9999;
+  z-index: 999999 !important;
   right: 0;
   top: 50%;
   height: @appHeight;

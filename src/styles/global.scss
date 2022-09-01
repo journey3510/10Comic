@@ -1,31 +1,32 @@
 $scrollbarColor: #66ccff88;
 
-
-.app-container {
-  background-color: #f8f8f8;
-  padding: 10px;
-}
-
-::-webkit-scrollbar {
-  width: 4px;
-  height: 5px;
-  border-radius:15px;
-  -webkit-border-radius:  15px;
-}
-::-webkit-scrollbar-track-piece {
-  // background-color: #ffff;
-  border-radius:15px;
-  -webkit-border-radius:  15px;
-}
-::-webkit-scrollbar-thumb:vertical {
-  height: 5px;
-  background-color: $scrollbarColor;
-  border-radius: 15px;
-  -webkit-border-radius:  15px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  width: 4px;
-  background-color: rgba(144, 147, 153, 0.5);
-  border-radius:  15px;  
-  -webkit-border-radius: 15px;
+.app {
+  .app-container {
+    background-color: #f8f8f8;
+    padding: 10px;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 5px;
+    border-radius:15px;
+    -webkit-border-radius:  15px;
+  }
+  ::-webkit-scrollbar-track-piece {
+    // background-color: #ffff;
+    border-radius:15px;
+    -webkit-border-radius:  15px;
+  }
+  ::-webkit-scrollbar-thumb:vertical {
+    height: 5px;
+    background-color: $scrollbarColor;
+    border-radius: 15px;
+    -webkit-border-radius:  15px;
+  }
+  ::-webkit-scrollbar-thumb:horizontal {
+    width: 4px;
+    background-color: rgba(144, 147, 153, 0.5);
+    border-radius:  15px;  
+    -webkit-border-radius: 15px;
+  }
 }
