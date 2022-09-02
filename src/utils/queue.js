@@ -90,8 +90,6 @@ export default class Queue {
   addImgDownPromise(index, imgurl, imgIndex) {
     return new Promise((resolve, reject) => {
       const _this = this
-
-      console.log('imgurl: ', imgurl)
       const suffix = this.getSuffix(imgurl)
       const newName = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + suffix
       // eslint-disable-next-line no-undef

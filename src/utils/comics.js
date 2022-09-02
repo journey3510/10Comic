@@ -6,7 +6,7 @@
 import { request, parseToDOM } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
-const comicsWebInfo = [
+export const comicsWebInfo = [
   {
     domain: 'manhua.dmzj.com',
     homepage: 'https://manhua.dmzj.com/',
@@ -150,11 +150,29 @@ const comicsWebInfo = [
   },
   {
     domain: 'qiximh1.com',
-    homepage: 'http://qiximh1.com',
+    homepage: 'http://qiximh1.com/',
     webName: '七夕漫画',
     comicNameCss: '.comic_name .name',
     chapterCss: '.catalog_list.row_catalog_list',
     readtype: 1,
+    searchFun: async function(keyword) {
+      const searchUrl = 'http://qiximh1.com/search.php'
+      const data = new FormData()
+      data.append('keyword', keyword)
+      const { responseText } = await request('post', searchUrl, data)
+      const resJson = JSON.parse(responseText)
+      const searchList = []
+      resJson.search_data.forEach(element => {
+        const obj = {}
+        obj.name = element.name
+        obj.url = this.homepage + element.id + '/'
+        obj.imageUrl = element.imgs
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
     getImgs: function(context) {
       const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       const func = []
@@ -251,7 +269,6 @@ const comicsWebInfo = [
     searchFun: async function(keyword) {
       const searchUrl = this.homepage + 'Comic/searchList?search=' + keyword
       const { responseText } = await request('get', searchUrl)
-      console.log('responseText: ', responseText)
       const dom = parseToDOM(responseText).querySelector('.mod_book_list')
       const domList = dom.querySelectorAll('li')
       const searchList = []
@@ -263,8 +280,7 @@ const comicsWebInfo = [
         searchList.push(obj)
       })
       return new Promise((resolve, reject) => {
-        resolve()
-        // return searchList
+        resolve(searchList)
       })
     },
     getImgs: function(context) {
@@ -515,23 +531,5 @@ export const matchWeb = (url) => {
       currentComics.getImgs = eval('(function(){return ' + currentComics.getImgs + ' })()')
     }
   }
-}
-
-export const search = async(keyword) => {
-  const searchInfo = []
-  const promise = []
-  comicsWebInfo.forEach(item => {
-    if (item.searchFun) {
-      // promise.push(item.searchFun(keyword))
-      const findres = item.searchFun(keyword)
-      searchInfo.push({
-        webName: item.webName,
-        findres
-      })
-    }
-  })
-  return new Promise((resolve, reject) => {
-    resolve(searchInfo)
-  })
 }
 
