@@ -121,25 +121,12 @@
         </van-checkbox-group>
       </van-cell-group>
     </div>
-
-    <van-button
-      type="primary"
-      size="mini"
-      @click="test"
-    >test</van-button>
-
-    <van-button
-      type="primary"
-      size="mini"
-      @click="testall"
-    >all</van-button>
-
   </div>
 </template>
 
 <script>
 
-import { currentComics, search } from '@/utils/comics'
+import { currentComics } from '@/utils/comics'
 import { getStorage } from '@/config/setup'
 
 import { Toast } from 'vant'
@@ -172,13 +159,6 @@ export default {
     this.getInfo()
   },
   methods: {
-    async testall() {
-
-    },
-    async test(word) {
-      const a = await search('海贼王')
-      console.log('a: ', a)
-    },
     getInfo() {
       try {
         this.currentComics = currentComics

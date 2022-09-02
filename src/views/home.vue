@@ -2,16 +2,18 @@
   <div class="homeindex">
     <div
       id="selectId"
-      :style="{width: '200px',position: 'relative',margin:'-5px 0 2px 15px',zIndex: 999999}"
+      :style="{position: 'relative',margin:'-5px 0 2px 15px',zIndex: 999999}"
       @mouseleave="leaveCollapse"
     >
-      <van-collapse v-model="activeNames">
+      <van-collapse v-model="activeNames" style="width: 200px;">
         <van-collapse-item class="xxx" :title="checkTitle" name="1">
           <div @click="checkContent(1, '原列表')">原列表</div>
           <br>
           <div @click="checkContent(2, '导入规则列表')">导入规则列表</div>
         </van-collapse-item>
       </van-collapse>
+
+      <van-icon id="search-ico" name="search" size="30" color="#ee0000" @click="()=>{ this.$bus.$emit('showSearchPage')}" />
     </div>
 
     <van-cell-group v-if="checkValue == 1" inset>
@@ -109,6 +111,8 @@ export default {
   min-height: 600px;
   #selectId {
     margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
     /deep/ .van-collapse-item__wrapper{
       position: absolute;
       width: 100%;
@@ -121,6 +125,12 @@ export default {
       .van-collapse-item__content div:hover {
         color: red;
       }
+    }
+
+    #search-ico {
+      cursor: pointer;
+      color: @lingColor;
+
     }
   }
 

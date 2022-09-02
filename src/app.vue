@@ -59,6 +59,9 @@
         </svg>
       </div>
     </div>
+
+    <Search />
+
     <!-- <van-button
       id="thebtn"
       icon="plus"
@@ -74,17 +77,20 @@ import Table from '@/views/table.vue'
 import Setting from '@/views/setting.vue'
 import Down from '@/views/down.vue'
 
+import Search from '@/components/search.vue'
+
 import { matchWeb } from './utils/comics'
 
 export default {
   name: 'App',
   components: {
-    Home, Table, Down, Setting
+    Home, Table, Down, Setting, Search
   },
   data() {
     return {
       show: true,
       isHide: true,
+      showSearchPage: false,
       active: 1,
       titles: ['漫画网站', '选择章节', '下载', '设置'],
       comicInfo: {}
@@ -115,10 +121,8 @@ export default {
     },
     async Init() {
       matchWeb(window.location.href)
-    },
-    test(e) {
-
     }
+
   }
 }
 </script>

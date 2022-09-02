@@ -39,13 +39,24 @@ export const getImage = async(url) => {
   }
 }
 
-export const request = async(method, url, responseType) => {
+// export const request = async(method, url, responseType) => {
+export const request = async(...details) => {
+  let method, url, data, responseType, timeout
+  if (details.length === 1) {
+    ({ method, url, data, responseType, timeout } = details[0])
+  } else {
+    method = details[0]
+    url = details[1]
+    data = details[2]
+  }
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line no-undef
     GM_xmlhttpRequest({
       method,
       url,
-      responseType,
+      data: (data || null),
+      responseType: (responseType || 'json'),
+      timeout: (timeout || 30 * 1000),
       onload: function(res) {
         resolve(res)
       },
