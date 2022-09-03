@@ -14,6 +14,24 @@ export const comicsWebInfo = [
     comicNameCss: '.odd_anim_title_m .anim_title_text h1',
     chapterCss: '.cartoon_online_border',
     readtype: 1,
+    searchFun: async function(keyword) {
+      const searchUrl = this.homepage + 'tags/search.shtml?s=' + keyword
+      const { responseText } = await request('get', searchUrl)
+      const dom = parseToDOM(responseText).querySelector('.tcaricature_block')
+      const domList = dom.querySelectorAll('ul')
+      const searchList = []
+      domList.forEach(element => {
+        const obj = {}
+        obj.name = element.querySelector('a').title
+        const pathname = element.querySelector('a').pathname
+        obj.url = this.homepage + pathname.slice(1, pathname.length)
+        obj.imageUrl = element.querySelector('img').src
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
     getImgs: async function(context) {
       const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       const func = []
@@ -218,6 +236,24 @@ export const comicsWebInfo = [
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-1,#chapter-list-10',
     readtype: 1,
+    searchFun: async function(keyword) {
+      const searchUrl = this.homepage + 'search/?keywords=' + keyword
+      const { responseText } = await request('get', searchUrl)
+      const dom = parseToDOM(responseText).querySelector('.book-list')
+      const domList = dom.querySelectorAll('li')
+      const searchList = []
+      domList.forEach(element => {
+        const obj = {}
+        obj.name = element.querySelector('a').title
+        const pathname = element.querySelector('a').pathname
+        obj.url = this.homepage + pathname.slice(1, pathname.length)
+        obj.imageUrl = element.querySelector('img').src
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
     getImgs: function(context) {
       const imgStr = context.match(/chapterImages = ([\s\S]+?);var chapterPath/)[1]
       let imgarr = JSON.parse(imgStr)
@@ -275,7 +311,8 @@ export const comicsWebInfo = [
       domList.forEach(element => {
         const obj = {}
         obj.name = element.querySelector('a').title
-        obj.url = this.homepage + element.querySelector('a').pathname
+        const pathname = element.querySelector('a').pathname
+        obj.url = this.homepage + pathname.slice(1, pathname.length)
         obj.imageUrl = element.querySelector('img').dataset.original
         searchList.push(obj)
       })
@@ -334,6 +371,27 @@ export const comicsWebInfo = [
     comicNameCss: '.content .title',
     chapterCss: '#j_chapter_list',
     readtype: 1,
+    searchFun: async function(keyword) {
+      const searchUrl = this.homepage + 'index.php/search?key=' + keyword
+      const { responseText } = await request('get', searchUrl)
+      const dom = parseToDOM(responseText).querySelector('.acgn-comic-list')
+      const domList = dom.querySelectorAll('li.acgn-item')
+      const searchList = []
+      domList.forEach(element => {
+        const obj = {}
+        obj.name = element.querySelector('a').title
+        if (obj.name === undefined) {
+          obj.name = element.querySelector('img').alt
+        }
+        const pathname = element.querySelector('a').pathname
+        obj.url = this.homepage + pathname.slice(1, pathname.length)
+        obj.imageUrl = element.querySelector('img').style.backgroundImage.match(/url\("(.*?)"/)[1]
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
     getImgs: function(context) {
       const group = context.matchAll(/data-echo="(.*?)"/g)
       const imgArray = []
@@ -350,6 +408,27 @@ export const comicsWebInfo = [
     comicNameCss: '.comic-title.j-comic-title',
     chapterCss: '.chapter__list-box.clearfix',
     readtype: 1,
+    searchFun: async function(keyword) {
+      const searchUrl = this.homepage + 'index.php/search?key=' + keyword
+      const { responseText } = await request('get', searchUrl)
+      const dom = parseToDOM(responseText).querySelector('.cate-comic-list')
+      const domList = dom.querySelectorAll('.common-comic-item')
+      const searchList = []
+      domList.forEach(element => {
+        const obj = {}
+        obj.name = element.querySelector('a').title
+        if (obj.name === undefined || obj.name === '') {
+          obj.name = element.querySelector('img').alt
+        }
+        const pathname = element.querySelector('a').pathname
+        obj.url = this.homepage + pathname.slice(1, pathname.length)
+        obj.imageUrl = element.querySelector('img').dataset.original
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
     getImgs: function(context) {
       const group = context.matchAll(/data-original="(.*?)"/g)
       const imgArray = []
@@ -381,6 +460,24 @@ export const comicsWebInfo = [
     chapterCss: '.chapter-body.clearfix #chapter-list-1',
     readtype: 1,
     readCssText: '.img_info {display: none;}.tbCenter img {border: 0px;}',
+    searchFun: async function(keyword) {
+      const searchUrl = this.homepage + 'search/?keywords=' + keyword
+      const { responseText } = await request('get', searchUrl)
+      const dom = parseToDOM(responseText).querySelector('.book-list')
+      const domList = dom.querySelectorAll('li.item-lg')
+      const searchList = []
+      domList.forEach(element => {
+        const obj = {}
+        obj.name = element.querySelector('a').title
+        const pathname = element.querySelector('a').pathname
+        obj.url = this.homepage + pathname.slice(1, pathname.length)
+        obj.imageUrl = element.querySelector('img').src
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
       const imgs = eval(imgStr)
@@ -430,33 +527,24 @@ export const comicsWebInfo = [
     chapterCss: '.zj_list_con #chapter-list-1',
     readtype: 1,
     readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
-    getImgs: async function(context) {
-      const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
-      const strArr = []
-      for (const item of group) {
-        strArr.push(item[1])
-        strArr.push(item[2])
-      }
-      let imgarr = JSON.parse(strArr[0])
-      if (imgarr[0].search('http') === -1) {
-        const josnRes = await request('get', this.homepage + 'js/config.js')
-        const josnContext = josnRes.responseText
-        const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
-        imgarr = imgarr.map((item) => {
-          return imageDomian + '/' + strArr[1] + item
-        })
-      }
-      return imgarr
-    }
-  },
-  {
-    domain: 'www.mhxin.com',
-    homepage: 'https://www.mhxin.com/',
-    webName: '漫画芯',
-    comicNameCss: '.wrap_intro_l_comic .comic_deCon h1',
-    chapterCss: '.zj_list_con #chapter-list-1',
-    readtype: 1,
-    readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
+    searchFun: async function(keyword) {
+      const searchUrl = this.homepage + 'search/?keywords=' + keyword
+      const { responseText } = await request('get', searchUrl)
+      const dom = parseToDOM(responseText).querySelector('.list_con_li')
+      const domList = dom.querySelectorAll('li.list-comic')
+      const searchList = []
+      domList.forEach(element => {
+        const obj = {}
+        obj.name = element.querySelector('a').title
+        const pathname = element.querySelector('a').pathname
+        obj.url = this.homepage + pathname.slice(1, pathname.length)
+        obj.imageUrl = element.querySelector('img').src
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
     getImgs: async function(context) {
       const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
       const strArr = []
@@ -483,6 +571,24 @@ export const comicsWebInfo = [
     comicNameCss: '.comics-detail__info > .comics-detail__title',
     chapterCss: '#chapter-items',
     readtype: 1,
+    searchFun: async function(keyword) {
+      const searchUrl = this.homepage + 'search/?keyword=' + keyword
+      const { responseText } = await request('get', searchUrl)
+      const dom = parseToDOM(responseText).querySelector('.pure-g.classify-items')
+      const domList = dom.querySelectorAll('div.comics-card')
+      const searchList = []
+      domList.forEach(element => {
+        const obj = {}
+        obj.name = element.querySelector('a').title
+        const pathname = element.querySelector('a').pathname
+        obj.url = this.homepage + pathname.slice(1, pathname.length)
+        obj.imageUrl = element.querySelector('img').src
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
     getImgs: async function(context) {
       const group = context.matchAll(/<img.*src="(.*?)"/g)
       const imgArray = []
