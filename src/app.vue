@@ -186,7 +186,7 @@ export default {
     right: 5px;
     top: 20px;
     transition: all 0.5s;
-      transform: rotate(180deg);
+    transform: rotate(180deg);
   }
 }
 .card--hide {

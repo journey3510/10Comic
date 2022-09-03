@@ -110,9 +110,10 @@ export default {
   max-height: 675px;
   min-height: 600px;
   #selectId {
-    margin-top: 10px;
+    // margin-top: 10px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     /deep/ .van-collapse-item__wrapper{
       position: absolute;
       width: 100%;
@@ -130,6 +131,7 @@ export default {
     #search-ico {
       cursor: pointer;
       color: @lingColor;
+      margin-right: 15px;
 
     }
   }

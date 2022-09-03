@@ -64,7 +64,7 @@ export const request = async(...details) => {
         reject(e)
       },
       ontimeout: function() {
-        console.log('超时')
+        reject('timeout')
       }
     })
   })
