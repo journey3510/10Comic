@@ -216,7 +216,7 @@ export default class Queue {
       this.worker[workerId].imgs.shift()
       len--
     }
-    const res = await Promise.all()
+    const res = await Promise.all(promise)
 
     res.forEach(element => {
       this.workerDownInfo[workerId].push(element)
