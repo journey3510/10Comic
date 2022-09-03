@@ -49,13 +49,13 @@ export const request = async(...details) => {
     url = details[1]
     data = details[2]
   }
+
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line no-undef
     GM_xmlhttpRequest({
       method,
       url,
       data: (data || null),
-      responseType: (responseType || 'json'),
       timeout: (timeout || 30 * 1000),
       onload: function(res) {
         resolve(res)

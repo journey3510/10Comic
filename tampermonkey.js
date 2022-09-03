@@ -95,5 +95,6 @@
 // @connect      nicefee.com
 // @connect      dcarimg.com
 // @connect      baozimh.com
+// @connect      kwimgs.com
 // @license      MIT
 // ==/UserScript==
