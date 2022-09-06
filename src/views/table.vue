@@ -44,7 +44,7 @@
         >取消</van-button>
       </div>
 
-      <div>
+      <div class="editItem-center">
         选
         <van-icon
           :style="{cursor: 'pointer'}"
@@ -298,7 +298,7 @@ export default {
 
 <style lang="less" scoped>
 .comiclist {
-  margin-top:  15px;
+  margin-top:  10px;
   border-radius: 15px;
   position: relative;
   height: 650px;
@@ -314,9 +314,13 @@ export default {
 #editItem {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   margin: 3px 20px !important;
   color: @lingColor;
   flex-wrap: wrap;
+  .editItem-center {
+    font-size: 18px;
+  }
 }
 
 #comicinfo {

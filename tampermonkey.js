@@ -23,12 +23,13 @@
 // @match        *://www.kumw5.com/*
 // @connect      kumw5.com
 //
-// @match        *://www.darpou.com/*
-// @match        *://darpou.com/*
+// @match        *://*.darpou.com/*
+// @connect      darpou.com
 // @connect      manga8.xyz
 //
 // @match        *://m.wuxiamh.com/*
 // @match        *://www.wuxiamh.com/*
+// @connect      wuxiamh.com
 // @connect      169gouwu.com
 //
 // @match        *://*.dmzj.com/*
@@ -96,5 +97,6 @@
 // @connect      dcarimg.com
 // @connect      baozimh.com
 // @connect      kwimgs.com
+// @connect      tongrenshuangbaozhaoshang.com
 // @license      MIT
 // ==/UserScript==

@@ -6,6 +6,53 @@
 import { request, parseToDOM } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
+export const searchFunTemplate_1 = async(data, keyword) => {
+  // eslint-disable-next-line prefer-const
+  let { search_add_url, alllist_dom_css, minlist_dom_css, namelink_index, img_src, use_background } = data.searchTemplate_1
+  namelink_index ? namelink_index-- : namelink_index = 0
+  const searchUrl = data.homepage + search_add_url + keyword
+  const { responseText } = await request('get', searchUrl)
+  const dom = parseToDOM(responseText).querySelector(alllist_dom_css)
+
+  const domList = dom.querySelectorAll(minlist_dom_css)
+  // 调试使用
+  // data.webName === '' ? console.log(domList) : ''
+  const searchList = []
+  domList.forEach(element => {
+    const obj = {}
+    try {
+      obj.name = element.querySelector('a').title
+      const pathname = element.querySelector('a').pathname
+      obj.url = data.homepage + pathname.slice(1, pathname.length)
+      // 获取封面图片地址
+      if (!use_background) {
+        const reg2 = eval('/' + img_src + `=('|")(.*?)('|")` + '/')
+        obj.imageUrl = element.innerHTML.match(reg2)[2]
+        // obj.imageUrl = element.querySelector('img').getAttribute(img_src)
+      } else {
+        obj.imageUrl = element.innerHTML.match(/background.*?(url)\('?(.*?)'?\)/)[2]
+      }
+
+      // 名称修正？
+      if (obj.name === '') {
+        let titleArr = element.innerHTML.match(/title=('|")(.*?)('|")/);
+
+        (titleArr && titleArr.length >= 2) ? (obj.name = titleArr[2])
+          : (titleArr = element.innerHTML.match(/alt=('|")(.*?)('|")/),
+          (titleArr && titleArr.length >= 2) ? obj.name = titleArr[2] : '')
+        // 文本 name  innerText
+        obj.name === '' ? obj.name = element.querySelectorAll('a')[namelink_index].innerText : ''
+      }
+    } catch (error) {
+      console.log('error: ', data.webName, error)
+    }
+    searchList.push(obj)
+  })
+  return new Promise((resolve, reject) => {
+    resolve(searchList)
+  })
+}
+
 export const comicsWebInfo = [
   {
     domain: 'manhua.dmzj.com',
@@ -14,23 +61,11 @@ export const comicsWebInfo = [
     comicNameCss: '.odd_anim_title_m .anim_title_text h1',
     chapterCss: '.cartoon_online_border',
     readtype: 1,
-    searchFun: async function(keyword) {
-      const searchUrl = this.homepage + 'tags/search.shtml?s=' + keyword
-      const { responseText } = await request('get', searchUrl)
-      const dom = parseToDOM(responseText).querySelector('.tcaricature_block')
-      const domList = dom.querySelectorAll('ul')
-      const searchList = []
-      domList.forEach(element => {
-        const obj = {}
-        obj.name = element.querySelector('a').title
-        const pathname = element.querySelector('a').pathname
-        obj.url = this.homepage + pathname.slice(1, pathname.length)
-        obj.imageUrl = element.querySelector('img').src
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
+    searchTemplate_1: {
+      search_add_url: 'tags/search.shtml?s=',
+      alllist_dom_css: '.tcaricature_block',
+      minlist_dom_css: 'ul',
+      img_src: 'src'
     },
     getImgs: async function(context) {
       const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
@@ -84,6 +119,12 @@ export const comicsWebInfo = [
     chapterCss: '#detail-list-select-1',
     readtype: 1,
     iswork: true,
+    searchTemplate_1: {
+      search_add_url: 'search.php?keyword=',
+      alllist_dom_css: '.mh-list.col7',
+      minlist_dom_css: 'li',
+      use_background: true
+    },
     getImgs: function(context) {
       const reg = /var km[^>]*_img_url='[^>]*'/gi
       const s1 = context.match(reg)
@@ -105,6 +146,13 @@ export const comicsWebInfo = [
     comicNameCss: '.fed-part-eone.fed-font-xvi a',
     chapterCss: '.fed-play-item.fed-drop-item.fed-visible .fed-part-rows:nth-child(2)',
     readtype: 1,
+    searchTemplate_1: {
+      search_add_url: 'vodsearch/-------------.html?wd=',
+      alllist_dom_css: '.fed-part-layout.fed-back-whits',
+      minlist_dom_css: 'dl.fed-deta-info',
+      namelink_index: 2,
+      img_src: 'data-original'
+    },
     getImgs: async function(context) {
       const txtUrl = context.match(/http(\S*).txt/gi)[0]
       const txtRes = await request('get', txtUrl)
@@ -159,6 +207,12 @@ export const comicsWebInfo = [
     chapterCss: '#chapter-list-1',
     readtype: 1,
     iswork: false,
+    searchTemplate_1: {
+      search_add_url: 'search/?keywords=',
+      alllist_dom_css: 'div.dmList ul',
+      minlist_dom_css: 'li.item-lg',
+      img_src: 'src'
+    },
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
       const imgs = eval(imgStr)
@@ -236,23 +290,11 @@ export const comicsWebInfo = [
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-1,#chapter-list-10',
     readtype: 1,
-    searchFun: async function(keyword) {
-      const searchUrl = this.homepage + 'search/?keywords=' + keyword
-      const { responseText } = await request('get', searchUrl)
-      const dom = parseToDOM(responseText).querySelector('.book-list')
-      const domList = dom.querySelectorAll('li')
-      const searchList = []
-      domList.forEach(element => {
-        const obj = {}
-        obj.name = element.querySelector('a').title
-        const pathname = element.querySelector('a').pathname
-        obj.url = this.homepage + pathname.slice(1, pathname.length)
-        obj.imageUrl = element.querySelector('img').src
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
+    searchTemplate_1: {
+      search_add_url: 'search/?keywords=',
+      alllist_dom_css: '.book-list',
+      minlist_dom_css: 'li',
+      img_src: 'src'
     },
     getImgs: function(context) {
       const imgStr = context.match(/chapterImages = ([\s\S]+?);var chapterPath/)[1]
@@ -302,23 +344,11 @@ export const comicsWebInfo = [
     hasSpend: true,
     freeCss: '.ui-icon-free',
     payCss: '.ui-icon-pay',
-    searchFun: async function(keyword) {
-      const searchUrl = this.homepage + 'Comic/searchList?search=' + keyword
-      const { responseText } = await request('get', searchUrl)
-      const dom = parseToDOM(responseText).querySelector('.mod_book_list')
-      const domList = dom.querySelectorAll('li')
-      const searchList = []
-      domList.forEach(element => {
-        const obj = {}
-        obj.name = element.querySelector('a').title
-        const pathname = element.querySelector('a').pathname
-        obj.url = this.homepage + pathname.slice(1, pathname.length)
-        obj.imageUrl = element.querySelector('img').dataset.original
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
+    searchTemplate_1: {
+      search_add_url: 'Comic/searchList?search=',
+      alllist_dom_css: '.mod_book_list',
+      minlist_dom_css: 'li',
+      img_src: 'data-original'
     },
     getImgs: function(context) {
       let nonce = context.match(/<script>\s*window.*?=(.*?)?;/)[1]
@@ -350,6 +380,12 @@ export const comicsWebInfo = [
     comicNameCss: '.cy_title h1',
     chapterCss: '.cy_plist #mh-chapter-list-ol-0',
     readtype: 1,
+    searchTemplate_1: {
+      search_add_url: 'search.php?keyword=',
+      alllist_dom_css: 'div.cy_list_mh',
+      minlist_dom_css: 'ul',
+      img_src: 'src'
+    },
     getImgs: function(context) {
       const group = context.matchAll(/(function.*?return \S})(\(.*?{}\))/g)
       const func = []
@@ -371,26 +407,12 @@ export const comicsWebInfo = [
     comicNameCss: '.content .title',
     chapterCss: '#j_chapter_list',
     readtype: 1,
-    searchFun: async function(keyword) {
-      const searchUrl = this.homepage + 'index.php/search?key=' + keyword
-      const { responseText } = await request('get', searchUrl)
-      const dom = parseToDOM(responseText).querySelector('.acgn-comic-list')
-      const domList = dom.querySelectorAll('li.acgn-item')
-      const searchList = []
-      domList.forEach(element => {
-        const obj = {}
-        obj.name = element.querySelector('a').title
-        if (obj.name === undefined) {
-          obj.name = element.querySelector('img').alt
-        }
-        const pathname = element.querySelector('a').pathname
-        obj.url = this.homepage + pathname.slice(1, pathname.length)
-        obj.imageUrl = element.querySelector('img').style.backgroundImage.match(/url\("(.*?)"/)[1]
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
+    searchTemplate_1: {
+      search_add_url: 'index.php/search?key=',
+      alllist_dom_css: '.acgn-comic-list',
+      minlist_dom_css: 'li.acgn-item',
+      img_src: 'src',
+      use_background: true
     },
     getImgs: function(context) {
       const group = context.matchAll(/data-echo="(.*?)"/g)
@@ -408,26 +430,11 @@ export const comicsWebInfo = [
     comicNameCss: '.comic-title.j-comic-title',
     chapterCss: '.chapter__list-box.clearfix',
     readtype: 1,
-    searchFun: async function(keyword) {
-      const searchUrl = this.homepage + 'index.php/search?key=' + keyword
-      const { responseText } = await request('get', searchUrl)
-      const dom = parseToDOM(responseText).querySelector('.cate-comic-list')
-      const domList = dom.querySelectorAll('.common-comic-item')
-      const searchList = []
-      domList.forEach(element => {
-        const obj = {}
-        obj.name = element.querySelector('a').title
-        if (obj.name === undefined || obj.name === '') {
-          obj.name = element.querySelector('img').alt
-        }
-        const pathname = element.querySelector('a').pathname
-        obj.url = this.homepage + pathname.slice(1, pathname.length)
-        obj.imageUrl = element.querySelector('img').dataset.original
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
+    searchTemplate_1: {
+      search_add_url: 'index.php/search?key=',
+      alllist_dom_css: '.cate-comic-list',
+      minlist_dom_css: '.common-comic-item',
+      img_src: 'data-original'
     },
     getImgs: function(context) {
       const group = context.matchAll(/data-original="(.*?)"/g)
@@ -460,23 +467,11 @@ export const comicsWebInfo = [
     chapterCss: '.chapter-body.clearfix #chapter-list-1',
     readtype: 1,
     readCssText: '.img_info {display: none;}.tbCenter img {border: 0px;}',
-    searchFun: async function(keyword) {
-      const searchUrl = this.homepage + 'search/?keywords=' + keyword
-      const { responseText } = await request('get', searchUrl)
-      const dom = parseToDOM(responseText).querySelector('.book-list')
-      const domList = dom.querySelectorAll('li.item-lg')
-      const searchList = []
-      domList.forEach(element => {
-        const obj = {}
-        obj.name = element.querySelector('a').title
-        const pathname = element.querySelector('a').pathname
-        obj.url = this.homepage + pathname.slice(1, pathname.length)
-        obj.imageUrl = element.querySelector('img').src
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
+    searchTemplate_1: {
+      search_add_url: 'search/?keywords=',
+      alllist_dom_css: '.book-list',
+      minlist_dom_css: 'li.item-lg',
+      img_src: 'src'
     },
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
@@ -527,23 +522,11 @@ export const comicsWebInfo = [
     chapterCss: '.zj_list_con #chapter-list-1',
     readtype: 1,
     readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
-    searchFun: async function(keyword) {
-      const searchUrl = this.homepage + 'search/?keywords=' + keyword
-      const { responseText } = await request('get', searchUrl)
-      const dom = parseToDOM(responseText).querySelector('.list_con_li')
-      const domList = dom.querySelectorAll('li.list-comic')
-      const searchList = []
-      domList.forEach(element => {
-        const obj = {}
-        obj.name = element.querySelector('a').title
-        const pathname = element.querySelector('a').pathname
-        obj.url = this.homepage + pathname.slice(1, pathname.length)
-        obj.imageUrl = element.querySelector('img').src
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
+    searchTemplate_1: {
+      search_add_url: 'search/?keywords=',
+      alllist_dom_css: '.list_con_li',
+      minlist_dom_css: 'li.list-comic',
+      img_src: 'src'
     },
     getImgs: async function(context) {
       const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
@@ -571,23 +554,11 @@ export const comicsWebInfo = [
     comicNameCss: '.comics-detail__info > .comics-detail__title',
     chapterCss: '#chapter-items',
     readtype: 1,
-    searchFun: async function(keyword) {
-      const searchUrl = this.homepage + 'search/?keyword=' + keyword
-      const { responseText } = await request('get', searchUrl)
-      const dom = parseToDOM(responseText).querySelector('.pure-g.classify-items')
-      const domList = dom.querySelectorAll('div.comics-card')
-      const searchList = []
-      domList.forEach(element => {
-        const obj = {}
-        obj.name = element.querySelector('a').title
-        const pathname = element.querySelector('a').pathname
-        obj.url = this.homepage + pathname.slice(1, pathname.length)
-        obj.imageUrl = element.querySelector('img').src
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
+    searchTemplate_1: {
+      search_add_url: 'search/?keyword=',
+      alllist_dom_css: '.pure-g.classify-items',
+      minlist_dom_css: 'div.comics-card',
+      img_src: 'src'
     },
     getImgs: async function(context) {
       const group = context.matchAll(/<img.*src="(.*?)"/g)

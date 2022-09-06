@@ -24,6 +24,14 @@ export const loadStyle2 = (url) => {
   })
 }
 
+export const getDataType = (obj) => {
+  const type = typeof obj
+  if (type !== 'object') {
+    return type
+  }
+  return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1')
+}
+
 export const getImage = async(url) => {
   const { response } = await request('get', url)
   try {
@@ -32,14 +40,13 @@ export const getImage = async(url) => {
       resolve(imgs)
     })
   } catch (error) {
-    console.log('error: ', error)
+    console.log('getImageError: ', error)
     return new Promise((resolve, reject) => {
       reject([])
     })
   }
 }
 
-// export const request = async(method, url, responseType) => {
 export const request = async(...details) => {
   let method, url, data, responseType, timeout
   if (details.length === 1) {
@@ -56,6 +63,7 @@ export const request = async(...details) => {
       method,
       url,
       data: (data || null),
+      responseType,
       timeout: (timeout || 30 * 1000),
       onload: function(res) {
         resolve(res)
