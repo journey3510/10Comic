@@ -103,11 +103,11 @@ export default class Queue {
           resolve(true)
         },
         onerror: result => {
-          console.log('onerror: ', result)
+          console.log('downError: ', result)
           resolve(false)
         },
         ontimeout: result => {
-          console.log('ontimeout: ', result)
+          console.log('ontimeoutError: ', result)
           resolve(false)
         }
       })

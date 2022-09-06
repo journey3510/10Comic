@@ -4,7 +4,7 @@
       <van-sticky>
 
         <div class="search-input-btn">
-          <input v-model="inputSeachword" type="text" name="searchword">
+          <input v-model="inputSeachword" type="text" name="searchword" @keyup.enter="search(inputSeachword)">
           <van-button
             type="primary"
             size="small"
@@ -22,41 +22,47 @@
     </div>
 
     <div id="search-page-bottom">
-      <van-collapse v-model="activeNames">
-        <van-collapse-item
-          v-for="(item, index) in showResult"
-          :key="index"
-          class="origin-list"
-          :title="item.webName"
-          :name="index"
-        >
-          <van-cell-group :style="{textAlign: 'left',background: '#eee5', padding: '2px 0'}">
-            <div
-              v-for="(item2, index2) in item.findres"
-              :key="index2"
-              :title="item2.url"
-              class="origin-image-list"
-              @click="toResultWeb(item2.url)"
-            >
-              <van-image
-                width="100"
-                height="150"
-                :src="item2.imageUrl"
-              />
-              <p>{{ item2.name }}</p>
-            </div>
-          </van-cell-group>
-        </van-collapse-item>
-      </van-collapse>
-    </div>
+      <div v-show="showResult.length !== 0">
 
+        <van-collapse v-model="activeNames">
+          <van-collapse-item
+            v-for="(item, index) in showResult"
+            :key="index"
+            class="origin-list"
+            :title="item.webName"
+            :name="index"
+          >
+            <van-cell-group :style="{textAlign: 'left',background: '#eee5', padding: '2px 0'}">
+              <div
+                v-for="(item2, index2) in item.findres"
+                :key="index2"
+                :title="item2.url"
+                class="origin-image-list"
+                @click="toResultWeb(item2.url)"
+              >
+                <van-image
+                  width="100"
+                  height="150"
+                  :src="item2.imageUrl"
+                />
+                <p>{{ item2.name }}</p>
+              </div>
+            </van-cell-group>
+          </van-collapse-item>
+        </van-collapse>
+      </div>
+
+      <van-empty v-show="showResult.length === 0" description="搜索内容" />
+
+    </div>
   </div>
+
 </template>
 
 <script>
 
 import { request } from '@/utils/index'
-import { comicsWebInfo } from '@/utils/comics'
+import { comicsWebInfo, searchFunTemplate_1 } from '@/utils/comics'
 
 import { Toast } from 'vant'
 
@@ -66,10 +72,11 @@ export default {
     return {
       showSearchPage: false,
       inputSeachword: '',
-      activeNames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      activeNames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
       searcKey: '',
       searchInfo: [],
-      showResult: []
+      showResult: [],
+      showSearchPart: false
     }
   },
   watch: {
@@ -120,7 +127,22 @@ export default {
       this.showResult = []
       for (let i = 0; i < comicsWebInfo.length; i++) {
         const item = comicsWebInfo[i]
-        if (item.searchFun) {
+        if (item.searchTemplate_1) {
+          try {
+            const findres = await searchFunTemplate_1(item, keyword)
+            let showLen
+            findres.length > 8 ? showLen = 8 : showLen = findres.length
+            this.searchInfo.push({
+              webName: item.webName,
+              findres: findres.slice(0, showLen)
+            })
+          } catch (error) {
+            console.log('searchError: ', item.webName, error)
+          }
+          continue
+        }
+
+        if (!item.searchTemplate_1 && item.searchFun) {
           try {
             const findres = await item.searchFun(keyword)
             let showLen
@@ -139,6 +161,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 #search-page {
   width: 1100px;
   height: 600px;
@@ -159,21 +182,26 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
+    border-bottom: 1px solid @yiColor;
 
-    input {
-      border: 1px solid @yiColor;
-      height: 20px;
-      width: 200px;
-      border-radius: 5px;
-      background: #fff;
-    }
     .search-input-btn {
-      margin-left: 300px;
+      margin-left: 400px;
       margin-top: 10px;
       width: 280px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      input {
+        border: 1px solid @yiColor;
+        height: 20px;
+        width: 200px;
+        border-radius: 5px;
+        background: #fff;
+        font-size: 15px;
+        line-height: 20px;
+        padding-left: 15px;
+      }
+
       /deep/ .van-button--small {
         height: 25px;
       }
@@ -201,6 +229,7 @@ export default {
     height: 530px;
     max-height: 530px;
     overflow-y: scroll;
+
     .origin-image-list {
       display: flex;
       width: 120px;
