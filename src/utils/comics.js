@@ -568,6 +568,28 @@ export const comicsWebInfo = [
       }
       return imgArray
     }
+  },
+  {
+    domain: 'www.aiguoman.com',
+    homepage: 'https://www.aiguoman.com/',
+    webName: '爱国漫',
+    comicNameCss: '.detail-info > .detail-info-title',
+    chapterCss: '#chapterlistload',
+    readtype: 1,
+    searchTemplate_1: {
+      search_add_url: 'search?key=',
+      alllist_dom_css: '.container .mh-list',
+      minlist_dom_css: 'li',
+      img_src: 'src'
+    },
+    getImgs: async function(context) {
+      const group = context.matchAll(/<img.*src="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[1])
+      }
+      return imgArray
+    }
   }
 ]
 

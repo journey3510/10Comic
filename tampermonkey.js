@@ -90,6 +90,10 @@
 // @connect      pkssj.com
 // @connect      manhuatu.cc
 //
+// @match        *://www.aiguoman.com/*
+// @connect      kingwar.cn
+// @connect      aiguoman.com
+//
 // @connect      *
 // @connect      laimidao.com
 // @connect      izhegu.com
