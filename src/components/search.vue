@@ -4,6 +4,7 @@
       <van-sticky>
 
         <div class="search-input-btn">
+          <van-loading v-show="showSearchLoad" color="#ee0000" type="spinner" size="25" />
           <input v-model="inputSeachword" type="text" name="searchword" @keyup.enter="search(inputSeachword)">
           <van-button
             type="primary"
@@ -32,7 +33,7 @@
             :title="item.webName"
             :name="index"
           >
-            <van-cell-group :style="{textAlign: 'left',background: '#eee5', padding: '2px 0'}">
+            <van-cell-group :style="{textAlign: 'left',background: 'rgb(245 245 245 / 33%)', padding: '2px 0'}">
               <div
                 v-for="(item2, index2) in item.findres"
                 :key="index2"
@@ -44,7 +45,12 @@
                   width="100"
                   height="150"
                   :src="item2.imageUrl"
-                />
+                  @error="loadImgError(item2, item.webName)"
+                >
+                  <template v-slot:loading>
+                    <van-loading type="spinner" size="25" />
+                  </template>
+                </van-image>
                 <p>{{ item2.name }}</p>
               </div>
             </van-cell-group>
@@ -72,6 +78,8 @@ export default {
     return {
       showSearchPage: false,
       inputSeachword: '',
+      showSearchLoad: false,
+      searchTime: 0,
       activeNames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
       searcKey: '',
       searchInfo: [],
@@ -95,24 +103,23 @@ export default {
     toResultWeb(url) {
       window.open(url, '_blank')
     },
-    async getSearchContent(len) {
-      const oneWebInfo = this.searchInfo[len - 1]
-      const list = oneWebInfo.findres
+    async loadImgError(item, name) {
+      const url = item.imageUrl
+      item.imgErrorTime === undefined ? item.imgErrorTime = 0 : ''
 
-      for (let i = 0; i < list.length; i++) {
-        const element = list[i]
-        // 利用油猴来请求 图片
-        try {
-          const blob = await request({
-            method: 'get',
-            url: element.imageUrl,
-            responseType: 'blob',
-            timeout: 1000 })
-          const url = window.URL.createObjectURL(blob.response)
-          element.imageUrl = url
-        // eslint-disable-next-line no-empty
-        } catch (error) {}
+      if (item.imgErrorTime !== 1) {
+        const blob = await request({
+          method: 'get',
+          url,
+          responseType: 'blob',
+          timeout: 10000 })
+        const newUrl = window.URL.createObjectURL(blob.response)
+        item.imgErrorTime++
+        item.imageUrl = newUrl
       }
+    },
+    getSearchContent(len) {
+      const oneWebInfo = this.searchInfo[len - 1]
       this.showResult.push(oneWebInfo)
     },
     async search(keyword) {
@@ -124,37 +131,51 @@ export default {
         })
         return
       }
+      this.searchTime++
+      const currentSearchTime = this.searchTime
+      this.showSearchLoad = true
       this.showResult = []
       for (let i = 0; i < comicsWebInfo.length; i++) {
         const item = comicsWebInfo[i]
+        if (!item.searchTemplate_1 && !item.searchFun) {
+          continue
+        }
+
+        let findres = []
         if (item.searchTemplate_1) {
           try {
-            const findres = await searchFunTemplate_1(item, keyword)
-            let showLen
-            findres.length > 8 ? showLen = 8 : showLen = findres.length
-            this.searchInfo.push({
-              webName: item.webName,
-              findres: findres.slice(0, showLen)
-            })
+            findres = await searchFunTemplate_1(item, keyword)
           } catch (error) {
-            console.log('searchError: ', item.webName, error)
+            Toast({
+              message: item.webName + '\n' + error,
+              getContainer: '#search-page',
+              position: 'center'
+            })
           }
-          continue
         }
 
         if (!item.searchTemplate_1 && item.searchFun) {
           try {
-            const findres = await item.searchFun(keyword)
-            let showLen
-            findres.length > 8 ? showLen = 8 : showLen = findres.length
-            this.searchInfo.push({
-              webName: item.webName,
-              findres: findres.slice(0, showLen)
+            findres = await item.searchFun(keyword)
+          } catch (error) {
+            Toast({
+              message: item.webName + '\n' + error,
+              getContainer: '#search-page',
+              position: 'center'
             })
-            // eslint-disable-next-line no-empty
-          } catch (error) {}
+          }
+        }
+
+        if (currentSearchTime === this.searchTime) {
+          let showLen
+          findres.length > 8 ? showLen = 8 : showLen = findres.length
+          this.searchInfo.push({
+            webName: item.webName,
+            findres: findres.slice(0, showLen)
+          })
         }
       }
+      this.showSearchLoad = false
     }
   }
 }
@@ -187,7 +208,7 @@ export default {
     .search-input-btn {
       margin-left: 400px;
       margin-top: 10px;
-      width: 280px;
+      width: 320px;
       display: flex;
       justify-content: space-between;
       align-items: center;

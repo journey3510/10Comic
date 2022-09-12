@@ -121,9 +121,9 @@ export const comicsWebInfo = [
     iswork: true,
     searchTemplate_1: {
       search_add_url: 'search.php?keyword=',
-      alllist_dom_css: '.mh-list.col7',
+      alllist_dom_css: '.box.container > div > ul',
       minlist_dom_css: 'li',
-      use_background: true
+      img_src: 'data-src'
     },
     getImgs: function(context) {
       const reg = /var km[^>]*_img_url='[^>]*'/gi
