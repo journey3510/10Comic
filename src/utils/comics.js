@@ -374,6 +374,22 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'comic.acgn.cc',
+    homepage: 'https://comic.acgn.cc/',
+    webName: '动漫戏说',
+    comicNameCss: '.list_navbox h3 a',
+    chapterCss: '#comic_chapter > ul',
+    readtype: 1,
+    getImgs: async function(context) {
+      const group = context.matchAll(/_src="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[1])
+      }
+      return imgArray
+    }
+  },
+  {
     domain: 'www.mhxqiu1.com',
     homepage: 'http://www.mhxqiu1.com/',
     webName: '漫画星球',
