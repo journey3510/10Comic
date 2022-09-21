@@ -1,5 +1,5 @@
 import JSZip from 'jszip'
-import { getImage, downFile, addZeroForNum } from '@/utils/index'
+import { getImage, downFile, addZeroForNum, request } from '@/utils/index'
 import { setStorage, getStorage } from '@/config/setup'
 
 // 多个任务并行执行的队列
@@ -103,8 +103,23 @@ export default class Queue {
           resolve(true)
         },
         onerror: result => {
-          console.log('downError: ', result)
-          resolve(false)
+          request({
+            method: 'get',
+            url: imgurl,
+            responseType: 'blob'
+          }).then((res) => {
+            const name_2 = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + this.getSuffix(res.finalUrl)
+            this.downloadFile(name_2, res.response).then((downRes) => {
+              _this.worker[index].currentnum = _this.worker[index].currentnum + 1
+              _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
+              _this.refresh()
+              if (downRes) {
+                resolve(true)
+              } else {
+                resolve(false)
+              }
+            })
+          })
         },
         ontimeout: result => {
           console.log('ontimeoutError: ', result)

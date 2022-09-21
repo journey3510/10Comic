@@ -8,9 +8,14 @@ import { getStorage } from '@/config/setup'
 
 export const searchFunTemplate_1 = async(data, keyword) => {
   // eslint-disable-next-line prefer-const
-  let { search_add_url, alllist_dom_css, minlist_dom_css, namelink_index, img_src, use_background } = data.searchTemplate_1
+  let { search_add_url, search_pre, alllist_dom_css, minlist_dom_css, namelink_index, img_src, use_background } = data.searchTemplate_1
   namelink_index ? namelink_index-- : namelink_index = 0
-  const searchUrl = data.homepage + search_add_url + keyword
+  let searchUrl = ''
+  if (search_pre) {
+    searchUrl = search_pre + search_add_url + keyword
+  } else {
+    searchUrl = data.homepage + search_add_url + keyword
+  }
   const { responseText } = await request('get', searchUrl)
   const dom = parseToDOM(responseText).querySelector(alllist_dom_css)
 
@@ -146,13 +151,13 @@ export const comicsWebInfo = [
     comicNameCss: '.fed-part-eone.fed-font-xvi a',
     chapterCss: '.fed-play-item.fed-drop-item.fed-visible .fed-part-rows:nth-child(2)',
     readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'vodsearch/-------------.html?wd=',
-      alllist_dom_css: '.fed-part-layout.fed-back-whits',
-      minlist_dom_css: 'dl.fed-deta-info',
-      namelink_index: 2,
-      img_src: 'data-original'
-    },
+    // searchTemplate_1: {
+    //   search_add_url: 'vodsearch/-------------.html?wd=',
+    //   alllist_dom_css: '.fed-part-layout.fed-back-whits',
+    //   minlist_dom_css: 'dl.fed-deta-info',
+    //   namelink_index: 2,
+    //   img_src: 'data-original'
+    // },
     getImgs: async function(context) {
       const txtUrl = context.match(/http(\S*).txt/gi)[0]
       const txtRes = await request('get', txtUrl)
@@ -374,6 +379,53 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.txydd.com',
+    homepage: 'http://www.txydd.com/',
+    webName: '滴滴漫画',
+    comicNameCss: '.content h1',
+    chapterCss: '#j_chapter_list',
+    readtype: 1,
+    getImgs: async function(context) {
+      const group = context.matchAll(/chapter-pid(\s|\S)*?(src)="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[3])
+      }
+      return imgArray
+    }
+  },
+  {
+    domain: 'www.cnanjie.com',
+    homepage: 'https://www.cnanjie.com/',
+    webName: '好看的漫画网',
+    comicNameCss: '.title h1',
+    chapterCss: '#chapter-list-1',
+    readtype: 1,
+    searchTemplate_1: {
+      search_add_url: 'search/?keywords=',
+      alllist_dom_css: '#dmList ul',
+      minlist_dom_css: 'li',
+      img_src: 'src'
+    },
+    getImgs: async function(context) {
+      const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
+      const strArr = []
+      for (const item of group) {
+        strArr.push(item[1])
+      }
+      let imgarr = JSON.parse(strArr[0])
+      if (imgarr[0].search('http') === -1) {
+        const josnRes = await request('get', this.homepage + 'js/config.js')
+        const josnContext = josnRes.responseText
+        const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+        imgarr = imgarr.map((item) => {
+          return imageDomian + item
+        })
+      }
+      return imgarr
+    }
+  },
+  {
     domain: 'comic.acgn.cc',
     homepage: 'https://comic.acgn.cc/',
     webName: '动漫戏说',
@@ -390,18 +442,59 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.77mh.xyz',
+    homepage: 'https://www.77mh.xyz/',
+    webName: '新新漫画',
+    comicNameCss: '.ar_list_coc h1',
+    chapterCss: '.ar_list_coc .ar_rlos_bor',
+    readtype: 1,
+    searchTemplate_1: {
+      search_add_url: 'k.php?k=',
+      search_pre: 'https://so.77mh.xyz/',
+      alllist_dom_css: '.ar_list_co ul',
+      minlist_dom_css: 'dl',
+      img_src: 'src'
+    },
+    getImgs: async function(context) {
+      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      const func = []
+      for (const item of group) {
+        func.push(item[1])
+        func.push(item[2])
+      }
+      const code = '(' + func[0] + ')' + func[1]
+      const imgStr = eval(code)
+      const params = imgStr.match(/var atsvr="(.*?)";var msg='(.*?)'.*img_s=(.*?);.*colist_(.*?).htm/)
+      let imgArray = params[2].split('|')
+
+      const coid = window.location.href.match(/colist_(\d*?).html/)[1]
+      const reqUrl = `https://css.gdbyhtl.net:5443/img_v1/cncf_svr.asp?z=${params[1]}&s=${params[3]}&cid=${params[4]}&coid=${coid}`
+      console.log('reqUrl: ', reqUrl)
+      const { responseText } = await request('get', reqUrl)
+      const getImgPre = responseText.match(/= "(.*?)"/)[1]
+
+      if (imgArray[0].search('http') === -1) {
+        imgArray = imgArray.map((item) => {
+          return getImgPre + item
+        })
+      }
+      console.log('imgArray: ', imgArray)
+      return imgArray
+    }
+  },
+  {
     domain: 'www.mhxqiu1.com',
     homepage: 'http://www.mhxqiu1.com/',
     webName: '漫画星球',
     comicNameCss: '.cy_title h1',
     chapterCss: '.cy_plist #mh-chapter-list-ol-0',
     readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'search.php?keyword=',
-      alllist_dom_css: 'div.cy_list_mh',
-      minlist_dom_css: 'ul',
-      img_src: 'src'
-    },
+    // searchTemplate_1: {
+    //   search_add_url: 'search.php?keyword=',
+    //   alllist_dom_css: 'div.cy_list_mh',
+    //   minlist_dom_css: 'ul',
+    //   img_src: 'src'
+    // },
     getImgs: function(context) {
       const group = context.matchAll(/(function.*?return \S})(\(.*?{}\))/g)
       const func = []
@@ -440,8 +533,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.mh5.org',
-    homepage: 'https://www.mh5.org/',
+    domain: 'www.mhua5.com',
+    homepage: 'https://www.mhua5.com/',
     webName: '漫画屋',
     comicNameCss: '.comic-title.j-comic-title',
     chapterCss: '.chapter__list-box.clearfix',
