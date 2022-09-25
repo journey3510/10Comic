@@ -3,7 +3,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request, parseToDOM } from '@/utils/index'
+import { request, parseToDOM, funstrToData } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
 export const searchFunTemplate_1 = async(data, keyword) => {
@@ -73,14 +73,7 @@ export const comicsWebInfo = [
       img_src: 'src'
     },
     getImgs: async function(context) {
-      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      const func = []
-      for (const item of group) {
-        func.push(item[1])
-        func.push(item[2])
-      }
-      const code = '(' + func[0] + ')' + func[1]
-      let imgStr = eval(code)
+      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       let imgArray = JSON.parse(imgStr)
       if (imgArray[0].search('http') === -1) {
@@ -98,14 +91,7 @@ export const comicsWebInfo = [
     chapterCss: '.tab-content-selected .list_con_li.autoHeight',
     readtype: 1,
     getImgs: async function(context) {
-      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      const func = []
-      for (const item of group) {
-        func.push(item[1])
-        func.push(item[2])
-      }
-      const code = '(' + func[0] + ')' + func[1]
-      let imgStr = eval(code)
+      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       imgStr = imgStr.match(/page_url":"(.*?)","sum_pages/)[1]
       let imgArray = imgStr.split('\\r\\n')
       if (imgArray[0].search('http') === -1) {
@@ -251,14 +237,7 @@ export const comicsWebInfo = [
       })
     },
     getImgs: function(context) {
-      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      const func = []
-      for (const item of group) {
-        func.push(item[1])
-        func.push(item[2])
-      }
-      const code = '(' + func[0] + ')' + func[1]
-      let imgStr = eval(code)
+      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       const imgArray = JSON.parse(imgStr)
       return imgArray
@@ -456,20 +435,13 @@ export const comicsWebInfo = [
       img_src: 'src'
     },
     getImgs: async function(context) {
-      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      const func = []
-      for (const item of group) {
-        func.push(item[1])
-        func.push(item[2])
-      }
-      const code = '(' + func[0] + ')' + func[1]
-      const imgStr = eval(code)
+      const imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       const params = imgStr.match(/var atsvr="(.*?)";var msg='(.*?)'.*img_s=(.*?);.*colist_(.*?).htm/)
       let imgArray = params[2].split('|')
 
       const coid = window.location.href.match(/colist_(\d*?).html/)[1]
       const reqUrl = `https://css.gdbyhtl.net:5443/img_v1/cncf_svr.asp?z=${params[1]}&s=${params[3]}&cid=${params[4]}&coid=${coid}`
-      console.log('reqUrl: ', reqUrl)
+
       const { responseText } = await request('get', reqUrl)
       const getImgPre = responseText.match(/= "(.*?)"/)[1]
 
@@ -478,7 +450,6 @@ export const comicsWebInfo = [
           return getImgPre + item
         })
       }
-      console.log('imgArray: ', imgArray)
       return imgArray
     }
   },
@@ -496,14 +467,7 @@ export const comicsWebInfo = [
     //   img_src: 'src'
     // },
     getImgs: function(context) {
-      const group = context.matchAll(/(function.*?return \S})(\(.*?{}\))/g)
-      const func = []
-      for (const item of group) {
-        func.push(item[1])
-        func.push(item[2])
-      }
-      const code = '(' + func[0] + ')' + func[1]
-      let imgStr = eval(code)
+      let imgStr = funstrToData(context, /(function.*?return \S})(\(.*?{}\))/g)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       const imgArray = JSON.parse(imgStr)
       return imgArray
@@ -610,14 +574,7 @@ export const comicsWebInfo = [
     chapterCss: '.cy_zhangjie .cy_plist',
     readtype: 1,
     getImgs: async function(context) {
-      const group = context.matchAll(/(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      const func = []
-      for (const item of group) {
-        func.push(item[1])
-        func.push(item[2])
-      }
-      const code = '(' + func[0] + ')' + func[1]
-      let imgStr = eval(code)
+      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       const imgArray = JSON.parse(imgStr)
       return imgArray
@@ -697,6 +654,35 @@ export const comicsWebInfo = [
       for (const item of group) {
         imgArray.push(item[1])
       }
+      return imgArray
+    }
+  },
+  {
+    domain: 'www.maofly.com',
+    homepage: 'https://www.maofly.com/',
+    webName: '漫画猫',
+    comicNameCss: 'h1.comic-title',
+    chapterCss: 'ol.links-of-books.num_div',
+    readtype: 1,
+    webState: 2,
+    searchTemplate_1: {
+      search_add_url: 'search.html?q=',
+      alllist_dom_css: '.comic-main-section.bg-white .row.m-0',
+      minlist_dom_css: 'div.col-4',
+      img_src: 'data-original'
+    },
+    getImgs: async function(context) {
+      const img_data = context.match(/let img_data = "(.*?)"/)[1]
+      const asset_domain = context.match(/data-chapter-domain="(.*?)"/)[1]
+      const { responseText } = await request('get', this.homepage + 'static/js/string.min.js')
+
+      const LZStringFun = funstrToData(responseText, /(function[\s\S]+?return \S})(\(\))/g)
+      const img_data_arr = LZStringFun.decompressFromBase64(img_data).split(',')
+
+      let imgArray = []
+      imgArray = img_data_arr.map((item) => {
+        return asset_domain + '/uploads/' + item
+      })
       return imgArray
     }
   }
