@@ -240,7 +240,7 @@
             </van-cell>
           </van-cell-group>
 
-          <van-cell-group id="webpart" title="自定义规则" inset>
+          <van-cell-group title="自定义规则" inset>
             <van-cell
               title-class="cellleftvalue"
               value-class="cellrightvalue"
@@ -256,6 +256,17 @@
               is-link
               center
               @click="deleteAllUserWeb()"
+            />
+          </van-cell-group>
+
+          <van-cell-group id="otherpart" title="其他" inset>
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              title="脚本反馈/评分"
+              is-link
+              center
+              @click="jump('https://greasyfork.org/zh-CN/scripts/447819/feedback')"
             />
           </van-cell-group>
         </div>
@@ -327,6 +338,9 @@ export default {
     this.$bus.$on('changeSetupFirstPage', () => { this.changeSwipe(0) })
   },
   methods: {
+    jump(url) {
+      window.open(url, '_blank')
+    },
     onChangeData(key, value, key2) {
       setStorage(key, value, key2)
     },

@@ -115,3 +115,17 @@ export const parseToDOM = (str) => {
   }
   return div
 }
+
+export const funstrToData = (str, reg) => {
+  const group = str.matchAll(reg)
+  const func = []
+  for (const item of group) {
+    func.push(item[1])
+    func.push(item[2])
+  }
+  const code = '(' + func[0] + ')' + func[1]
+  // eslint-disable-next-line no-eval
+  const data = eval(code)
+  return data
+}
+
