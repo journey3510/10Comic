@@ -1,4 +1,3 @@
-
 /* eslint-disable no-undef */
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
@@ -128,6 +127,80 @@ export const comicsWebInfo = [
         imgUrl.push(item[1])
       }
       return imgUrl
+    }
+  },
+  {
+    domain: 'manga.bilibili.com',
+    homepage: 'https://manga.bilibili.com/',
+    webName: '哔哩哔哩',
+    comicNameCss: '.manga-info h1.manga-title',
+    chapterCss: '.episode-list .list-header',
+    readtype: 1,
+    searchFun: async function(keyword) {
+      const searchUrl = 'https://manga.bilibili.com/twirp/comic.v1.Comic/Search?device=pc&platform=web'
+      const data = new FormData()
+      data.append('key_word', keyword)
+      data.append('page_num', 1)
+      data.append('page_size', 8)
+      const { responseText } = await request('post', searchUrl, data)
+      const list = JSON.parse(responseText).data.list
+      const searchList = []
+      list.forEach(element => {
+        const obj = {}
+        obj.name = element.org_title
+        obj.url = this.homepage + 'detail/mc' + element.id
+        obj.imageUrl = element.vertical_cover
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
+    getComicInfo: async function() {
+      const comicid = window.location.href.match(/detail\/(\D*)(\d*)/)[2]
+      const data = new FormData()
+      data.append('comic_id', parseInt(comicid))
+      const getUrl = 'https://manga.bilibili.com/twirp/comic.v1.Comic/ComicDetail?device=pc&platform=web'
+      const { responseText } = await request('post', getUrl, data)
+      const comic = JSON.parse(responseText)
+      const comicName = comic.data.title
+      const comic_list = comic.data.ep_list
+      const allList = []
+      comic_list.forEach(element => {
+        const url = `https://manga.bilibili.com/mc${comicid}/${element.id}`
+        const data = {
+          comicName: comicName,
+          chapterName: element.short_title + ' ' + element.title,
+          url: element.is_locked ? 'javascript:void();' : url,
+          readtype: this.readtype,
+          isPay: element.is_locked
+        }
+        allList.push(data)
+      })
+      return allList.reverse()
+    },
+    getImgs: async function(context, passData) {
+      const chapter_id = parseInt(passData.url.match(/.com\/(\D*)(\d*)\/(\d*)/)[3])
+      const data = new FormData()
+      data.append('ep_id', chapter_id)
+      const postUrl = 'https://manga.bilibili.com/twirp/comic.v1.Comic/GetImageIndex?device=pc&platform=web'
+      const { responseText } = await request('post', postUrl, data)
+      const imgArray = JSON.parse(responseText).data.images
+
+      const saveImg = []
+      const query = []
+      const imgPostUrl = 'https://manga.bilibili.com/twirp/comic.v1.Comic/ImageToken?device=pc&platform=web'
+      imgArray.forEach(item => {
+        query.push(item.path)
+      })
+      const img_data = new FormData()
+      img_data.append('urls', JSON.stringify(query))
+      const img_data_res = await request('post', imgPostUrl, img_data)
+      const imgObjArr = JSON.parse(img_data_res.responseText).data
+      imgObjArr.forEach(imgObj => {
+        saveImg.push(`${imgObj.url}?token=${imgObj.token}`)
+      })
+      return saveImg
     }
   },
   {

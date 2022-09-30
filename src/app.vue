@@ -75,6 +75,7 @@ import Down from '@/views/down.vue'
 import Search from '@/components/search.vue'
 
 import { matchWeb } from './utils/comics'
+// import { request } from './utils/index'
 
 export default {
   name: 'App',
@@ -112,6 +113,9 @@ export default {
     },
     async Init() {
       matchWeb(window.location.href)
+    },
+    async test() {
+
     }
   }
 }
