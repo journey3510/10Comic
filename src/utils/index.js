@@ -33,9 +33,13 @@ export const getDataType = (obj) => {
 }
 
 export const getImage = async(url) => {
-  const { response } = await request('get', url)
   try {
-    const imgs = await currentComics.getImgs(response)
+    let response = ''
+    if (!currentComics.getComicInfo) {
+      const data = await request('get', url)
+      response = data.response
+    }
+    const imgs = await currentComics.getImgs(response, { url })
     return new Promise((resolve, reject) => {
       resolve(imgs)
     })
@@ -69,7 +73,7 @@ export const request = async(...details) => {
         resolve(res)
       },
       onerror: function(e) {
-        reject(e)
+        reject('onerror')
       },
       ontimeout: function() {
         reject('timeout')

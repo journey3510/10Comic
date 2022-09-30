@@ -103,23 +103,32 @@ export default class Queue {
           resolve(true)
         },
         onerror: result => {
-          request({
-            method: 'get',
-            url: imgurl,
-            responseType: 'blob'
-          }).then((res) => {
-            const name_2 = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + this.getSuffix(res.finalUrl)
-            this.downloadFile(name_2, res.response).then((downRes) => {
+          if (result.error === 'not_whitelisted') {
+            // 重新请求
+            request({
+              method: 'get',
+              url: imgurl,
+              responseType: 'blob'
+            }).then((res) => {
+              const name_2 = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + this.getSuffix(res.finalUrl)
               _this.worker[index].currentnum = _this.worker[index].currentnum + 1
               _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
               _this.refresh()
-              if (downRes) {
-                resolve(true)
-              } else {
+              if (res === 'onerror' || res === 'timeout') {
                 resolve(false)
               }
+              this.downloadFile(name_2, res.response).then((downRes) => {
+                if (downRes) {
+                  resolve(true)
+                } else {
+                  resolve(false)
+                }
+              })
             })
-          })
+          } else {
+            console.log('onerror: ', result)
+            resolve(false)
+          }
         },
         ontimeout: result => {
           console.log('ontimeoutError: ', result)

@@ -159,7 +159,7 @@ export default {
     this.getInfo()
   },
   methods: {
-    getInfo() {
+    getInfo(times) {
       try {
         this.currentComics = currentComics
         if (currentComics === null) {
@@ -173,7 +173,12 @@ export default {
         this.zipDownFlag = getStorage('zipDownFlag')
       // eslint-disable-next-line no-empty
       } catch (error) {
-        // console.log('error: ', error)
+        if (times === undefined) {
+          setTimeout(() => {
+            this.getInfo(1)
+          }, 2000)
+        }
+        console.log('error: ', error)
       }
       return
     },
@@ -228,6 +233,13 @@ export default {
     },
     async getSelectList() {
       this.overlayShow = true
+      if (currentComics.getComicInfo) {
+        this.list = await currentComics.getComicInfo()
+        this.overlayShow = false
+        this.showSelectList = true
+        return
+      }
+
       const chapterCss = currentComics.chapterCss
       setTimeout(() => {
         if (currentComics.hasSpend) {
