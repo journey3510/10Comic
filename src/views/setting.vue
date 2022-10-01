@@ -273,7 +273,7 @@
 
         <div id="set-bottom">
           <van-button
-            :style="{width: '120px',background: '#ee000055'}"
+            :style="{width: '120px',background: '#ee000055 !important'}"
             size="small"
             round
             @click="allInit"

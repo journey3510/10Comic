@@ -60,7 +60,6 @@
     <!-- <van-button
       id="thebtn"
       icon="plus"
-      type="primary"
       @click="test"
     /> -->
   </div>

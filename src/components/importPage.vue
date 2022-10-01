@@ -8,7 +8,6 @@
       :style="{width: '97%',height: '92%'}"
     />
     <van-button
-      type="primary"
       size="mini"
       @click="getCode"
     >确定</van-button>

@@ -11,7 +11,7 @@
       >
         <template #title>
           <div :style="{display:'flex', lineHeight: '25px'}">下载中
-            <van-tag v-if="comicName" class="comicnametag1" type="primary">{{ comicName }}</van-tag>
+            <van-tag v-if="comicName" class="comicnametag1">{{ comicName }}</van-tag>
           </div>
         </template>
 
@@ -79,7 +79,6 @@
             <div class="itemname">
               <div>
                 <van-tag
-                  type="primary"
                   :title="item.comicName"
                   class="comicnametag"
                   @click="jump(item.comicPageUrl)"
@@ -183,7 +182,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 #downcontext {
   margin: 15px 15px;
   max-height: 680px;
@@ -200,6 +199,7 @@ export default {
   white-space: nowrap;
   text-overflow:ellipsis;
   overflow:hidden;
+  background-color: @lingColor !important;
 }
 
 #downlist {

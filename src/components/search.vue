@@ -7,7 +7,6 @@
           <van-loading v-show="showSearchLoad" color="#ee0000" type="spinner" size="25" />
           <input v-model="inputSeachword" type="text" name="searchword" @keyup.enter="search(inputSeachword)">
           <van-button
-            type="primary"
             size="small"
             @click="search(inputSeachword)"
           >搜索</van-button>
