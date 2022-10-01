@@ -122,5 +122,5 @@
 // @connect      nicefee.com
 // @connect      dcarimg.com
 // @connect      baozimh.com
-// @license      MIT
+// @license      GPLv3
 // ==/UserScript==

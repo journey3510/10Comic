@@ -31,13 +31,11 @@
     <div id="editItem">
       <div>
         <van-button
-          type="primary"
           size="mini"
           :disabled="!showSelectList"
           @click="selectAll"
         >全选</van-button>
         <van-button
-          type="primary"
           size="mini"
           :disabled="!showSelectList"
           @click="CancelSelect"
@@ -59,7 +57,6 @@
         style="width:80px;"
         size="mini"
         round
-        type="primary"
         :disabled="!showSelectList"
         @click="downSelectList"
       >下载</van-button>
@@ -77,7 +74,6 @@
         <van-button
           style="width:120px;"
           round
-          type="primary"
           class="bottom-button"
           :disabled="comicName === '------'"
           @click="getSelectList"
@@ -96,31 +92,52 @@
     <div
       v-if="showSelectList"
       id="select-list"
+      style="border-radius: 25px;"
     >
-      <van-cell-group
-        style="border-radius: 25px;"
-        inset
+      <van-cell
+        id="select-list-1"
+        center
+        title="排序"
       >
-        <van-checkbox-group ref="checkboxGroup" v-model="selectResult">
-          <van-cell
-            v-for="(item,index) in list"
-            :key="index"
-            :style="item.url !== 'javascript:void();' ?'': {color: 'red'}"
-            :title="item.chapterName"
-          >
-            <template #right-icon>
-              <van-checkbox
-                :name="index"
-                :disabled="item.url !== 'javascript:void();' ? false: true"
-                class="selectChapter"
-                icon-size="24px"
-                @click="radioSelect(index)"
-              />
-            </template>
-          </van-cell>
-        </van-checkbox-group>
-      </van-cell-group>
+        <template #right-icon>
+          <van-icon
+            :style="{cursor: 'pointer'}"
+            name="sort"
+            color="#ee000055"
+            size="18"
+            @click="reverseList"
+          />
+          <van-icon />
+        </template>
+      </van-cell>
+
+      <div id="select-list-2">
+        <van-cell-group
+          id="select-list-2-1"
+          inset
+        >
+          <van-checkbox-group ref="checkboxGroup" v-model="selectResult">
+            <van-cell
+              v-for="(item,index) in list"
+              :key="index"
+              :style="item.url !== 'javascript:void();' ?'': {color: 'red'}"
+              :title="item.chapterName"
+            >
+              <template #right-icon>
+                <van-checkbox
+                  :name="index"
+                  :disabled="item.url !== 'javascript:void();' ? false: true"
+                  class="selectChapter"
+                  icon-size="24px"
+                  @click="radioSelect(index)"
+                />
+              </template>
+            </van-cell>
+          </van-checkbox-group>
+        </van-cell-group>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -181,6 +198,11 @@ export default {
         console.log('error: ', error)
       }
       return
+    },
+    reverseList() {
+      this.overlayShow = true
+      this.list = this.list.reverse()
+      this.overlayShow = false
     },
     selectAll() {
       this.$refs.checkboxGroup.toggleAll(false)
@@ -311,16 +333,39 @@ export default {
 <style lang="less" scoped>
 .comiclist {
   margin-top:  10px;
-  border-radius: 15px;
   position: relative;
-  height: 650px;
+  height: 690px;
 }
 #overlayDom {
   background-color: #eeeeeece;
 }
 #select-list {
-  max-height: 600px;
-  overflow-y:auto;
+  margin: 0 15px;
+  #select-list-1 {
+    color:#ee000055;
+    font-size: 16px;
+    font-weight: bold;
+    height: 30px;
+    border-bottom: 1px solid #ccc5;
+    border-radius: 10px;
+  }
+
+  #select-list-2 {
+    overflow: hidden;
+    #select-list-2-1 {
+      max-height: 590px;
+      overflow-y:auto;
+      ::-webkit-scrollbar-track-piece {
+        background-color: #fff !important;
+      }
+    }
+  }
+
+  .van-cell-group--inset {
+      margin: 0 0 !important;
+      overflow: hidden;
+      border-radius: 8px;
+  }
 }
 
 #editItem {
