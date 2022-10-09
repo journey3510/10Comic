@@ -86,9 +86,9 @@
 // @match        *://www.mhxin.com/*
 // @connect      mhxin.com
 //
-// @match        *://www.pkssj.com/*
-// @connect      pkssj.com
-// @connect      manhuatu.cc
+// @match        *://cn.baozimh.com/*
+// @connect      baozimh.com
+// @connect      webmota.com
 //
 // @match        *://www.aiguoman.com/*
 // @connect      kingwar.cn
