@@ -687,11 +687,11 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.pkssj.com',
-    homepage: 'https://www.pkssj.com/',
+    domain: 'cn.baozimh.com',
+    homepage: 'https://cn.baozimh.com/',
     webName: '包子漫画',
-    comicNameCss: '.comics-detail__info > .comics-detail__title',
-    chapterCss: '#chapter-items',
+    comicNameCss: 'h1.comics-detail__title',
+    chapterCss: '.comics-detail > .l-content:nth-of-type(3)',
     readtype: 1,
     searchTemplate_1: {
       search_add_url: 'search/?keyword=',
