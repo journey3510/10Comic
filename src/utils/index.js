@@ -32,14 +32,14 @@ export const getDataType = (obj) => {
   return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1')
 }
 
-export const getImage = async(url) => {
+export const getImage = async(url, isPay) => {
   try {
     let response = ''
     if (!currentComics.getComicInfo) {
-      const data = await request('get', url)
+      const data = await request({ method: 'get', url, useCookie: isPay })
       response = data.response
     }
-    const imgs = await currentComics.getImgs(response, { url })
+    const imgs = await currentComics.getImgs(response, { url, isPay })
     return new Promise((resolve, reject) => {
       resolve(imgs)
     })
@@ -52,9 +52,10 @@ export const getImage = async(url) => {
 }
 
 export const request = async(...details) => {
-  let method, url, data, responseType, timeout
+  let method, url, data, responseType, timeout, useCookie, cookie
   if (details.length === 1) {
-    ({ method, url, data, responseType, timeout } = details[0])
+    ({ method, url, data, responseType, timeout, useCookie } = details[0])
+    useCookie ? cookie = document.cookie : ''
   } else {
     method = details[0]
     url = details[1]
@@ -68,7 +69,8 @@ export const request = async(...details) => {
       url,
       data: (data || null),
       responseType,
-      timeout: (timeout || 30 * 1000),
+      timeout: (timeout || 15 * 1000),
+      cookie: (cookie || ''),
       onload: function(res) {
         resolve(res)
       },

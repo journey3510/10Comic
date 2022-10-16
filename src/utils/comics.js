@@ -59,6 +59,45 @@ export const searchFunTemplate_1 = async(data, keyword) => {
 
 export const comicsWebInfo = [
   {
+    domain: 'ac.qq.com',
+    homepage: 'https://ac.qq.com/',
+    webName: '腾讯漫画',
+    comicNameCss: '.works-intro-title.ui-left strong',
+    chapterCss: '.chapter-page-all.works-chapter-list',
+    readtype: 1,
+    hasSpend: true,
+    freeCss: '.ui-icon-free',
+    payCss: '.ui-icon-pay',
+    searchTemplate_1: {
+      search_add_url: 'Comic/searchList?search=',
+      alllist_dom_css: '.mod_book_list',
+      minlist_dom_css: 'li',
+      img_src: 'data-original'
+    },
+    getImgs: function(context) {
+      let nonce = context.match(/<script>\s*window.*?=(.*?)?;/)[1]
+      nonce = eval(nonce)
+      const dataStr = context.match(/DATA.*?'(.*)?'/)[1]
+      const data = dataStr.split('')
+      nonce = nonce.match(/\d+[a-zA-Z]+/g)
+      let len = nonce.length
+      let locate = null
+      let str = ''
+      while (len--) {
+        locate = parseInt(nonce[len]) & 255
+        str = nonce[len].replace(/\d+/g, '')
+        data.splice(locate, str.length)
+      }
+      const chapterStr = data.join('')
+      const chapterObj = JSON.parse(window.atob(chapterStr))
+      const imgarr = []
+      chapterObj.picture.forEach(element => {
+        imgarr.push(element.url)
+      })
+      return imgarr
+    }
+  },
+  {
     domain: 'manhua.dmzj.com',
     homepage: 'https://manhua.dmzj.com/',
     webName: '动漫之家',
@@ -171,7 +210,7 @@ export const comicsWebInfo = [
         const data = {
           comicName: comicName,
           chapterName: element.short_title + ' ' + element.title,
-          url: element.is_locked ? 'javascript:void();' : url,
+          url,
           readtype: this.readtype,
           isPay: element.is_locked
         }
@@ -180,11 +219,12 @@ export const comicsWebInfo = [
       return allList.reverse()
     },
     getImgs: async function(context, passData) {
-      const chapter_id = parseInt(passData.url.match(/.com\/(\D*)(\d*)\/(\d*)/)[3])
+      const { url, isPay } = passData
+      const chapter_id = parseInt(url.match(/.com\/(\D*)(\d*)\/(\d*)/)[3])
       const data = new FormData()
       data.append('ep_id', chapter_id)
       const postUrl = 'https://manga.bilibili.com/twirp/comic.v1.Comic/GetImageIndex?device=pc&platform=web'
-      const { responseText } = await request('post', postUrl, data)
+      const { responseText } = await request({ method: 'post', url: postUrl, data, useCookie: isPay })
       const imgArray = JSON.parse(responseText).data.images
 
       const saveImg = []
@@ -388,45 +428,6 @@ export const comicsWebInfo = [
           return imageDomian + '/' + strArr[1] + item
         })
       }
-      return imgarr
-    }
-  },
-  {
-    domain: 'ac.qq.com',
-    homepage: 'https://ac.qq.com/',
-    webName: '腾讯漫画',
-    comicNameCss: '.works-intro-title.ui-left strong',
-    chapterCss: '.chapter-page-all.works-chapter-list',
-    readtype: 1,
-    hasSpend: true,
-    freeCss: '.ui-icon-free',
-    payCss: '.ui-icon-pay',
-    searchTemplate_1: {
-      search_add_url: 'Comic/searchList?search=',
-      alllist_dom_css: '.mod_book_list',
-      minlist_dom_css: 'li',
-      img_src: 'data-original'
-    },
-    getImgs: function(context) {
-      let nonce = context.match(/<script>\s*window.*?=(.*?)?;/)[1]
-      nonce = eval(nonce)
-      const dataStr = context.match(/DATA.*?'(.*)?'/)[1]
-      const data = dataStr.split('')
-      nonce = nonce.match(/\d+[a-zA-Z]+/g)
-      let len = nonce.length
-      let locate = null
-      let str = ''
-      while (len--) {
-        locate = parseInt(nonce[len]) & 255
-        str = nonce[len].replace(/\d+/g, '')
-        data.splice(locate, str.length)
-      }
-      const chapterStr = data.join('')
-      const chapterObj = JSON.parse(window.atob(chapterStr))
-      const imgarr = []
-      chapterObj.picture.forEach(element => {
-        imgarr.push(element.url)
-      })
       return imgarr
     }
   },
