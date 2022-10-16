@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      isHide: false,
+      isHide: true,
       showSearchPage: false,
       active: 1,
       titles: ['漫画网站', '加载', '下载', '设置'],
