@@ -94,22 +94,23 @@
       id="select-list"
       style="border-radius: 25px;"
     >
-      <van-cell
-        id="select-list-1"
-        center
-        title="排序"
-      >
-        <template #right-icon>
+      <div id="select-list-1">
+        <div id="select-list-1-left">
+          <span>颜色</span>
+          <span class="span-circle" style="background: blue;" title="正常" />
+          <span class="span-circle" style="background: red;" title="付费" />
+          <span class="span-circle" style="background: #ccc;" title="无效" />
+        </div>
+        <div id="select-list-1-right">
           <van-icon
             :style="{cursor: 'pointer'}"
             name="sort"
-            color="#ee000055"
+            color="#ee000088"
             size="18"
             @click="reverseList"
           />
-          <van-icon />
-        </template>
-      </van-cell>
+        </div>
+      </div>
 
       <div id="select-list-2">
         <van-cell-group
@@ -120,7 +121,7 @@
             <van-cell
               v-for="(item,index) in list"
               :key="index"
-              :style="item.url !== 'javascript:void();' ?'': {color: 'red'}"
+              :style="titleStyle(item.url, item.isPay)"
               :title="item.chapterName"
             >
               <template #right-icon>
@@ -171,11 +172,23 @@ export default {
       zipDownFlag: true
     }
   },
+  computed: {
+
+  },
   mounted() {
     this.watchKeyEvent()
     this.getInfo()
   },
   methods: {
+    titleStyle: function(url, isPay) {
+      if (url === 'javascript:void();') {
+        return { color: '#ccc' }
+      }
+      if (isPay === true) {
+        return { color: 'red' }
+      }
+      return `color: blue`
+    },
     getInfo(times) {
       try {
         this.currentComics = currentComics
@@ -184,8 +197,10 @@ export default {
         }
         const comicNameCss = this.currentComics.comicNameCss
         this.webname = currentComics.webName
-        this.comicName = document.querySelector(comicNameCss).innerText
-        this.$bus.$emit('getComicName', this.comicName)
+        setTimeout(() => {
+          this.comicName = document.querySelector(comicNameCss).innerText
+          this.$bus.$emit('getComicName', this.comicName)
+        }, 1000)
         //
         this.zipDownFlag = getStorage('zipDownFlag')
       // eslint-disable-next-line no-empty
@@ -264,10 +279,12 @@ export default {
 
       const chapterCss = currentComics.chapterCss
       setTimeout(() => {
+        // 获取付费标志
         if (currentComics.hasSpend) {
           this.paylogoArr = []
           const logoCss = currentComics.freeCss + ',' + currentComics.payCss
           const logoArr = document.querySelectorAll(logoCss)
+
           logoArr.forEach((element, index) => {
             if ('.' + logoArr[index].className === currentComics.payCss) {
               this.paylogoArr.push(true)
@@ -276,6 +293,8 @@ export default {
             }
           })
         }
+
+        // 获取章节数据
         const nodeList = document.querySelectorAll(chapterCss)
         nodeList.forEach(dom => {
           const urls = dom.querySelectorAll('a')
@@ -289,11 +308,13 @@ export default {
               url: element.href,
               readtype
             }
+            //
             if (currentComics.hasSpend) {
               data.isPay = this.paylogoArr[index]
-              if (data.isPay) {
-                data.url = 'javascript:void();'
-              }
+
+              // if (data.isPay) {
+              //   data.url = 'javascript:void();'
+              // }
             }
             this.list.push(data)
           })
@@ -342,12 +363,29 @@ export default {
 #select-list {
   margin: 0 15px;
   #select-list-1 {
-    color:#ee000055;
-    font-size: 16px;
-    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 0 10px 0 10px;
+
     height: 30px;
     border-bottom: 1px solid #ccc5;
     border-radius: 10px;
+
+    #select-list-1-left {
+      display: flex;
+      width: 90px;
+      justify-content: space-between;
+      align-items: center;
+      span.span-circle {
+        width: 14px;
+        height: 14px;
+        display: flex;
+        border-radius: 7px;
+        cursor: pointer;
+      }
+    }
   }
 
   #select-list-2 {

@@ -49,10 +49,10 @@ export default class Queue {
     }
 
     if (readtype === 1) {
-      const url = this.worker[index].url
+      const { url, isPay } = this.worker[index]
       let imgs = []
       try {
-        imgs = await getImage(url)
+        imgs = await getImage(url, isPay)
       } catch (error) {
         this.worker[index].hasError = true
       }
@@ -172,8 +172,8 @@ export default class Queue {
 
   // 网站翻页阅读方式
   async down2(workerId) {
-    const { url, zipDownFlag } = this.worker[workerId]
-    const { imgUrl, nextPageUrl, number } = await getImage(url)
+    const { url, zipDownFlag, isPay } = this.worker[workerId]
+    const { imgUrl, nextPageUrl, number } = await getImage(url, isPay)
     this.worker[workerId].number = number
 
     while (imgUrl.length > 0) {
@@ -289,6 +289,7 @@ export default class Queue {
           func: this.exeDown(i),
           zipDownFlag: item.zipDownFlag,
           imgIndex: 0,
+          isPay: item.isPay,
           hasError: false
         }
         this.workerDownInfo[i] = []

@@ -83,10 +83,10 @@ export default {
   },
   data() {
     return {
-      isHide: true,
+      isHide: false,
       showSearchPage: false,
       active: 1,
-      titles: ['漫画网站', '选择章节', '下载', '设置'],
+      titles: ['漫画网站', '加载', '下载', '设置'],
       comicInfo: {}
     }
   },
