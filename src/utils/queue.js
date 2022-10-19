@@ -50,9 +50,10 @@ export default class Queue {
 
     if (readtype === 1) {
       const { url, isPay } = this.worker[index]
+      const processData = { url, isPay }
       let imgs = []
       try {
-        imgs = await getImage(url, isPay)
+        imgs = await getImage(processData)
       } catch (error) {
         this.worker[index].hasError = true
       }
@@ -86,14 +87,14 @@ export default class Queue {
     this.worker.splice(0, 0)
   }
 
-  // 下载图片 Promise
+  // 直接下载图片 Promise
   addImgDownPromise(index, imgurl, imgIndex) {
     return new Promise((resolve, reject) => {
       const _this = this
       const suffix = this.getSuffix(imgurl)
       const newName = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + suffix
-      // eslint-disable-next-line no-undef
-      GM_download({
+
+      downFile({
         url: imgurl,
         name: newName,
         onload: result => {
@@ -103,8 +104,9 @@ export default class Queue {
           resolve(true)
         },
         onerror: result => {
-          if (result.error === 'not_whitelisted') {
-            // 重新请求
+          if (imgurl !== '') {
+            // 失败重新请求
+            // console.log(result, '失败重新请求: ' + newName)
             request({
               method: 'get',
               url: imgurl,
@@ -117,7 +119,8 @@ export default class Queue {
               if (res === 'onerror' || res === 'timeout') {
                 resolve(false)
               }
-              this.downloadFile(name_2, res.response).then((downRes) => {
+              const newurl = window.URL.createObjectURL(res.response)
+              downFile(newurl, name_2).then((downRes) => {
                 if (downRes) {
                   resolve(true)
                 } else {
@@ -138,13 +141,13 @@ export default class Queue {
     })
   }
 
-  // 请求图片 Promise
+  // 请求图片Blob Promise (后用于压缩)
   addImgPromise(index, imgurl) {
     return new Promise((resolve, reject) => {
       const _this = this
       const suffix = this.getSuffix(imgurl)
-      // eslint-disable-next-line no-undef
-      GM_xmlhttpRequest({
+
+      request({
         method: 'get',
         url: imgurl,
         responseType: 'blob',
@@ -157,6 +160,7 @@ export default class Queue {
             suffix: suffix })
         },
         onerror: function(e) {
+          console.log(9999999999)
           resolve({
             blob: 1,
             suffix: '' })
@@ -170,11 +174,23 @@ export default class Queue {
     })
   }
 
-  // 网站翻页阅读方式
+  /**
+     * 下载图片
+     * @param { workerId } workerId: 任务id
+     */
+
+  // 网站翻页阅读
   async down2(workerId) {
-    const { url, zipDownFlag, isPay } = this.worker[workerId]
-    const { imgUrl, nextPageUrl, number } = await getImage(url, isPay)
-    this.worker[workerId].number = number
+    const { url, zipDownFlag, progress, number, isPay } = this.worker[workerId]
+
+    const processData = { url, progress, number, isPay }
+    processData.otherData = this.worker[workerId].otherData
+
+    const { imgUrl, nextPageUrl, imgCount, otherData } = await getImage(processData)
+    this.worker[workerId].otherData = otherData
+
+    this.worker[workerId].number = parseInt(imgCount)
+    const beforeDownLen = imgUrl.length
 
     while (imgUrl.length > 0) {
       // eslint-disable-next-line prefer-const
@@ -197,31 +213,34 @@ export default class Queue {
         this.workerDownInfo[workerId].push(element)
       })
     }
+    console.log('ss', beforeDownLen, nextPageUrl, progress, number)
 
-    if (nextPageUrl !== '') {
+    if (beforeDownLen !== 0 && nextPageUrl !== '' && progress !== parseInt(imgCount)) {
       this.worker[workerId].url = nextPageUrl
+      console.log(888888888)
       return new Promise((resolve, reject) => {
         // 休息一下？
         setTimeout(() => {
           resolve(this.down2(workerId))
         }, 1000)
       })
-    }
-
-    // 是否压缩
-    if (zipDownFlag) {
-      const result = await this.makeZip(workerId)
-      return new Promise((resolve, reject) => {
-        resolve(result)
-      })
     } else {
-      return new Promise((resolve, reject) => {
-        resolve(1)
-      })
+      console.log(9999999999)
+      // 是否压缩
+      if (zipDownFlag) {
+        const result = await this.makeZip(workerId)
+        return new Promise((resolve, reject) => {
+          resolve(result)
+        })
+      } else {
+        return new Promise((resolve, reject) => {
+          resolve(1)
+        })
+      }
     }
   }
 
-  // 网站卷轴阅读方式
+  // 网站卷轴阅读
   async down(workerId) {
     const { imgs, zipDownFlag } = this.worker[workerId]
     const promise = []

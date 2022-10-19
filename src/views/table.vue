@@ -97,7 +97,8 @@
       <div id="select-list-1">
         <div id="select-list-1-left">
           <span>颜色</span>
-          <span class="span-circle" style="background: blue;" title="正常" />
+          <span class="span-circle" style="background: blue;" title="免费" />
+          <span class="span-circle" style="background: #AA6680;" title="单行本/卷" />
           <span class="span-circle" style="background: red;" title="付费" />
           <span class="span-circle" style="background: #ccc;" title="无效" />
         </div>
@@ -121,7 +122,7 @@
             <van-cell
               v-for="(item,index) in list"
               :key="index"
-              :style="titleStyle(item.url, item.isPay)"
+              :style="titleStyle(item.url, item.isPay, item.characterType)"
               :title="item.chapterName"
             >
               <template #right-icon>
@@ -180,12 +181,15 @@ export default {
     this.getInfo()
   },
   methods: {
-    titleStyle: function(url, isPay) {
+    titleStyle: function(url, isPay, type) {
       if (url === 'javascript:void();') {
         return { color: '#ccc' }
       }
       if (isPay === true) {
         return { color: 'red' }
+      }
+      if (type === 'many') {
+        return { color: '#AA6680' }
       }
       return `color: blue`
     },
@@ -217,6 +221,13 @@ export default {
     reverseList() {
       this.overlayShow = true
       this.list = this.list.reverse()
+      const listLength = this.list.length
+      if (this.selectResult.length !== 0) {
+        this.selectResult = this.selectResult.map((item) => {
+          item = listLength - item - 1
+          return item
+        })
+      }
       this.overlayShow = false
     },
     selectAll() {
@@ -277,7 +288,6 @@ export default {
         return
       }
 
-      const chapterCss = currentComics.chapterCss
       setTimeout(() => {
         // 获取付费标志
         if (currentComics.hasSpend) {
@@ -293,35 +303,40 @@ export default {
             }
           })
         }
+        // 单章数据
+        const nodeList = document.querySelectorAll(currentComics.chapterCss)
+        this.getChapterData(nodeList, currentComics, 'one')
+        // 分卷数据
+        if (currentComics.chapterCss_2) {
+          const nodeList = document.querySelectorAll(currentComics.chapterCss_2)
+          this.getChapterData(nodeList, currentComics, 'many')
+        }
 
-        // 获取章节数据
-        const nodeList = document.querySelectorAll(chapterCss)
-        nodeList.forEach(dom => {
-          const urls = dom.querySelectorAll('a')
-          const readtype = currentComics.readtype
-          urls.forEach((element, index) => {
-            let chapterName = element.innerText.replace(/\n|\r/g, '')
-            chapterName = chapterName.trim()
-            const data = {
-              comicName: this.comicName,
-              chapterName: chapterName,
-              url: element.href,
-              readtype
-            }
-            //
-            if (currentComics.hasSpend) {
-              data.isPay = this.paylogoArr[index]
-
-              // if (data.isPay) {
-              //   data.url = 'javascript:void();'
-              // }
-            }
-            this.list.push(data)
-          })
-        })
         this.overlayShow = false
         this.showSelectList = true
       }, 100)
+    },
+    // 获取章节数据
+    getChapterData(nodeList, currentComics, type) {
+      nodeList.forEach(dom => {
+        const urls = dom.querySelectorAll('a')
+        const readtype = currentComics.readtype
+        urls.forEach((element, index) => {
+          let chapterName = element.innerText.replace(/\n|\r/g, '')
+          chapterName = chapterName.trim()
+          const data = {
+            comicName: this.comicName,
+            chapterName: chapterName,
+            url: element.href,
+            characterType: type,
+            readtype
+          }
+          if (currentComics.hasSpend) {
+            data.isPay = this.paylogoArr[index]
+          }
+          this.list.push(data)
+        })
+      })
     },
     downSelectList() {
       if (this.selectResult.length === 0) {
@@ -375,7 +390,7 @@ export default {
 
     #select-list-1-left {
       display: flex;
-      width: 90px;
+      width: 95px;
       justify-content: space-between;
       align-items: center;
       span.span-circle {
