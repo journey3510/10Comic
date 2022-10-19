@@ -116,6 +116,9 @@
 // @connect      bilibili.com
 // @connect      hdslb.com
 //
+// @match        *://www.mangabz.com/*
+// @connect      mangabz.com
+//
 // @connect      *
 // @connect      laimidao.com
 // @connect      izhegu.com

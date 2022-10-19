@@ -57,11 +57,11 @@
     </div>
 
     <Search />
-    <!-- <van-button
+    <van-button
       id="thebtn"
       icon="plus"
       @click="test"
-    /> -->
+    />
   </div>
 </template>
 
@@ -74,7 +74,7 @@ import Down from '@/views/down.vue'
 import Search from '@/components/search.vue'
 
 import { matchWeb } from './utils/comics'
-// import { request } from './utils/index'
+import { request, downFile } from './utils/index'
 
 export default {
   name: 'App',
@@ -113,8 +113,30 @@ export default {
     async Init() {
       matchWeb(window.location.href)
     },
-    async test() {
 
+    async test() {
+      const url = 'http://image.mangabz.com/1/72/251763/8_1794.jpg?cid=251763&key=f097f04d3e850de195274010ec127e66&uk='
+      // eslint-disable-next-line no-undef
+      GM_download({
+        url,
+        name: 'ee.jpg',
+        // headers: {
+        //   referer: 'http://www.mangabz.com/'
+        // },
+        onload: function(L) {
+          console.log('L: ', L)
+        },
+        onerror: function(e) {
+
+        },
+        onprogress: function(e) {
+          console.log('eonprogress: ', e)
+        },
+
+        ontimeout: function() {
+
+        }
+      })
     }
   }
 }

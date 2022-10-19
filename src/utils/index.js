@@ -32,14 +32,17 @@ export const getDataType = (obj) => {
   return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1')
 }
 
-export const getImage = async(url, isPay) => {
+export const getImage = async(processData) => {
   try {
+    const url = processData.url
+    console.log('url: ', url)
     let response = ''
+    // 获取网页内容
     if (!currentComics.getComicInfo) {
-      const data = await request({ method: 'get', url, useCookie: isPay })
+      const data = await request({ method: 'get', url, useCookie: processData.isPay })
       response = data.response
     }
-    const imgs = await currentComics.getImgs(response, { url, isPay })
+    const imgs = await currentComics.getImgs(response, processData)
     return new Promise((resolve, reject) => {
       resolve(imgs)
     })
@@ -52,14 +55,20 @@ export const getImage = async(url, isPay) => {
 }
 
 export const request = async(...details) => {
-  let method, url, data, responseType, timeout, useCookie, cookie
+  const headers = currentComics.headers
+  let method, url, data, newHeaders, responseType, timeout, useCookie, cookie, onload, onerror, ontimeout
   if (details.length === 1) {
-    ({ method, url, data, responseType, timeout, useCookie } = details[0])
+    ({ method, url, data, newHeaders, responseType, timeout, useCookie, onload, onerror, ontimeout } = details[0])
     useCookie ? cookie = document.cookie : ''
   } else {
     method = details[0]
     url = details[1]
     data = details[2]
+  }
+  if (url === null || url === '') {
+    return new Promise((resolve, reject) => {
+      resolve('')
+    })
   }
 
   return new Promise((resolve, reject) => {
@@ -67,38 +76,49 @@ export const request = async(...details) => {
     GM_xmlhttpRequest({
       method,
       url,
+      headers: (newHeaders || headers || ''),
       data: (data || null),
       responseType,
       timeout: (timeout || 15 * 1000),
       cookie: (cookie || ''),
-      onload: function(res) {
+      onload: (onload || function(res) {
         resolve(res)
-      },
-      onerror: function(e) {
+      }),
+      onerror: (onerror || function(e) {
         reject('onerror')
-      },
-      ontimeout: function() {
+      }),
+      ontimeout: (ontimeout || function() {
         reject('timeout')
-      }
+      })
     })
   })
 }
 
-export const downFile = async(url, name) => {
+export const downFile = async(...detail) => {
+  let url, name, headers, onload, onerror, ontimeout
+  if (detail.length === 1) {
+    ({ url, name, headers, onload, onerror, ontimeout } = detail[0])
+  } else {
+    url = detail[0]
+    name = detail[1]
+  }
+
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line no-undef
     GM_download({
       url,
       name,
-      onload: result => {
+      headers: headers,
+      onload: (onload || function(res) {
         resolve(true)
-      },
-      onerror: result => {
+      }),
+      onerror: (onerror || function(e) {
+        console.log('onerror: ', onerror)
         resolve(false)
-      },
-      ontimeout: result => {
+      }),
+      ontimeout: (ontimeout || function() {
         resolve(false)
-      }
+      })
     })
   })
 }
@@ -128,6 +148,9 @@ export const funstrToData = (str, reg) => {
   for (const item of group) {
     func.push(item[1])
     func.push(item[2])
+  }
+  if (!func[1]) {
+    func[1] = '()'
   }
   const code = '(' + func[0] + ')' + func[1]
   // eslint-disable-next-line no-eval

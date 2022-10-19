@@ -59,6 +59,94 @@ export const searchFunTemplate_1 = async(data, keyword) => {
 
 export const comicsWebInfo = [
   {
+    domain: 'www.mangabz.com',
+    homepage: 'http://www.mangabz.com/',
+    webName: 'Mangabz',
+    comicNameCss: 'p.detail-info-title',
+    chapterCss: '#chapterlistload',
+    headers: {
+      referer: 'http://www.mangabz.com/'
+    },
+    readtype: 2,
+    searchTemplate_1: {
+      search_add_url: 'search?title=',
+      alllist_dom_css: '.container .mh-list',
+      minlist_dom_css: 'li',
+      img_src: 'src'
+    },
+    getImgs: async function(context, processData) {
+      console.log('processData: ', processData)
+      let group; let page = 1
+      if (processData.otherData) {
+        if (processData.progress !== 1) {
+          page = processData.progress
+        }
+        group = processData.otherData.group
+      } else {
+        group = context.match(/MANGABZ_MID=(\d+?);.*MANGABZ_CID=(\d+?);.*MANGABZ_IMAGE_COUNT=(\d+?);.*MANGABZ_VIEWSIGN="(.*?)".*MANGABZ_VIEWSIGN_DT="(.*?)"/)
+      }
+
+      const reqUrl =
+      `http://www.mangabz.com/m${group[2]}/chapterimage.ashx?cid=${group[2]}&page=${page}&key=&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5]}&_sign=${group[4]}`
+
+      const { responseText } = await request('get', reqUrl)
+
+      const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
+      const imgUrl = funstrToData(codeText, /(function.*return .*?})/g)
+      console.log('imgUrl: ', imgUrl)
+      const otherData = {
+        group
+      }
+
+      return { imgUrl, nextPageUrl: null, imgCount: group[3], otherData }
+      // return {}
+    }
+  },
+  {
+    domain: 'manhua.dmzj.com',
+    homepage: 'https://manhua.dmzj.com/',
+    webName: '动漫之家',
+    comicNameCss: '.odd_anim_title_m .anim_title_text h1',
+    chapterCss: '.cartoon_online_border',
+    chapterCss_2: '.cartoon_online_border_other',
+    readtype: 1,
+    searchTemplate_1: {
+      search_add_url: 'tags/search.shtml?s=',
+      alllist_dom_css: '.tcaricature_block',
+      minlist_dom_css: 'ul',
+      img_src: 'src'
+    },
+    getImgs: async function(context) {
+      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      let imgArray = JSON.parse(imgStr)
+      if (imgArray[0].search('http') === -1) {
+        imgArray = imgArray.map((item) => {
+          return 'https://images.dmzj.com/' + item
+        })
+      }
+      return imgArray
+    }
+  }, {
+    domain: 'www.dmzj.com',
+    homepage: 'https://www.dmzj.com/',
+    webName: '动漫之家2',
+    comicNameCss: '.comic_deCon h1 a',
+    chapterCss: '.tab-content-selected .list_con_li.autoHeight',
+    readtype: 1,
+    getImgs: async function(context) {
+      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      imgStr = imgStr.match(/page_url":"(.*?)","sum_pages/)[1]
+      let imgArray = imgStr.split('\\r\\n')
+      if (imgArray[0].search('http') === -1) {
+        imgArray = imgArray.map((item) => {
+          return 'https://images.dmzj.com/' + item.replace(/\\/g, '')
+        })
+      }
+      return imgArray
+    }
+  },
+  {
     domain: 'ac.qq.com',
     homepage: 'https://ac.qq.com/',
     webName: '腾讯漫画',
@@ -95,49 +183,6 @@ export const comicsWebInfo = [
         imgarr.push(element.url)
       })
       return imgarr
-    }
-  },
-  {
-    domain: 'manhua.dmzj.com',
-    homepage: 'https://manhua.dmzj.com/',
-    webName: '动漫之家',
-    comicNameCss: '.odd_anim_title_m .anim_title_text h1',
-    chapterCss: '.cartoon_online_border',
-    readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'tags/search.shtml?s=',
-      alllist_dom_css: '.tcaricature_block',
-      minlist_dom_css: 'ul',
-      img_src: 'src'
-    },
-    getImgs: async function(context) {
-      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
-      let imgArray = JSON.parse(imgStr)
-      if (imgArray[0].search('http') === -1) {
-        imgArray = imgArray.map((item) => {
-          return 'https://images.dmzj.com/' + item
-        })
-      }
-      return imgArray
-    }
-  }, {
-    domain: 'www.dmzj.com',
-    homepage: 'https://www.dmzj.com/',
-    webName: '动漫之家2',
-    comicNameCss: '.comic_deCon h1 a',
-    chapterCss: '.tab-content-selected .list_con_li.autoHeight',
-    readtype: 1,
-    getImgs: async function(context) {
-      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      imgStr = imgStr.match(/page_url":"(.*?)","sum_pages/)[1]
-      let imgArray = imgStr.split('\\r\\n')
-      if (imgArray[0].search('http') === -1) {
-        imgArray = imgArray.map((item) => {
-          return 'https://images.dmzj.com/' + item.replace(/\\/g, '')
-        })
-      }
-      return imgArray
     }
   },
   {
@@ -218,8 +263,8 @@ export const comicsWebInfo = [
       })
       return allList.reverse()
     },
-    getImgs: async function(context, passData) {
-      const { url, isPay } = passData
+    getImgs: async function(context, processData) {
+      const { url, isPay } = processData
       const chapter_id = parseInt(url.match(/.com\/(\D*)(\d*)\/(\d*)/)[3])
       const data = new FormData()
       data.append('ep_id', chapter_id)
@@ -296,11 +341,11 @@ export const comicsWebInfo = [
         imgUrl.push(item[1])
       }
 
-      const number = context.match(/<span id="k_total" class="curPage">(\d+)<\/span>/)[1]
+      const imgCount = context.match(/<span id="k_total" class="curPage">(\d+)<\/span>/)[1]
       const context1 = context.match(/class="action-list">[\s\S]+?<mip-link href="(https:\/\/[\s\S]+?html)">下一页/g)[0]
       let nextPageUrl = context1.match(/http(\S*)html/g)[2]
       nextPageUrl = nextPageUrl.indexOf('-') !== -1 ? nextPageUrl : ''
-      return { imgUrl, nextPageUrl, number }
+      return { imgUrl, nextPageUrl, imgCount }
     }
   },
   {
@@ -542,6 +587,7 @@ export const comicsWebInfo = [
     // },
     getImgs: function(context) {
       let imgStr = funstrToData(context, /(function.*?return \S})(\(.*?{}\))/g)
+      console.log('imgStr: ', imgStr)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       const imgArray = JSON.parse(imgStr)
       return imgArray
