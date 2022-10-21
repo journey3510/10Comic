@@ -43,7 +43,7 @@
   - 如压缩下载有较多油猴弹窗提示跨域,建议直接下载
 
 ### 自定义添加规则
-- 导入规则JOSN 字段说明 (未加入搜索字段)
+- JOSN 字段说明 (未加入搜索字段)
 
 ```js
 [
@@ -53,20 +53,36 @@
     webName，String, 网站名,
     comicNameCss，String, 漫画名的CSS选择器,
     chapterCss，String, 含有所有章节链接的dom的CSS选择器,
-    readtype， Number, 值:1 -卷轴阅读或SPA网页, 值:0 -翻页阅读
+    readtype， Number, 值:1 -卷轴阅读或SPA网页, 值:0 -翻页阅读 (指不能一次性获取到某章节所有图片地址)
     iswork， Boolean,  网站是否正常运行
     getImgs，String,  字符内容为获取章节图片的函数,
-      * @param {String} context  某一章节链接的请求正文，
-      * @return_1 {Array} imgArray
+      * 1
+      * @param {String} (context)  
+        * context 某一章节链接的请求正文
+      * @return {Array} imgArray
           * readtype == 1 时，要求返回imgArray 数组 含章节所有图片地址
-          * 例如  ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
-      * @return_2 {Object} 
-          * readtype == 0 时，要求返回{ imgUrl, nextPageUrl, number }
-          * {imgUrl-当前页的图片地址,nextPageUrl-下一页地址,number-图片总数量}
-          * 例如  { 
-              imgUrl: ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
+          * 例如 return ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
+          
+      * 2
+      * @param {String, Object} (context, processData)
+        * context 章节某一页链接的请求正文
+        * processData 进程反馈数据及保存数据,首次不存在
+      * @return {Object} 
+          * readtype == 0 （翻页） 时，要求返回 { *imgUrlArr, *nextPageUrl, *imgCount, otherData }
+          * imgUrlArr -当前页的图片地址, imgUrlArr.length == 0 结束下载, 否则请求下一页地址
+          * nextPageUrl -下一页地址, 为 '' 则结束下载, 
+          * imgCount -图片总数量
+          * otherData -(可选值)结束当前页请求后自定义保存需要的数据，下次在参数processData中可获取到
+          * 参考 
+            * return  { 
+              imgUrlArr: ['http://xx.xx.xx/3.jpg','http://xx.xx.xx/4.jpg']
               nextPageUrl: 'http://xx.xx.xx/xx.html'
-              number: 12
+              imgCount: 12,
+              otherData: {
+                currentPage: 5,
+                sign: 'FSFRGGFDBFRHHEYSDGHNTRRSSGS',
+                …
+              }
             }
   }
 ]
@@ -99,7 +115,9 @@
 
 
 ### v1.3 更新记录
-  - 2022/10/18 *v1.3.3* 增加 、增加对个别网站对单行本/卷的支持、修改反向排序勾选方法
+  - 2022/10/21 *v1.3.3* 
+    - 增加Mangabz、奇漫屋网站，修改“翻页阅读方式”的下载方法，可设置窗口大小缩放
+    - 增加对个别网站的单行本/卷的支持，修改反向排序勾选方法
   - 2022/10/16 *v1.3.2* 关闭调试默认显示界面
   - 2022/10/16 *v1.3.1* 支持对B站、腾讯漫画付费章节下载（需登录并提前购买）
   - 2022/10/9 *v1.3.0*  包子漫画换源

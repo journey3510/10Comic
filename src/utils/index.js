@@ -35,7 +35,6 @@ export const getDataType = (obj) => {
 export const getImage = async(processData) => {
   try {
     const url = processData.url
-    console.log('url: ', url)
     let response = ''
     // 获取网页内容
     if (!currentComics.getComicInfo) {
@@ -58,12 +57,15 @@ export const request = async(...details) => {
   const headers = currentComics.headers
   let method, url, data, newHeaders, responseType, timeout, useCookie, cookie, onload, onerror, ontimeout
   if (details.length === 1) {
-    ({ method, url, data, newHeaders, responseType, timeout, useCookie, onload, onerror, ontimeout } = details[0])
+    ({ method, url, data, responseType, timeout, useCookie, onload, onerror, ontimeout } = details[0]);
+    //
+    (details[0].headers || details[0].headers === '') ? newHeaders = details[0].headers : ''
     useCookie ? cookie = document.cookie : ''
   } else {
     method = details[0]
     url = details[1]
     data = details[2]
+    details[3] ? (newHeaders = details[3]) : ''
   }
   if (url === null || url === '') {
     return new Promise((resolve, reject) => {
@@ -71,12 +73,19 @@ export const request = async(...details) => {
     })
   }
 
+  let theHeaders
+  if (newHeaders === '') {
+    theHeaders = ''
+  } else {
+    theHeaders = (newHeaders || headers || '')
+  }
+
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line no-undef
     GM_xmlhttpRequest({
       method,
       url,
-      headers: (newHeaders || headers || ''),
+      headers: theHeaders,
       data: (data || null),
       responseType,
       timeout: (timeout || 15 * 1000),

@@ -7,7 +7,9 @@ const configDefault = {
   version: AppVersion,
   appLoadDefault: {
     isShowUI: true,
-    loadHotKey: 'V' // alt + loadHotKey
+    loadHotKey: 'V', // alt + loadHotKey
+    rightSize: 100,
+    centerSize: 100
   },
   maxChapterNum: 2,
   maxPictureNum: 3,

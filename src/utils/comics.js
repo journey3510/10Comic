@@ -15,12 +15,14 @@ export const searchFunTemplate_1 = async(data, keyword) => {
   } else {
     searchUrl = data.homepage + search_add_url + keyword
   }
-  const { responseText } = await request('get', searchUrl)
+  let headers = ''
+  data.headers ? headers = data.headers : ''
+  // 调试使用
+  // data.webName === '' ? console.log('') : ''
+  const { responseText } = await request({ method: 'get', url: searchUrl, data: '', headers })
   const dom = parseToDOM(responseText).querySelector(alllist_dom_css)
 
   const domList = dom.querySelectorAll(minlist_dom_css)
-  // 调试使用
-  // data.webName === '' ? console.log(domList) : ''
   const searchList = []
   domList.forEach(element => {
     const obj = {}
@@ -58,50 +60,6 @@ export const searchFunTemplate_1 = async(data, keyword) => {
 }
 
 export const comicsWebInfo = [
-  {
-    domain: 'www.mangabz.com',
-    homepage: 'http://www.mangabz.com/',
-    webName: 'Mangabz',
-    comicNameCss: 'p.detail-info-title',
-    chapterCss: '#chapterlistload',
-    headers: {
-      referer: 'http://www.mangabz.com/'
-    },
-    readtype: 2,
-    searchTemplate_1: {
-      search_add_url: 'search?title=',
-      alllist_dom_css: '.container .mh-list',
-      minlist_dom_css: 'li',
-      img_src: 'src'
-    },
-    getImgs: async function(context, processData) {
-      console.log('processData: ', processData)
-      let group; let page = 1
-      if (processData.otherData) {
-        if (processData.progress !== 1) {
-          page = processData.progress
-        }
-        group = processData.otherData.group
-      } else {
-        group = context.match(/MANGABZ_MID=(\d+?);.*MANGABZ_CID=(\d+?);.*MANGABZ_IMAGE_COUNT=(\d+?);.*MANGABZ_VIEWSIGN="(.*?)".*MANGABZ_VIEWSIGN_DT="(.*?)"/)
-      }
-
-      const reqUrl =
-      `http://www.mangabz.com/m${group[2]}/chapterimage.ashx?cid=${group[2]}&page=${page}&key=&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5]}&_sign=${group[4]}`
-
-      const { responseText } = await request('get', reqUrl)
-
-      const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
-      const imgUrl = funstrToData(codeText, /(function.*return .*?})/g)
-      console.log('imgUrl: ', imgUrl)
-      const otherData = {
-        group
-      }
-
-      return { imgUrl, nextPageUrl: null, imgCount: group[3], otherData }
-      // return {}
-    }
-  },
   {
     domain: 'manhua.dmzj.com',
     homepage: 'https://manhua.dmzj.com/',
@@ -147,11 +105,65 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.mangabz.com',
+    homepage: 'http://www.mangabz.com/',
+    webName: 'Mangabz',
+    comicNameCss: 'p.detail-info-title',
+    chapterCss: '#chapterlistload',
+    headers: {
+      referer: 'http://www.mangabz.com/'
+    },
+    readtype: 0,
+    searchTemplate_1: {
+      search_add_url: 'search?title=',
+      alllist_dom_css: '.container .mh-list',
+      minlist_dom_css: 'li',
+      img_src: 'src'
+    },
+    getImgs: async function(context, processData) {
+      let group; let page = 1
+      if (processData.otherData) {
+        group = processData.otherData.group
+      } else {
+        group = context.match(/MANGABZ_MID=(\d+?);.*MANGABZ_CID=(\d+?);.*MANGABZ_IMAGE_COUNT=(\d+?);.*MANGABZ_VIEWSIGN="(.*?)".*MANGABZ_VIEWSIGN_DT="(.*?)"/)
+      }
+      if (processData.imgIndex !== undefined) {
+        page = processData.imgIndex + 1
+      }
+      const reqUrl = `http://www.mangabz.com/m${group[2]}/chapterimage.ashx?cid=${group[2]}&page=${page}&key=&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5]}&_sign=${group[4]}`
+
+      const { responseText } = await request('get', reqUrl)
+      const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
+      const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
+      const otherData = { group }
+      return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
+    }
+  }, {
+    domain: 'www.qiman57.com',
+    homepage: 'http://www.qiman57.com/',
+    webName: '奇漫屋',
+    comicNameCss: 'h1.name_mh',
+    chapterCss: '#chapter-list1',
+    readtype: 1,
+    searchTemplate_1: {
+      search_add_url: 'search.php?keyword=',
+      alllist_dom_css: '.bookList_3',
+      minlist_dom_css: 'div',
+      img_src: 'src'
+    },
+    getImgs: async function(context) {
+      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      return JSON.parse(imgStr)
+    }
+  },
+  {
     domain: 'ac.qq.com',
     homepage: 'https://ac.qq.com/',
     webName: '腾讯漫画',
     comicNameCss: '.works-intro-title.ui-left strong',
     chapterCss: '.chapter-page-all.works-chapter-list',
+    headers: '',
     readtype: 1,
     hasSpend: true,
     freeCss: '.ui-icon-free',
@@ -219,6 +231,9 @@ export const comicsWebInfo = [
     webName: '哔哩哔哩',
     comicNameCss: '.manga-info h1.manga-title',
     chapterCss: '.episode-list .list-header',
+    headers: {
+      referer: 'https://manga.bilibili.com/'
+    },
     readtype: 1,
     searchFun: async function(keyword) {
       const searchUrl = 'https://manga.bilibili.com/twirp/comic.v1.Comic/Search?device=pc&platform=web'
@@ -226,7 +241,7 @@ export const comicsWebInfo = [
       data.append('key_word', keyword)
       data.append('page_num', 1)
       data.append('page_size', 8)
-      const { responseText } = await request('post', searchUrl, data)
+      const { responseText } = await request('post', searchUrl, data, this.headers)
       const list = JSON.parse(responseText).data.list
       const searchList = []
       list.forEach(element => {
@@ -331,21 +346,16 @@ export const comicsWebInfo = [
     webName: '武侠漫画（手机）',
     comicNameCss: '.view-sub.autoHeight .title',
     chapterCss: '#chapter-list-1',
-    readtype: 0,
+    readtype: 1,
     iswork: false,
     nextpageRgeCss: '.action-list li:nth-child(3) a',
     getImgs: async function(context) {
-      const imgobj = context.matchAll(/><mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
-      const imgUrl = []
+      const imgobj = context.matchAll(/<mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
+      const imgUrlArr = []
       for (const item of imgobj) {
-        imgUrl.push(item[1])
+        imgUrlArr.push(item[1])
       }
-
-      const imgCount = context.match(/<span id="k_total" class="curPage">(\d+)<\/span>/)[1]
-      const context1 = context.match(/class="action-list">[\s\S]+?<mip-link href="(https:\/\/[\s\S]+?html)">下一页/g)[0]
-      let nextPageUrl = context1.match(/http(\S*)html/g)[2]
-      nextPageUrl = nextPageUrl.indexOf('-') !== -1 ? nextPageUrl : ''
-      return { imgUrl, nextPageUrl, imgCount }
+      return imgUrlArr
     }
   },
   {
@@ -367,7 +377,6 @@ export const comicsWebInfo = [
       const imgs = eval(imgStr)
       return imgs
     }
-
   },
   {
     domain: 'qiximh1.com',
@@ -380,7 +389,7 @@ export const comicsWebInfo = [
       const searchUrl = 'http://qiximh1.com/search.php'
       const data = new FormData()
       data.append('keyword', keyword)
-      const { responseText } = await request('post', searchUrl, data)
+      const { responseText } = await request('post', searchUrl, data, '')
       const resJson = JSON.parse(responseText)
       const searchList = []
       resJson.search_data.forEach(element => {
@@ -587,7 +596,6 @@ export const comicsWebInfo = [
     // },
     getImgs: function(context) {
       let imgStr = funstrToData(context, /(function.*?return \S})(\(.*?{}\))/g)
-      console.log('imgStr: ', imgStr)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       const imgArray = JSON.parse(imgStr)
       return imgArray

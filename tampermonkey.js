@@ -119,6 +119,10 @@
 // @match        *://www.mangabz.com/*
 // @connect      mangabz.com
 //
+// @match        *://www.qiman57.com/*
+// @connect      qiman57.com
+// @connect      dcarimg.com
+//
 // @connect      *
 // @connect      laimidao.com
 // @connect      izhegu.com

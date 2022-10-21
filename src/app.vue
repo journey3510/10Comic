@@ -1,67 +1,70 @@
 <template>
-  <div class="app">
-    <div class="card" :class="{ 'card--hide': isHide }">
-      <van-nav-bar id="border-top-set" :title="titles[this.active]" />
+  <div class="yi-ling-app">
+    <div id="app-right" class="card" :class="{ 'card--hide': isHide }">
+      <div>
 
-      <van-swipe
-        ref="swipe"
-        class="my-swipe"
-        indicator-color="white"
-        :touchable="false"
-        style="cursor: default;"
-        :duration="5"
-        :initial-swipe="active"
-        :show-indicators="false"
-      >
-        <van-swipe-item class="swipeitem">
-          <Home />
-        </van-swipe-item>
-        <van-swipe-item class="swipeitem">
-          <Table />
-        </van-swipe-item>
-        <van-swipe-item class="swipeitem">
-          <Down />
-        </van-swipe-item>
-        <van-swipe-item class="swipeitem">
-          <Setting />
-        </van-swipe-item>
-      </van-swipe>
+        <van-nav-bar id="border-top-set" :title="titles[this.active]" />
 
-      <div class="app-container ">
-        <van-tabbar
-          id="border-bottom-set"
-          v-model="active"
-          style="position: absolute;"
-          active-color="#ee0000"
-          inactive-color="#000"
+        <van-swipe
+          ref="swipe"
+          class="my-swipe"
+          indicator-color="white"
+          :touchable="false"
+          style="cursor: default;"
+          :duration="5"
+          :initial-swipe="active"
+          :show-indicators="false"
         >
-          <van-tabbar-item icon="home-o" />
-          <van-tabbar-item icon="todo-list-o" />
-          <van-tabbar-item icon="underway-o" />
-          <van-tabbar-item icon="setting-o" />
-        </van-tabbar>
-      </div>
+          <van-swipe-item class="swipeitem">
+            <Home />
+          </van-swipe-item>
+          <van-swipe-item class="swipeitem">
+            <Table />
+          </van-swipe-item>
+          <van-swipe-item class="swipeitem">
+            <Down />
+          </van-swipe-item>
+          <van-swipe-item class="swipeitem">
+            <Setting />
+          </van-swipe-item>
+        </van-swipe>
 
-      <!-- 按钮 -->
-      <div class="card__btn" @click="hide">
-        <svg
-          t="1663828267105"
-          class="icon"
-          viewBox="0 0 1024 1024"
-          version="1.1"
-          p-id="2601"
-        >
-          <path d="M312.888889 995.555556c-17.066667 0-28.444444-5.688889-39.822222-17.066667-22.755556-22.755556-17.066667-56.888889 5.688889-79.644445l364.088888-329.955555c11.377778-11.377778 17.066667-22.755556 17.066667-34.133333 0-11.377778-5.688889-22.755556-17.066667-34.133334L273.066667 187.733333c-22.755556-22.755556-28.444444-56.888889-5.688889-79.644444 22.755556-22.755556 56.888889-28.444444 79.644444-5.688889l364.088889 312.888889c34.133333 28.444444 56.888889 73.955556 56.888889 119.466667s-17.066667 85.333333-51.2 119.466666l-364.088889 329.955556c-11.377778 5.688889-28.444444 11.377778-39.822222 11.377778z" p-id="2134" fill="#ee000088" />
-        </svg>
+        <div class="app-container ">
+          <van-tabbar
+            id="border-bottom-set"
+            v-model="active"
+            style="position: absolute;"
+            active-color="#ee0000"
+            inactive-color="#000"
+          >
+            <van-tabbar-item icon="home-o" />
+            <van-tabbar-item icon="todo-list-o" />
+            <van-tabbar-item icon="underway-o" />
+            <van-tabbar-item icon="setting-o" />
+          </van-tabbar>
+        </div>
+
+        <!-- 按钮 -->
+        <div class="card__btn" @click="hide">
+          <svg
+            t="1663828267105"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            p-id="2601"
+          >
+            <path d="M312.888889 995.555556c-17.066667 0-28.444444-5.688889-39.822222-17.066667-22.755556-22.755556-17.066667-56.888889 5.688889-79.644445l364.088888-329.955555c11.377778-11.377778 17.066667-22.755556 17.066667-34.133333 0-11.377778-5.688889-22.755556-17.066667-34.133334L273.066667 187.733333c-22.755556-22.755556-28.444444-56.888889-5.688889-79.644444 22.755556-22.755556 56.888889-28.444444 79.644444-5.688889l364.088889 312.888889c34.133333 28.444444 56.888889 73.955556 56.888889 119.466667s-17.066667 85.333333-51.2 119.466666l-364.088889 329.955556c-11.377778 5.688889-28.444444 11.377778-39.822222 11.377778z" p-id="2134" fill="#ee000088" />
+          </svg>
+        </div>
       </div>
     </div>
 
     <Search />
-    <van-button
+    <!-- <van-button
       id="thebtn"
       icon="plus"
       @click="test"
-    />
+    /> -->
   </div>
 </template>
 
@@ -74,7 +77,7 @@ import Down from '@/views/down.vue'
 import Search from '@/components/search.vue'
 
 import { matchWeb } from './utils/comics'
-import { request, downFile } from './utils/index'
+// import { request, downFile } from './utils/index'
 
 export default {
   name: 'App',
@@ -115,28 +118,6 @@ export default {
     },
 
     async test() {
-      const url = 'http://image.mangabz.com/1/72/251763/8_1794.jpg?cid=251763&key=f097f04d3e850de195274010ec127e66&uk='
-      // eslint-disable-next-line no-undef
-      GM_download({
-        url,
-        name: 'ee.jpg',
-        // headers: {
-        //   referer: 'http://www.mangabz.com/'
-        // },
-        onload: function(L) {
-          console.log('L: ', L)
-        },
-        onerror: function(e) {
-
-        },
-        onprogress: function(e) {
-          console.log('eonprogress: ', e)
-        },
-
-        ontimeout: function() {
-
-        }
-      })
     }
   }
 }
@@ -146,6 +127,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  // font-size: 14px !important;
 }
 .custom-indicator {
   position: absolute;
@@ -153,7 +135,7 @@ export default {
   right: 5px;
   bottom: 5px;
   padding: 2px 5px;
-  font-size: 12px;
+  font-size: 14px;
   background: rgba(0, 0, 0, 0.1);
 }
 #thebtn {
@@ -165,15 +147,26 @@ export default {
 </style>
 
 <style lang="less" scoped>
-.card {
+.yi-ling-app {
   position: fixed;
-  z-index: 999999 !important;
-  right: 0;
-  top: 50%;
-  height: @appHeight;
-  width: @appWidth !important;
+  width: 100%;
+  height: 100%;
+  z-index: 100000;
+
+  #app-right {
+    height: @appHeight;
+    width: @appWidth;
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    transform-origin: right top;
+    z-index: 999999 !important;
+  }
+}
+
+.card {
   background-color: #f8f8f8;
-  transform: translateY(-50%);
   border: solid 1px #66ccffee;
   border-radius: 25px ;
   transition: all 0.5s;
@@ -201,7 +194,7 @@ export default {
   background-color: #66ccff96;
   cursor: pointer;
   position: absolute;
-  right: @appWidth;
+  right: 100%;
   top: 50%;
   text-align: center;
   svg {
@@ -215,9 +208,9 @@ export default {
   }
 }
 .card--hide {
-  right:  -@appWidth + 5px;
+  // right: -@appWidth !important;
+  transform: translate(100%, -50%)  !important;
   .card__btn {
-    right: @appWidth;
     svg {
       transform: rotate(180deg);
     }
