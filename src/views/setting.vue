@@ -70,6 +70,54 @@
                 </div>
               </template>
             </van-cell>
+
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              center
+            >
+              <template #title>
+                <span class="custom-title">右边大小缩放(%)</span>
+              </template>
+
+              <template #default>
+                <van-stepper
+                  v-model="appRightSize"
+                  class="rightbutton"
+                  min="75"
+                  max="125"
+                  :default-value="100"
+                  step="1"
+                  integer
+                  button-size="20px"
+                  @change="changeRightSize(appRightSize)"
+                />
+              </template>
+            </van-cell>
+
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              center
+            >
+              <template #title>
+                <span class="custom-title">中间大小缩放(%)</span>
+              </template>
+
+              <template #default>
+                <van-stepper
+                  v-model="appCenterSize"
+                  class="rightbutton"
+                  min="75"
+                  max="125"
+                  :default-value="100"
+                  step="1"
+                  integer
+                  button-size="20px"
+                  @change="changeCenterSize(appCenterSize)"
+                />
+              </template>
+            </van-cell>
           </van-cell-group>
 
           <van-cell-group id="downpart" title="下载" inset>
@@ -189,7 +237,6 @@
               </template>
 
               <template #default>
-
                 <van-stepper
                   v-model="imgIndexBitNum"
                   class="rightbutton"
@@ -293,6 +340,7 @@
           <import-page v-if="setupOtherPage === 1" />
         </div>
       </van-swipe-item>
+
     </van-swipe>
 
   </div>
@@ -317,8 +365,12 @@ export default {
     return {
       appLoadDefault: {
         isShowUI: true,
-        loadHotKey: ''
+        loadHotKey: '',
+        rightSize: 100,
+        centerSize: 100
       },
+      appRightSize: 100,
+      appCenterSize: 100,
       maxChapterNum: 1,
       maxPictureNum: 2,
       zipDownFlag: true,
@@ -344,6 +396,22 @@ export default {
     onChangeData(key, value, key2) {
       setStorage(key, value, key2)
     },
+    changeRightSize(num) {
+      if (num === undefined) {
+        num = 100
+      }
+      const appRightDom = document.getElementById('app-right')
+      appRightDom.style.scale = num / 100
+      this.onChangeData('appLoadDefault', num, 'rightSize')
+    },
+    changeCenterSize(num) {
+      if (num === undefined) {
+        num = 100
+      }
+      const appRightDom = document.getElementById('search-page')
+      appRightDom.style.scale = num / 100
+      this.onChangeData('appLoadDefault', num, 'centerSize')
+    },
     loadHotKeyChange(obj) {
       if (obj.data) {
         this.appLoadDefault.loadHotKey = obj.data.toUpperCase()
@@ -366,10 +434,20 @@ export default {
       this.onChangeData('imgSplicingFlag', value)
     },
     changeSwipe(val) {
+      console.log('val: ', val)
       this.$refs.swipe2.swipeTo(val)
       this.setupOtherPage = val
     },
-    exeFun(flag) {
+    exeFun(flag, basic) {
+      let rightSize = 100; let centerSize = 100
+      basic.rightSize ? rightSize = basic.rightSize : ''
+      basic.rightSize ? this.appRightSize = basic.rightSize : ''
+      this.changeRightSize(rightSize)
+
+      basic.centerSize ? centerSize = basic.centerSize : ''
+      basic.centerSize ? this.appCenterSize = basic.centerSize : ''
+      this.changeRightSize(centerSize)
+
       this.webImgSplicing(flag)
     },
     getAllData() {
@@ -384,7 +462,7 @@ export default {
       // eslint-disable-next-line no-empty
       } catch (error) {}
       // 获取数据后执行其他方法
-      this.exeFun(this.imgSplicingFlag)
+      this.exeFun(this.imgSplicingFlag, this.appLoadDefault)
     },
     async allInit() {
       Dialog.confirm({
@@ -419,7 +497,7 @@ export default {
 
 <style lang="less" scoped>
 .setindex {
-  display: flex;
+  // display: flex;
   .swipeitem {
     display: flex;
     flex-direction: column;
@@ -440,7 +518,8 @@ export default {
   }
 
   #setpart {
-    flex-direction: row;
+    // display: flex;
+    // flex-direction: column;
     border-radius: 15px;
     background-color: #ffffff;
     overflow: auto;
@@ -452,6 +531,7 @@ export default {
     }
 
     .van-cell {
+      width: 100%;
       padding: 10px 1px;
       .cellleftvalue {
         flex: 1;
@@ -484,7 +564,7 @@ export default {
           .custom-button {
             width: 20px;
             color: #fff;
-            font-size: 10px;
+            font-size: 14px;
             line-height: 15px;
             text-align: center;
             background-color: #ee0a24;

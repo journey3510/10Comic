@@ -36,7 +36,7 @@
               <div
                 v-for="(item2, index2) in item.findres"
                 :key="index2"
-                :title="item2.url"
+                :title="item2.name"
                 class="origin-image-list"
                 @click="toResultWeb(item2.url)"
               >
@@ -111,6 +111,7 @@ export default {
           method: 'get',
           url,
           responseType: 'blob',
+          headers: item.headers || '',
           timeout: 10000 })
         const newUrl = window.URL.createObjectURL(blob.response)
         item.imgErrorTime++

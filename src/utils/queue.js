@@ -59,7 +59,7 @@ export default class Queue {
       }
       imgs === [] ? this.worker[index].hasError = true : ''
       this.worker[index].imgs = imgs
-      this.worker[index].number = imgs.length
+      this.worker[index].totalNumber = imgs.length
       yield this.down(index)
         .then(function() {
           afterDown(index)
@@ -98,23 +98,22 @@ export default class Queue {
         url: imgurl,
         name: newName,
         onload: result => {
-          _this.worker[index].currentnum = _this.worker[index].currentnum + 1
-          _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
+          _this.worker[index].successNum = _this.worker[index].successNum + 1
+          _this.worker[index].progress = parseInt(_this.worker[index].successNum / _this.worker[index].totalNumber * 100)
           _this.refresh()
           resolve(true)
         },
         onerror: result => {
           if (imgurl !== '') {
             // 失败重新请求
-            // console.log(result, '失败重新请求: ' + newName)
             request({
               method: 'get',
               url: imgurl,
               responseType: 'blob'
             }).then((res) => {
               const name_2 = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + this.getSuffix(res.finalUrl)
-              _this.worker[index].currentnum = _this.worker[index].currentnum + 1
-              _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
+              _this.worker[index].successNum = _this.worker[index].successNum + 1
+              _this.worker[index].progress = parseInt(_this.worker[index].successNum / _this.worker[index].totalNumber * 100)
               _this.refresh()
               if (res === 'onerror' || res === 'timeout') {
                 resolve(false)
@@ -152,15 +151,14 @@ export default class Queue {
         url: imgurl,
         responseType: 'blob',
         onload: function(gmRes) {
-          _this.worker[index].currentnum = _this.worker[index].currentnum + 1
-          _this.worker[index].progress = parseInt(_this.worker[index].currentnum / _this.worker[index].number * 100)
+          _this.worker[index].successNum = _this.worker[index].successNum + 1
+          _this.worker[index].progress = parseInt(_this.worker[index].successNum / _this.worker[index].totalNumber * 100)
           _this.refresh()
           resolve({
             blob: gmRes.response,
             suffix: suffix })
         },
         onerror: function(e) {
-          console.log(9999999999)
           resolve({
             blob: 1,
             suffix: '' })
@@ -181,31 +179,32 @@ export default class Queue {
 
   // 网站翻页阅读
   async down2(workerId) {
-    const { url, zipDownFlag, progress, number, isPay } = this.worker[workerId]
+    const { url, zipDownFlag, totalNumber, isPay, imgIndex } = this.worker[workerId]
 
-    const processData = { url, progress, number, isPay }
+    const processData = { url, imgIndex, totalNumber, isPay }
     processData.otherData = this.worker[workerId].otherData
 
-    const { imgUrl, nextPageUrl, imgCount, otherData } = await getImage(processData)
+    const { imgUrlArr, nextPageUrl, imgCount, otherData } = await getImage(processData)
     this.worker[workerId].otherData = otherData
 
-    this.worker[workerId].number = parseInt(imgCount)
-    const beforeDownLen = imgUrl.length
+    this.worker[workerId].totalNumber = parseInt(imgCount)
+    const beforeDownLen = imgUrlArr.length
+    // console.log('下载前', beforeDownLen, imgIndex, totalNumber)
 
-    while (imgUrl.length > 0) {
+    while (imgUrlArr.length > 0) {
       // eslint-disable-next-line prefer-const
       let promise = []
       for (let index = this.pictureNum; index > 0; index--) {
-        if (imgUrl[0] === undefined) {
+        if (imgUrlArr[0] === undefined) {
           break
         }
         if (zipDownFlag) {
-          promise.push(this.addImgPromise(workerId, imgUrl[0]))
+          promise.push(this.addImgPromise(workerId, imgUrlArr[0]))
         } else {
           const imgIndex = ++this.worker[workerId].imgIndex
-          promise.push(this.addImgDownPromise(workerId, imgUrl[0], imgIndex))
+          promise.push(this.addImgDownPromise(workerId, imgUrlArr[0], imgIndex))
         }
-        imgUrl.shift()
+        imgUrlArr.shift()
       }
 
       const res = await Promise.all(promise)
@@ -213,11 +212,10 @@ export default class Queue {
         this.workerDownInfo[workerId].push(element)
       })
     }
-    console.log('ss', beforeDownLen, nextPageUrl, progress, number)
 
-    if (beforeDownLen !== 0 && nextPageUrl !== '' && progress !== parseInt(imgCount)) {
+    const newImgIndex = this.worker[workerId].imgIndex
+    if (beforeDownLen !== 0 && nextPageUrl !== '' && newImgIndex < parseInt(imgCount)) {
       this.worker[workerId].url = nextPageUrl
-      console.log(888888888)
       return new Promise((resolve, reject) => {
         // 休息一下？
         setTimeout(() => {
@@ -225,7 +223,6 @@ export default class Queue {
         }, 1000)
       })
     } else {
-      console.log(9999999999)
       // 是否压缩
       if (zipDownFlag) {
         const result = await this.makeZip(workerId)
@@ -299,20 +296,21 @@ export default class Queue {
         const worker = {
           comicName: item.comicName,
           chapterName: item.chapterName,
-          currentnum: 0,
-          number: 0,
-          imgs: [],
           url: item.url,
-          progress: 0,
-          readtype: item.readtype,
+          isPay: item.isPay, // 是否付费章节
+          imgIndex: 0, // 图片序号
+          successNum: 0, // 下载成功数量
+          totalNumber: 0, // 图片总数
+          imgs: [],
+          progress: 0, // 进度百分比
+          readtype: item.readtype, // 阅读(下载)方式类型
           func: this.exeDown(i),
-          zipDownFlag: item.zipDownFlag,
-          imgIndex: 0,
-          isPay: item.isPay,
-          hasError: false
+          zipDownFlag: item.zipDownFlag, // 是否压缩
+          hasError: false,
+          otherData: undefined // 自定义存储其他下载数据
         }
-        this.workerDownInfo[i] = []
         this.worker[i] = worker
+        this.workerDownInfo[i] = []
         this.list.pop()
         runIndex.push(i)
       }

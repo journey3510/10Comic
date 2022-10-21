@@ -371,6 +371,7 @@ export default {
   margin-top:  10px;
   position: relative;
   height: 690px;
+  font-size: 14px !important;
 }
 #overlayDom {
   background-color: #eeeeeece;
