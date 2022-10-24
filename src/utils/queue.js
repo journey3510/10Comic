@@ -99,7 +99,7 @@ export default class Queue {
         name: newName,
         onload: result => {
           _this.worker[index].successNum = _this.worker[index].successNum + 1
-          _this.worker[index].progress = parseInt(_this.worker[index].successNum / _this.worker[index].totalNumber * 100)
+          _this.worker[index].progress = parseInt(_this.worker[index].imgIndex / _this.worker[index].totalNumber * 100)
           _this.refresh()
           resolve(true)
         },
@@ -113,9 +113,10 @@ export default class Queue {
             }).then((res) => {
               const name_2 = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + this.getSuffix(res.finalUrl)
               _this.worker[index].successNum = _this.worker[index].successNum + 1
-              _this.worker[index].progress = parseInt(_this.worker[index].successNum / _this.worker[index].totalNumber * 100)
+              _this.worker[index].progress = parseInt(_this.worker[index].imgIndex / _this.worker[index].totalNumber * 100)
               _this.refresh()
               if (res === 'onerror' || res === 'timeout') {
+                _this.worker[index].hasError = true
                 resolve(false)
               }
               const newurl = window.URL.createObjectURL(res.response)
@@ -123,12 +124,14 @@ export default class Queue {
                 if (downRes) {
                   resolve(true)
                 } else {
+                  _this.worker[index].hasError = true
                   resolve(false)
                 }
               })
             })
           } else {
             console.log('onerror: ', result)
+            _this.worker[index].hasError = true
             resolve(false)
           }
         },
@@ -152,13 +155,14 @@ export default class Queue {
         responseType: 'blob',
         onload: function(gmRes) {
           _this.worker[index].successNum = _this.worker[index].successNum + 1
-          _this.worker[index].progress = parseInt(_this.worker[index].successNum / _this.worker[index].totalNumber * 100)
+          _this.worker[index].progress = parseInt(_this.worker[index].imgIndex / _this.worker[index].totalNumber * 100)
           _this.refresh()
           resolve({
             blob: gmRes.response,
             suffix: suffix })
         },
         onerror: function(e) {
+          _this.worker[index].hasError = true
           resolve({
             blob: 1,
             suffix: '' })
@@ -198,10 +202,10 @@ export default class Queue {
         if (imgUrlArr[0] === undefined) {
           break
         }
+        const imgIndex = ++this.worker[workerId].imgIndex
         if (zipDownFlag) {
           promise.push(this.addImgPromise(workerId, imgUrlArr[0]))
         } else {
-          const imgIndex = ++this.worker[workerId].imgIndex
           promise.push(this.addImgDownPromise(workerId, imgUrlArr[0], imgIndex))
         }
         imgUrlArr.shift()
@@ -246,12 +250,11 @@ export default class Queue {
 
     while (pictureNum-- && len > 0) {
       // 是否压缩
+      const imgIndex = ++this.worker[workerId].imgIndex
       if (zipDownFlag) {
         promise.push(this.addImgPromise(workerId, imgs[0]))
       } else {
-        const imgIndex = this.worker[workerId].imgIndex + 1
         promise.push(this.addImgDownPromise(workerId, imgs[0], imgIndex))
-        this.worker[workerId].imgIndex++
       }
       this.worker[workerId].imgs.shift()
       len--

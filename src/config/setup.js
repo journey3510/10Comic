@@ -13,7 +13,7 @@ const configDefault = {
   },
   maxChapterNum: 2,
   maxPictureNum: 3,
-  zipDownFlag: true,
+  zipDownFlag: false,
   imgIndexBitNum: 3,
   imgSplicingFlag: true,
   downHistory: '[]',
