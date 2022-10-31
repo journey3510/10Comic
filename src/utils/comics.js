@@ -93,12 +93,12 @@ export const comicsWebInfo = [
     chapterCss: '.tab-content-selected .list_con_li.autoHeight',
     readtype: 1,
     getImgs: async function(context) {
-      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      imgStr = imgStr.match(/page_url":"(.*?)","sum_pages/)[1]
-      let imgArray = imgStr.split('\\r\\n')
+      const imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      const info = JSON.parse(imgStr.match(/{.*}/)[0])
+      let imgArray = info['page_url'].split('\r\n')
       if (imgArray[0].search('http') === -1) {
         imgArray = imgArray.map((item) => {
-          return 'https://images.dmzj.com/' + item.replace(/\\/g, '')
+          return 'https://images.dmzj.com/' + item
         })
       }
       return imgArray
@@ -202,7 +202,7 @@ export const comicsWebInfo = [
     homepage: 'http://www.kumw5.com/',
     webName: '酷漫屋',
     comicNameCss: '.info h1',
-    chapterCss: '#detail-list-select-1',
+    chapterCss: '.view-win-list',
     readtype: 1,
     iswork: true,
     searchTemplate_1: {
