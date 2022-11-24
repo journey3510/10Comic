@@ -3,10 +3,11 @@
 /* eslint-disable no-undef */
 import { AppVersion, isDev } from '@/config/index'
 
+// 脚本存储信息
 const configDefault = {
   version: AppVersion,
   appLoadDefault: {
-    isShowUI: true,
+    isShowUI: false,
     loadHotKey: 'V', // alt + loadHotKey
     rightSize: 100,
     centerSize: 100
@@ -56,6 +57,7 @@ export const setinit = async() => {
       resolve(false)
     }
     for (const key in configDefault) {
+      console.log('configDefault[key]: ', configDefault[key])
       GM_setValue(key, configDefault[key])
     }
     resolve(true)
@@ -63,6 +65,7 @@ export const setinit = async() => {
 }
 
 export const setStorage = (key, value, key2 = null) => {
+  // console.log('value: ', value)
   if (key2) {
     const obj = GM_getValue(key)
     obj[key2] = value
