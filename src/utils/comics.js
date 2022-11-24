@@ -378,62 +378,62 @@ export const comicsWebInfo = [
       return imgs
     }
   },
-  {
-    domain: 'qiximh1.com',
-    homepage: 'http://qiximh1.com/',
-    webName: '七夕漫画',
-    comicNameCss: '.comic_name .name',
-    chapterCss: '.catalog_list.row_catalog_list',
-    readtype: 1,
-    searchFun: async function(keyword) {
-      const searchUrl = 'http://qiximh1.com/search.php'
-      const data = new FormData()
-      data.append('keyword', keyword)
-      const { responseText } = await request('post', searchUrl, data, '')
-      const resJson = JSON.parse(responseText)
-      const searchList = []
-      resJson.search_data.forEach(element => {
-        const obj = {}
-        obj.name = element.name
-        obj.url = this.homepage + element.id + '/'
-        obj.imageUrl = element.imgs
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
-    },
-    getImgs: function(context) {
-      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
-      const imgArray = JSON.parse(imgStr)
-      return imgArray
-    }
-  },
-  {
-    domain: 'www.36manga.com',
-    homepage: 'https://www.36manga.com/',
-    webName: '36漫画网',
-    comicNameCss: '.book-title h1 span',
-    chapterCss: '#chapter-list-4 li:not(:first-of-type)',
-    readtype: 1,
-    iswork: false,
-    getImgs: function(context) {
-      const group = context.matchAll(/chapterImages = ([\s\S]+?);var chapterPath = "([\s\S]+?)";var chapterPrice/g)
-      let imgarr = []
-      let middleStr = ''
-      for (const item of group) {
-        imgarr = JSON.parse(item[1])
-        middleStr = item[2]
-      }
-      if (imgarr[0].search('http') === -1) {
-        imgarr = imgarr.map((item) => {
-          return 'https://img001.arc-theday.com/' + middleStr + item
-        })
-      }
-      return imgarr
-    }
-  },
+  // {
+  //   domain: 'qiximh1.com',
+  //   homepage: 'http://qiximh1.com/',
+  //   webName: '七夕漫画',
+  //   comicNameCss: '.comic_name .name',
+  //   chapterCss: '.catalog_list.row_catalog_list',
+  //   readtype: 1,
+  //   searchFun: async function(keyword) {
+  //     const searchUrl = 'http://qiximh1.com/search.php'
+  //     const data = new FormData()
+  //     data.append('keyword', keyword)
+  //     const { responseText } = await request('post', searchUrl, data, '')
+  //     const resJson = JSON.parse(responseText)
+  //     const searchList = []
+  //     resJson.search_data.forEach(element => {
+  //       const obj = {}
+  //       obj.name = element.name
+  //       obj.url = this.homepage + element.id + '/'
+  //       obj.imageUrl = element.imgs
+  //       searchList.push(obj)
+  //     })
+  //     return new Promise((resolve, reject) => {
+  //       resolve(searchList)
+  //     })
+  //   },
+  //   getImgs: function(context) {
+  //     let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+  //     imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+  //     const imgArray = JSON.parse(imgStr)
+  //     return imgArray
+  //   }
+  // },
+  // {
+  //   domain: 'www.36manga.com',
+  //   homepage: 'https://www.36manga.com/',
+  //   webName: '36漫画网',
+  //   comicNameCss: '.book-title h1 span',
+  //   chapterCss: '#chapter-list-4 li:not(:first-of-type)',
+  //   readtype: 1,
+  //   iswork: false,
+  //   getImgs: function(context) {
+  //     const group = context.matchAll(/chapterImages = ([\s\S]+?);var chapterPath = "([\s\S]+?)";var chapterPrice/g)
+  //     let imgarr = []
+  //     let middleStr = ''
+  //     for (const item of group) {
+  //       imgarr = JSON.parse(item[1])
+  //       middleStr = item[2]
+  //     }
+  //     if (imgarr[0].search('http') === -1) {
+  //       imgarr = imgarr.map((item) => {
+  //         return 'https://img001.arc-theday.com/' + middleStr + item
+  //       })
+  //     }
+  //     return imgarr
+  //   }
+  // },
   {
     domain: 'www.gufengmanhua.com',
     homepage: 'https://www.gufengmanhua.com/',
@@ -680,20 +680,20 @@ export const comicsWebInfo = [
       return imgs
     }
   },
-  {
-    domain: 'www.qianwee.com',
-    homepage: 'https://www.qianwee.com/',
-    webName: '前未漫画',
-    comicNameCss: '.comic_deCon.autoHeight h1',
-    chapterCss: '.zj_list_con #chapter-list-1',
-    readtype: 1,
-    readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
-    getImgs: async function(context) {
-      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
-      const imgs = eval(imgStr)
-      return imgs
-    }
-  },
+  // {
+  //   domain: 'www.qianwee.com',
+  //   homepage: 'https://www.qianwee.com/',
+  //   webName: '前未漫画',
+  //   comicNameCss: '.comic_deCon.autoHeight h1',
+  //   chapterCss: '.zj_list_con #chapter-list-1',
+  //   readtype: 1,
+  //   readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
+  //   getImgs: async function(context) {
+  //     const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+  //     const imgs = eval(imgStr)
+  //     return imgs
+  //   }
+  // },
   {
     domain: 'www.sixmh7.com',
     homepage: 'http://www.sixmh7.com/',
