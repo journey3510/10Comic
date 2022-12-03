@@ -35,8 +35,8 @@
 // @match        *://*.dmzj.com/*
 // @connect      dmzj.com
 //
-// @match        *://qiximh1.com/*
-// @connect      qiximh1.com
+// @match        *://qiximh3.com/*
+// @connect      qiximh3.com
 // @connect      byteimg.com
 //
 // @match        *://www.36manga.com/*
@@ -53,7 +53,7 @@
 // @connect      ac.qq.com
 // @connect      acimg.cn
 //
-// @match        *://www.mhxqiu1.com/*
+// @match        *://www.mhxqiu2.com/*
 // @connect      mhxqiu1.com
 // @connect      byteimg.com
 //
@@ -119,7 +119,7 @@
 // @match        *://www.mangabz.com/*
 // @connect      mangabz.com
 //
-// @match        *://www.qiman57.com/*
+// @match        *://www.qiman58.com/*
 // @connect      qiman57.com
 // @connect      dcarimg.com
 //

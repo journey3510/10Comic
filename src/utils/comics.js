@@ -139,8 +139,8 @@ export const comicsWebInfo = [
       return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
     }
   }, {
-    domain: 'www.qiman57.com',
-    homepage: 'http://www.qiman57.com/',
+    domain: 'www.qiman58.com',
+    homepage: 'http://www.qiman58.com/',
     webName: '奇漫屋',
     comicNameCss: 'h1.name_mh',
     chapterCss: '#chapter-list1',
@@ -347,7 +347,6 @@ export const comicsWebInfo = [
     comicNameCss: '.view-sub.autoHeight .title',
     chapterCss: '#chapter-list-1',
     readtype: 1,
-    iswork: false,
     nextpageRgeCss: '.action-list li:nth-child(3) a',
     getImgs: async function(context) {
       const imgobj = context.matchAll(/<mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
@@ -365,7 +364,6 @@ export const comicsWebInfo = [
     comicNameCss: '.title h1',
     chapterCss: '#chapter-list-1',
     readtype: 1,
-    iswork: false,
     searchTemplate_1: {
       search_add_url: 'search/?keywords=',
       alllist_dom_css: 'div.dmList ul',
@@ -379,14 +377,14 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'qiximh1.com',
-    homepage: 'http://qiximh1.com/',
+    domain: 'qiximh3.com',
+    homepage: 'http://qiximh3.com/',
     webName: '七夕漫画',
     comicNameCss: '.comic_name .name',
     chapterCss: '.catalog_list.row_catalog_list',
     readtype: 1,
     searchFun: async function(keyword) {
-      const searchUrl = 'http://qiximh1.com/search.php'
+      const searchUrl = 'http://qiximh3.com/search.php'
       const data = new FormData()
       data.append('keyword', keyword)
       const { responseText } = await request('post', searchUrl, data, '')
@@ -582,8 +580,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.mhxqiu1.com',
-    homepage: 'http://www.mhxqiu1.com/',
+    domain: 'www.mhxqiu2.com',
+    homepage: 'http://www.mhxqiu2.com/',
     webName: '漫画星球',
     comicNameCss: '.cy_title h1',
     chapterCss: '.cy_plist #mh-chapter-list-ol-0',
