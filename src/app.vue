@@ -149,8 +149,8 @@ export default {
 <style lang="less" scoped>
 .yi-ling-app {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100%;
   z-index: 100000;
 
   #app-right {
