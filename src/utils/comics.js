@@ -138,7 +138,83 @@ export const comicsWebInfo = [
       const otherData = { group }
       return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
     }
-  }, {
+  },
+  {
+    domain: 'www.1kkk.com',
+    homepage: 'https://www.1kkk.com/',
+    webName: '极速漫画',
+    comicNameCss: '.banner_detail_form > .info > p.title',
+    chapterCss: '#detail-list-select-1',
+    hasSpend: true,
+    payKey: '-lock',
+    readtype: 0,
+    headers: {
+      referer: 'https://www.1kkk.com/'
+    },
+    searchTemplate_1: {
+      search_add_url: 'search?title=',
+      alllist_dom_css: '.mh-list',
+      minlist_dom_css: 'li',
+      use_background: true
+    },
+    getImgs: async function(context, processData) {
+      let group; let page = 1
+      if (processData.otherData) {
+        group = processData.otherData.group
+      } else {
+        group = context.match(/DM5_MID=(\d+?);.*DM5_CID=(\d+?);.*DM5_IMAGE_COUNT=(\d+?);.*DM5_VIEWSIGN="(.*?)".*DM5_VIEWSIGN_DT="(.*?)"/)
+      }
+      if (processData.imgIndex !== undefined) {
+        page = processData.imgIndex + 1
+      }
+      const reqUrl = `https://www.1kkk.com/ch1-${group[2]}/chapterfun.ashx?cid=${group[2]}&page=${page}&key=&language=1&gtk=6&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5].replaceAll(' ', '+').replaceAll(':', '%3A')}&_sign=${group[4]}`
+      const { responseText } = await request({ method: 'get', url: reqUrl, useCookie: processData.isPay })
+      // console.log('haveEAVL: ', responseText !== undefined)
+      const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
+      const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
+      const otherData = { group }
+      return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
+    }
+  },
+  {
+    domain: 'www.dm5.com',
+    homepage: 'https://www.dm5.com/',
+    webName: '动漫屋',
+    comicNameCss: '.banner_detail_form > .info > p.title',
+    chapterCss: '#detail-list-select-1',
+    hasSpend: true,
+    payKey: '-lock',
+    readtype: 0,
+    headers: {
+      referer: 'https://www.dm5.com/'
+    },
+    searchTemplate_1: {
+      search_add_url: 'search?title=',
+      alllist_dom_css: '.mh-list',
+      minlist_dom_css: 'li',
+      use_background: true
+    },
+    getImgs: async function(context, processData) {
+      let group; let page = 1
+      if (processData.otherData) {
+        group = processData.otherData.group
+      } else {
+        group = context.match(/DM5_MID=(\d+?);.*DM5_CID=(\d+?);.*DM5_IMAGE_COUNT=(\d+?);.*DM5_VIEWSIGN="(.*?)".*DM5_VIEWSIGN_DT="(.*?)"/)
+      }
+      if (processData.imgIndex !== undefined) {
+        page = processData.imgIndex + 1
+      }
+      const reqUrl = `https://www.dm5.com/ch1-${group[2]}/chapterfun.ashx?cid=${group[2]}&page=${page}&key=&language=1&gtk=6&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5].replaceAll(' ', '+').replaceAll(':', '%3A')}&_sign=${group[4]}`
+      const { responseText } = await request({ method: 'get', url: reqUrl, useCookie: processData.isPay })
+
+      const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
+      const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
+
+      const otherData = { group }
+      return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
+    }
+  },
+  {
     domain: 'www.qiman58.com',
     homepage: 'http://www.qiman58.com/',
     webName: '奇漫屋',
@@ -166,8 +242,7 @@ export const comicsWebInfo = [
     headers: '',
     readtype: 1,
     hasSpend: true,
-    freeCss: '.ui-icon-free',
-    payCss: '.ui-icon-pay',
+    payKey: 'ui-icon-pay',
     searchTemplate_1: {
       search_add_url: 'Comic/searchList?search=',
       alllist_dom_css: '.mod_book_list',
