@@ -202,7 +202,7 @@ export default {
         const comicNameCss = this.currentComics.comicNameCss
         this.webname = currentComics.webName
         setTimeout(() => {
-          this.comicName = document.querySelector(comicNameCss).innerText
+          this.comicName = document.querySelector(comicNameCss).innerText.split('\n')[0].trim()
           this.$bus.$emit('getComicName', this.comicName)
         }, 1000)
         //
@@ -281,6 +281,8 @@ export default {
     },
     async getSelectList() {
       this.overlayShow = true
+
+      // 单页面应用 获取信息
       if (currentComics.getComicInfo) {
         this.list = await currentComics.getComicInfo()
         this.overlayShow = false
@@ -289,27 +291,14 @@ export default {
       }
 
       setTimeout(() => {
-        // 获取付费标志
-        if (currentComics.hasSpend) {
-          this.paylogoArr = []
-          const logoCss = currentComics.freeCss + ',' + currentComics.payCss
-          const logoArr = document.querySelectorAll(logoCss)
-
-          logoArr.forEach((element, index) => {
-            if ('.' + logoArr[index].className === currentComics.payCss) {
-              this.paylogoArr.push(true)
-            } else {
-              this.paylogoArr.push(false)
-            }
-          })
-        }
         // 单章数据
         const nodeList = document.querySelectorAll(currentComics.chapterCss)
         this.getChapterData(nodeList, currentComics, 'one')
-        // 分卷数据
+
+        // （如果存在）分卷数据
         if (currentComics.chapterCss_2) {
-          const nodeList = document.querySelectorAll(currentComics.chapterCss_2)
-          this.getChapterData(nodeList, currentComics, 'many')
+          const nodeList_2 = document.querySelectorAll(currentComics.chapterCss_2)
+          this.getChapterData(nodeList_2, currentComics, 'many')
         }
 
         this.overlayShow = false
@@ -318,22 +307,35 @@ export default {
     },
     // 获取章节数据
     getChapterData(nodeList, currentComics, type) {
+      const hasSpend = currentComics.hasSpend
       nodeList.forEach(dom => {
         const urls = dom.querySelectorAll('a')
         const readtype = currentComics.readtype
         urls.forEach((element, index) => {
           let chapterName = element.innerText.replace(/\n|\r/g, '')
-          chapterName = chapterName.trim()
+          chapterName = chapterName.split('\n')[0].trim()
+
+          // 获取付费标志
+          let currentIsPay = false
+          if (hasSpend) {
+            const payKey = currentComics.payKey
+            const parent = element.parentElement
+            if (parent.outerHTML.indexOf(payKey) > 0) {
+              currentIsPay = true
+            } else {
+              currentIsPay = false
+            }
+          }
+
           const data = {
             comicName: this.comicName,
             chapterName: chapterName,
             url: element.href,
             characterType: type,
-            readtype
+            readtype,
+            isPay: currentIsPay
           }
-          if (currentComics.hasSpend) {
-            data.isPay = this.paylogoArr[index]
-          }
+
           this.list.push(data)
         })
       })
