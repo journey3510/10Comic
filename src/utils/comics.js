@@ -138,9 +138,85 @@ export const comicsWebInfo = [
       const otherData = { group }
       return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
     }
-  }, {
-    domain: 'www.qiman57.com',
-    homepage: 'http://www.qiman57.com/',
+  },
+  {
+    domain: 'www.1kkk.com',
+    homepage: 'https://www.1kkk.com/',
+    webName: '极速漫画',
+    comicNameCss: '.banner_detail_form > .info > p.title',
+    chapterCss: '#detail-list-select-1',
+    hasSpend: true,
+    payKey: '-lock',
+    readtype: 0,
+    headers: {
+      referer: 'https://www.1kkk.com/'
+    },
+    searchTemplate_1: {
+      search_add_url: 'search?title=',
+      alllist_dom_css: '.mh-list',
+      minlist_dom_css: 'li',
+      use_background: true
+    },
+    getImgs: async function(context, processData) {
+      let group; let page = 1
+      if (processData.otherData) {
+        group = processData.otherData.group
+      } else {
+        group = context.match(/DM5_MID=(\d+?);.*DM5_CID=(\d+?);.*DM5_IMAGE_COUNT=(\d+?);.*DM5_VIEWSIGN="(.*?)".*DM5_VIEWSIGN_DT="(.*?)"/)
+      }
+      if (processData.imgIndex !== undefined) {
+        page = processData.imgIndex + 1
+      }
+      const reqUrl = `https://www.1kkk.com/ch1-${group[2]}/chapterfun.ashx?cid=${group[2]}&page=${page}&key=&language=1&gtk=6&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5].replaceAll(' ', '+').replaceAll(':', '%3A')}&_sign=${group[4]}`
+      const { responseText } = await request({ method: 'get', url: reqUrl, useCookie: processData.isPay })
+      // console.log('haveEAVL: ', responseText !== undefined)
+      const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
+      const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
+      const otherData = { group }
+      return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
+    }
+  },
+  {
+    domain: 'www.dm5.com',
+    homepage: 'https://www.dm5.com/',
+    webName: '动漫屋',
+    comicNameCss: '.banner_detail_form > .info > p.title',
+    chapterCss: '#detail-list-select-1',
+    hasSpend: true,
+    payKey: '-lock',
+    readtype: 0,
+    headers: {
+      referer: 'https://www.dm5.com/'
+    },
+    searchTemplate_1: {
+      search_add_url: 'search?title=',
+      alllist_dom_css: '.mh-list',
+      minlist_dom_css: 'li',
+      use_background: true
+    },
+    getImgs: async function(context, processData) {
+      let group; let page = 1
+      if (processData.otherData) {
+        group = processData.otherData.group
+      } else {
+        group = context.match(/DM5_MID=(\d+?);.*DM5_CID=(\d+?);.*DM5_IMAGE_COUNT=(\d+?);.*DM5_VIEWSIGN="(.*?)".*DM5_VIEWSIGN_DT="(.*?)"/)
+      }
+      if (processData.imgIndex !== undefined) {
+        page = processData.imgIndex + 1
+      }
+      const reqUrl = `https://www.dm5.com/ch1-${group[2]}/chapterfun.ashx?cid=${group[2]}&page=${page}&key=&language=1&gtk=6&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5].replaceAll(' ', '+').replaceAll(':', '%3A')}&_sign=${group[4]}`
+      const { responseText } = await request({ method: 'get', url: reqUrl, useCookie: processData.isPay })
+
+      const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
+      const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
+
+      const otherData = { group }
+      return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
+    }
+  },
+  {
+    domain: 'www.qiman58.com',
+    homepage: 'http://www.qiman58.com/',
     webName: '奇漫屋',
     comicNameCss: 'h1.name_mh',
     chapterCss: '#chapter-list1',
@@ -166,8 +242,7 @@ export const comicsWebInfo = [
     headers: '',
     readtype: 1,
     hasSpend: true,
-    freeCss: '.ui-icon-free',
-    payCss: '.ui-icon-pay',
+    payKey: 'ui-icon-pay',
     searchTemplate_1: {
       search_add_url: 'Comic/searchList?search=',
       alllist_dom_css: '.mod_book_list',
@@ -347,7 +422,6 @@ export const comicsWebInfo = [
     comicNameCss: '.view-sub.autoHeight .title',
     chapterCss: '#chapter-list-1',
     readtype: 1,
-    iswork: false,
     nextpageRgeCss: '.action-list li:nth-child(3) a',
     getImgs: async function(context) {
       const imgobj = context.matchAll(/<mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
@@ -365,7 +439,6 @@ export const comicsWebInfo = [
     comicNameCss: '.title h1',
     chapterCss: '#chapter-list-1',
     readtype: 1,
-    iswork: false,
     searchTemplate_1: {
       search_add_url: 'search/?keywords=',
       alllist_dom_css: 'div.dmList ul',
@@ -378,62 +451,62 @@ export const comicsWebInfo = [
       return imgs
     }
   },
-  // {
-  //   domain: 'qiximh1.com',
-  //   homepage: 'http://qiximh1.com/',
-  //   webName: '七夕漫画',
-  //   comicNameCss: '.comic_name .name',
-  //   chapterCss: '.catalog_list.row_catalog_list',
-  //   readtype: 1,
-  //   searchFun: async function(keyword) {
-  //     const searchUrl = 'http://qiximh1.com/search.php'
-  //     const data = new FormData()
-  //     data.append('keyword', keyword)
-  //     const { responseText } = await request('post', searchUrl, data, '')
-  //     const resJson = JSON.parse(responseText)
-  //     const searchList = []
-  //     resJson.search_data.forEach(element => {
-  //       const obj = {}
-  //       obj.name = element.name
-  //       obj.url = this.homepage + element.id + '/'
-  //       obj.imageUrl = element.imgs
-  //       searchList.push(obj)
-  //     })
-  //     return new Promise((resolve, reject) => {
-  //       resolve(searchList)
-  //     })
-  //   },
-  //   getImgs: function(context) {
-  //     let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-  //     imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
-  //     const imgArray = JSON.parse(imgStr)
-  //     return imgArray
-  //   }
-  // },
-  // {
-  //   domain: 'www.36manga.com',
-  //   homepage: 'https://www.36manga.com/',
-  //   webName: '36漫画网',
-  //   comicNameCss: '.book-title h1 span',
-  //   chapterCss: '#chapter-list-4 li:not(:first-of-type)',
-  //   readtype: 1,
-  //   iswork: false,
-  //   getImgs: function(context) {
-  //     const group = context.matchAll(/chapterImages = ([\s\S]+?);var chapterPath = "([\s\S]+?)";var chapterPrice/g)
-  //     let imgarr = []
-  //     let middleStr = ''
-  //     for (const item of group) {
-  //       imgarr = JSON.parse(item[1])
-  //       middleStr = item[2]
-  //     }
-  //     if (imgarr[0].search('http') === -1) {
-  //       imgarr = imgarr.map((item) => {
-  //         return 'https://img001.arc-theday.com/' + middleStr + item
-  //       })
-  //     }
-  //     return imgarr
-  //   }
-  // },
+  {
+    domain: 'qiximh3.com',
+    homepage: 'http://qiximh3.com/',
+    webName: '七夕漫画',
+    comicNameCss: '.comic_name .name',
+    chapterCss: '.catalog_list.row_catalog_list',
+    readtype: 1,
+    searchFun: async function(keyword) {
+      const searchUrl = 'http://qiximh3.com/search.php'
+      const data = new FormData()
+      data.append('keyword', keyword)
+      const { responseText } = await request('post', searchUrl, data, '')
+      const resJson = JSON.parse(responseText)
+      const searchList = []
+      resJson.search_data.forEach(element => {
+        const obj = {}
+        obj.name = element.name
+        obj.url = this.homepage + element.id + '/'
+        obj.imageUrl = element.imgs
+        searchList.push(obj)
+      })
+      return new Promise((resolve, reject) => {
+        resolve(searchList)
+      })
+    },
+    getImgs: function(context) {
+      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      const imgArray = JSON.parse(imgStr)
+      return imgArray
+    }
+  },
+  {
+    domain: 'www.36manga.com',
+    homepage: 'https://www.36manga.com/',
+    webName: '36漫画网',
+    comicNameCss: '.book-title h1 span',
+    chapterCss: '#chapter-list-4 li:not(:first-of-type)',
+    readtype: 1,
+    iswork: false,
+    getImgs: function(context) {
+      const group = context.matchAll(/chapterImages = ([\s\S]+?);var chapterPath = "([\s\S]+?)";var chapterPrice/g)
+      let imgarr = []
+      let middleStr = ''
+      for (const item of group) {
+        imgarr = JSON.parse(item[1])
+        middleStr = item[2]
+      }
+      if (imgarr[0].search('http') === -1) {
+        imgarr = imgarr.map((item) => {
+          return 'https://img001.arc-theday.com/' + middleStr + item
+        })
+      }
+      return imgarr
+    }
+  },
   {
     domain: 'www.gufengmanhua.com',
     homepage: 'https://www.gufengmanhua.com/',
@@ -582,8 +655,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.mhxqiu1.com',
-    homepage: 'http://www.mhxqiu1.com/',
+    domain: 'www.mhxqiu2.com',
+    homepage: 'http://www.mhxqiu2.com/',
     webName: '漫画星球',
     comicNameCss: '.cy_title h1',
     chapterCss: '.cy_plist #mh-chapter-list-ol-0',
