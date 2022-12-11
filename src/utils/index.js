@@ -111,6 +111,7 @@ export const downFile = async(...detail) => {
     url = detail[0]
     name = detail[1]
   }
+  name = name.replace(/\s+/ig, ' ')
 
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line no-undef
