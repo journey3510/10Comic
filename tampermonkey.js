@@ -20,8 +20,8 @@
 // @require      https://unpkg.com/vant@2.12/lib/vant.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/jszip/3.7.1/jszip.min.js
 //
-// @match        *://www.kumw5.com/*
-// @connect      kumw5.com
+// @match        *://www.kumw6.com/*
+// @connect      kumw6.com
 //
 // @match        *://*.darpou.com/*
 // @connect      darpou.com
@@ -129,6 +129,15 @@
 //
 // @match        *://www.dm5.com/*
 // @connect      dm5.com
+//
+// @match        *://www.bilibilicomics.com/*
+// @connect      bilibilicomics.com
+//
+// @match        *://www.kuaikanmanhua.com/*
+// @connect      kuaikanmanhua.com
+// @connect      v3mh.com
+//
+// @match        *
 // @connect      *
 // @connect      laimidao.com
 // @connect      izhegu.com

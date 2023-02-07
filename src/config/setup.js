@@ -48,6 +48,10 @@ export const appLoadinit = () => {
 
   GM_setValue('version', AppVersion)
   GM_setValue('maxChapterNum', 2)
+  if (AppVersion === '1.4.0') {
+    setStorage('appLoadDefault', false, 'isShowUI')
+  }
+
   return true
 }
 

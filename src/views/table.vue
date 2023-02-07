@@ -14,7 +14,7 @@
         marginTop: '-15px'
       }"
     >
-      <van-cell-group title="选项" :style="{display: 'flex',width: '250px', margin: '10px auto'}" inset>
+      <van-cell-group title="选项" :style="{display: 'flex',flexDirection: 'column', width: '350px', margin: '10px auto'}" inset>
         <van-cell title="本次压缩下载">
           <template #right-icon>
             <van-checkbox
@@ -24,6 +24,26 @@
             />
           </template>
         </van-cell>
+
+        <van-cell>
+          <div :style="{display: 'flex',justifyContent: 'space-between'}">
+            <van-checkbox
+              v-model="useCharacterNum"
+              label-position="left"
+              @change="characterSequenceChange"
+            >章节补充序号
+            </van-checkbox>
+            <van-checkbox
+              v-model="characterNumSequence"
+              :disabled="!useCharacterNum"
+              label-position="left"
+              @change="characterSequenceChange"
+            >—序号反序
+            </van-checkbox>
+          </div>
+
+        </van-cell>
+
       </van-cell-group>
     </van-popup>
 
@@ -123,8 +143,9 @@
               v-for="(item,index) in list"
               :key="index"
               :style="titleStyle(item.url, item.isPay, item.characterType)"
-              :title="item.chapterName"
+              :title="showComicTitleName(item.chapterNumStr, item.chapterName)"
             >
+              <!-- :title="item.chapterName" -->
               <template #right-icon>
                 <van-checkbox
                   :name="index"
@@ -147,6 +168,7 @@
 
 import { currentComics } from '@/utils/comics'
 import { getStorage } from '@/config/setup'
+import { addZeroForNum } from '@/utils/index'
 
 import { Toast } from 'vant'
 
@@ -155,6 +177,7 @@ export default {
   data() {
     return {
       list: [],
+      listBack: [],
       selectResult: [],
       downResult: [],
       minListIndex: null,
@@ -170,7 +193,10 @@ export default {
       comicName: '------',
 
       paylogoArr: [],
-      zipDownFlag: true
+      zipDownFlag: true,
+      useCharacterNum: false,
+      characterNumSequence: false
+
     }
   },
   computed: {
@@ -193,6 +219,14 @@ export default {
       }
       return `color: blue`
     },
+    showComicTitleName(numStr, name) {
+      let showname = ''
+      if (numStr !== '') {
+        showname = numStr + '-' + name
+        return showname
+      }
+      return name
+    },
     getInfo(times) {
       try {
         this.currentComics = currentComics
@@ -204,7 +238,7 @@ export default {
         setTimeout(() => {
           this.comicName = document.querySelector(comicNameCss).innerText.split('\n')[0].trim()
           this.$bus.$emit('getComicName', this.comicName)
-        }, 1000)
+        }, 2000)
         //
         this.zipDownFlag = getStorage('zipDownFlag')
       // eslint-disable-next-line no-empty
@@ -329,6 +363,7 @@ export default {
 
           const data = {
             comicName: this.comicName,
+            chapterNumStr: '',
             chapterName: chapterName,
             url: element.href,
             characterType: type,
@@ -336,7 +371,9 @@ export default {
             isPay: currentIsPay
           }
 
-          this.list.push(data)
+          if (data.chapterName !== '') {
+            this.list.push(data)
+          }
         })
       })
     },
@@ -352,6 +389,9 @@ export default {
       this.selectResult.forEach(num => {
         const item = this.list[num]
         item.zipDownFlag = this.zipDownFlag
+        if (item.chapterNumStr !== '') {
+          item.chapterName = item.chapterNumStr + '-' + item.chapterName
+        }
         this.downResult.push(item)
       })
       this.$bus.$emit('selectDown', this.downResult)
@@ -363,6 +403,52 @@ export default {
       this.list = []
       this.selectResult = []
       this.getSelectList()
+    },
+    characterSequenceChange() {
+      if (!this.useCharacterNum) {
+        // 删除 前几个字符
+        this.list.forEach((item, index) => {
+          item.chapterNumStr = ''
+        })
+        return
+      }
+
+      if (this.characterNumSequence === true) {
+        const len = this.list.length
+        this.list.forEach((item, index) => {
+          item.chapterNumStr = addZeroForNum(len - index, 3)
+        })
+      } else {
+        this.list.forEach((item, index) => {
+          item.chapterNumStr = addZeroForNum(index + 1, 3)
+        })
+      }
+    },
+    characterSequenceChange1() {
+      if (!this.useCharacterNum) {
+        // 删除 前几个字符
+        this.list.forEach((item, index) => {
+          item.chapterName = item.chapterName.split()
+        })
+        // this.list = JSON.parse(JSON.stringify(this.listBack))
+        return
+      }
+
+      if (this.listBack.length === 0) {
+        this.listBack = JSON.parse(JSON.stringify(this.list))
+      }
+
+      if (this.characterNumSequence === true) {
+        const len = this.list.length
+        this.list.forEach((item, index) => {
+          item.chapterName = addZeroForNum(len - index, 3) + item.chapterName
+        })
+      } else {
+        this.list.forEach((item, index) => {
+          item.chapterName = addZeroForNum(index + 1, 3) + item.chapterName
+        })
+      }
+      // console.log('sequence: ', sequence)
     }
   }
 }
