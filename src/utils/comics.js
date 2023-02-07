@@ -273,8 +273,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.kumw5.com',
-    homepage: 'http://www.kumw5.com/',
+    domain: 'www.kumw6.com',
+    homepage: 'http://www.kumw6.com/',
     webName: '酷漫屋',
     comicNameCss: '.info h1',
     chapterCss: '.view-win-list',
@@ -345,6 +345,7 @@ export const comicsWebInfo = [
         const data = {
           comicName: comicName,
           chapterName: element.short_title + ' ' + element.title,
+          chapterNumStr: '',
           url,
           readtype: this.readtype,
           isPay: element.is_locked
@@ -365,6 +366,66 @@ export const comicsWebInfo = [
       const saveImg = []
       const query = []
       const imgPostUrl = 'https://manga.bilibili.com/twirp/comic.v1.Comic/ImageToken?device=pc&platform=web'
+      imgArray.forEach(item => {
+        query.push(item.path)
+      })
+      const img_data = new FormData()
+      img_data.append('urls', JSON.stringify(query))
+      const img_data_res = await request('post', imgPostUrl, img_data)
+      const imgObjArr = JSON.parse(img_data_res.responseText).data
+      imgObjArr.forEach(imgObj => {
+        saveImg.push(`${imgObj.url}?token=${imgObj.token}`)
+      })
+      return saveImg
+    }
+  },
+  {
+    domain: 'www.bilibilicomics.com',
+    homepage: 'https://www.bilibilicomics.com/',
+    webName: '哔哩哔哩漫画国际版',
+    comicNameCss: 'h1.manga-title',
+    chapterCss: '.episode-list .list-header',
+    headers: {
+      referer: 'https://www.bilibilicomics.com/'
+    },
+    webDesc: '？需要魔法？',
+    readtype: 1,
+    getComicInfo: async function() {
+      const comicid = window.location.href.match(/detail\/(\D*)(\d*)/)[2]
+      const data = new FormData()
+      data.append('comic_id', parseInt(comicid))
+      const getUrl = 'https://www.bilibilicomics.com/twirp/comic.v1.Comic/ComicDetail?device=pc&platform=web'
+      const { responseText } = await request('post', getUrl, data)
+      const comic = JSON.parse(responseText)
+      const comicName = comic.data.title
+      const comic_list = comic.data.ep_list
+      const allList = []
+      comic_list.forEach(element => {
+        const url = `https://www.bilibilicomics.com/mc${comicid}/${element.id}`
+        const data = {
+          comicName: comicName,
+          chapterName: element.short_title + ' ' + element.title,
+          chapterNumStr: '',
+          url,
+          readtype: this.readtype,
+          isPay: element.is_locked
+        }
+        allList.push(data)
+      })
+      return allList.reverse()
+    },
+    getImgs: async function(context, processData) {
+      const { url, isPay } = processData
+      const chapter_id = parseInt(url.match(/.com\/(\D*)(\d*)\/(\d*)/)[3])
+      const data = new FormData()
+      data.append('ep_id', chapter_id)
+      const postUrl = 'https://www.bilibilicomics.com/twirp/comic.v1.Comic/GetImageIndex?device=pc&platform=web'
+      const { responseText } = await request({ method: 'post', url: postUrl, data, useCookie: isPay })
+      const imgArray = JSON.parse(responseText).data.images
+
+      const saveImg = []
+      const query = []
+      const imgPostUrl = 'https://www.bilibilicomics.com/twirp/comic.v1.Comic/ImageToken?device=pc&platform=web'
       imgArray.forEach(item => {
         query.push(item.path)
       })
@@ -856,6 +917,30 @@ export const comicsWebInfo = [
         imgArray.push(item[1])
       }
       return imgArray
+    }
+  },
+  {
+    domain: 'www.kuaikanmanhua.com',
+    homepage: 'https://www.kuaikanmanhua.com/',
+    webName: '快看漫画',
+    comicNameCss: 'h3.title',
+    chapterCss: 'div.TopicList > div:nth-child(2)',
+    readtype: 1,
+    hasSpend: true,
+    searchTemplate_1: {
+      search_add_url: 'search?key=',
+      alllist_dom_css: '.container .mh-list',
+      minlist_dom_css: 'li',
+      img_src: 'src'
+    },
+    getImgs: async function(context, processData) {
+      const data = funstrToData(context, /(function.*}})(\(.*)\);<\/script>/g)
+      const comicImages = data.data[0].comicInfo.comicImages
+      const imgarr = []
+      comicImages.forEach(element => {
+        imgarr.push(element.url)
+      })
+      return imgarr
     }
   },
   {

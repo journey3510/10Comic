@@ -37,6 +37,12 @@
             name="info-o"
             color="red"
           />
+          <van-icon
+            v-if="item.webDesc"
+            :title="item.webDesc"
+            name="info-o"
+            color="red"
+          />
         </template>
       </van-cell>
     </van-cell-group>
@@ -60,6 +66,12 @@
             <van-icon
               v-if="item.webState === 2"
               title="？较多图片地址失效 ？"
+              name="info-o"
+              color="red"
+            />
+            <van-icon
+              v-if="item.webDesc"
+              :title="item.webDesc"
               name="info-o"
               color="red"
             />
