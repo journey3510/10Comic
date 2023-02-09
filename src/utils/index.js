@@ -54,7 +54,10 @@ export const getImage = async(processData) => {
 }
 
 export const request = async(...details) => {
-  const headers = currentComics.headers
+  let headers
+  if (currentComics !== null) {
+    headers = currentComics.headers
+  }
   let method, url, data, newHeaders, responseType, timeout, useCookie, cookie, onload, onerror, ontimeout
   if (details.length === 1) {
     ({ method, url, data, responseType, timeout, useCookie, onload, onerror, ontimeout } = details[0]);
