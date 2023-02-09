@@ -7,7 +7,7 @@ import { getStorage } from '@/config/setup'
 
 export const searchFunTemplate_1 = async(data, keyword) => {
   // eslint-disable-next-line prefer-const
-  let { search_add_url, search_pre, alllist_dom_css, minlist_dom_css, namelink_index, img_src, use_background } = data.searchTemplate_1
+  let { search_add_url, search_pre, alllist_dom_css, minlist_dom_css, namelink_index, img_src, use_background, img_reg, match_reg_num } = data.searchTemplate_1
   namelink_index ? namelink_index-- : namelink_index = 0
   let searchUrl = ''
   if (search_pre) {
@@ -32,8 +32,12 @@ export const searchFunTemplate_1 = async(data, keyword) => {
       obj.url = data.homepage + pathname.slice(1, pathname.length)
       // 获取封面图片地址
       if (!use_background) {
-        const reg2 = eval('/' + img_src + `=('|")(.*?)('|")` + '/')
-        obj.imageUrl = element.innerHTML.match(reg2)[2]
+        if (!img_reg) {
+          const reg2 = eval('/' + img_src + `=('|")(.*?)('|")` + '/')
+          obj.imageUrl = element.innerHTML.match(reg2)[2]
+        } else {
+          obj.imageUrl = element.innerHTML.match(img_reg)[match_reg_num]
+        }
         // obj.imageUrl = element.querySelector('img').getAttribute(img_src)
       } else {
         obj.imageUrl = element.innerHTML.match(/background.*?(url)\('?(.*?)'?\)/)[2]
@@ -231,6 +235,26 @@ export const comicsWebInfo = [
       let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
       return JSON.parse(imgStr)
+    }
+  },
+  {
+    domain: 'www.dongmanmanhua.cn',
+    homepage: 'https://www.dongmanmanhua.cn/',
+    webName: '咚漫',
+    comicNameCss: 'h1.subj',
+    chapterCss: '#_listUl',
+    readtype: 1,
+    headers: {
+      referer: 'https://www.dongmanmanhua.cn/'
+    },
+    getImgs: async function(context) {
+      const str = context.match(/class="viewer_lst[\s\S]*?input/)[0]
+      const imgobj = str.matchAll(/img src[\s\S]*?data-url="(.*?)"/g)
+      const imgUrlArr = []
+      for (const item of imgobj) {
+        imgUrlArr.push(item[1])
+      }
+      return imgUrlArr
     }
   },
   {
@@ -636,37 +660,6 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.cnanjie.com',
-    homepage: 'https://www.cnanjie.com/',
-    webName: '好看的漫画网',
-    comicNameCss: '.title h1',
-    chapterCss: '#chapter-list-1',
-    readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'search/?keywords=',
-      alllist_dom_css: '#dmList ul',
-      minlist_dom_css: 'li',
-      img_src: 'src'
-    },
-    getImgs: async function(context) {
-      const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
-      const strArr = []
-      for (const item of group) {
-        strArr.push(item[1])
-      }
-      let imgarr = JSON.parse(strArr[0])
-      if (imgarr[0].search('http') === -1) {
-        const josnRes = await request('get', this.homepage + 'js/config.js')
-        const josnContext = josnRes.responseText
-        const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
-        imgarr = imgarr.map((item) => {
-          return imageDomian + item
-        })
-      }
-      return imgarr
-    }
-  },
-  {
     domain: 'comic.acgn.cc',
     homepage: 'https://comic.acgn.cc/',
     webName: '动漫戏说',
@@ -735,29 +728,7 @@ export const comicsWebInfo = [
       return imgArray
     }
   },
-  {
-    domain: 'www.haoman8.com',
-    homepage: 'https://www.haoman8.com/',
-    webName: '好漫8',
-    comicNameCss: '.content .title',
-    chapterCss: '#j_chapter_list',
-    readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'index.php/search?key=',
-      alllist_dom_css: '.acgn-comic-list',
-      minlist_dom_css: 'li.acgn-item',
-      img_src: 'src',
-      use_background: true
-    },
-    getImgs: function(context) {
-      const group = context.matchAll(/data-echo="(.*?)"/g)
-      const imgArray = []
-      for (const item of group) {
-        imgArray.push(item[1])
-      }
-      return imgArray
-    }
-  },
+
   {
     domain: 'www.mhua5.com',
     homepage: 'https://www.mhua5.com/',
@@ -886,7 +857,8 @@ export const comicsWebInfo = [
       search_add_url: 'search/?keyword=',
       alllist_dom_css: '.pure-g.classify-items',
       minlist_dom_css: 'div.comics-card',
-      img_src: 'src'
+      img_reg: /src=('|")(.*?)\?/,
+      match_reg_num: 2
     },
     getImgs: async function(context) {
       const group = context.matchAll(/<img.*src="(.*?)"/g)
@@ -927,12 +899,6 @@ export const comicsWebInfo = [
     chapterCss: 'div.TopicList > div:nth-child(2)',
     readtype: 1,
     hasSpend: true,
-    searchTemplate_1: {
-      search_add_url: 'search?key=',
-      alllist_dom_css: '.container .mh-list',
-      minlist_dom_css: 'li',
-      img_src: 'src'
-    },
     getImgs: async function(context, processData) {
       const data = funstrToData(context, /(function.*}})(\(.*)\);<\/script>/g)
       const comicImages = data.data[0].comicInfo.comicImages
@@ -944,19 +910,50 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.cnanjie.com',
+    homepage: 'https://www.cnanjie.com/',
+    webName: '好看的漫画网',
+    comicNameCss: '.title h1',
+    chapterCss: '#chapter-list-1',
+    readtype: 1,
+    searchTemplate_1: {
+      search_add_url: 'search/?keywords=',
+      alllist_dom_css: '#dmList ul',
+      minlist_dom_css: 'li',
+      img_src: 'src'
+    },
+    getImgs: async function(context) {
+      const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
+      const strArr = []
+      for (const item of group) {
+        strArr.push(item[1])
+      }
+      let imgarr = JSON.parse(strArr[0])
+      if (imgarr[0].search('http') === -1) {
+        const josnRes = await request('get', this.homepage + 'js/config.js')
+        const josnContext = josnRes.responseText
+        const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+        imgarr = imgarr.map((item) => {
+          return imageDomian + item
+        })
+      }
+      return imgarr
+    }
+  },
+  {
     domain: 'www.maofly.com',
     homepage: 'https://www.maofly.com/',
     webName: '漫画猫',
     comicNameCss: 'h1.comic-title',
     chapterCss: 'ol.links-of-books.num_div',
     readtype: 1,
-    webState: 2,
-    searchTemplate_1: {
-      search_add_url: 'search.html?q=',
-      alllist_dom_css: '.comic-main-section.bg-white .row.m-0',
-      minlist_dom_css: 'div.col-4',
-      img_src: 'data-original'
-    },
+    webDesc: '?可访问?',
+    // searchTemplate_1: {
+    //   search_add_url: 'search.html?q=',
+    //   alllist_dom_css: '.comic-main-section.bg-white .row.m-0',
+    //   minlist_dom_css: 'div.col-4',
+    //   img_src: 'data-original'
+    // },
     getImgs: async function(context) {
       const img_data = context.match(/let img_data = "(.*?)"/)[1]
       const asset_domain = context.match(/data-chapter-domain="(.*?)"/)[1]
@@ -969,6 +966,29 @@ export const comicsWebInfo = [
       imgArray = img_data_arr.map((item) => {
         return asset_domain + '/uploads/' + item
       })
+      return imgArray
+    }
+  },
+  {
+    domain: 'www.haoman8.com',
+    homepage: 'https://www.haoman8.com/',
+    webName: '好漫8',
+    comicNameCss: '.content .title',
+    chapterCss: '#j_chapter_list',
+    readtype: 1,
+    // searchTemplate_1: {
+    //   search_add_url: 'index.php/search?key=',
+    //   alllist_dom_css: '.acgn-comic-list',
+    //   minlist_dom_css: 'li.acgn-item',
+    //   img_src: 'src',
+    //   use_background: true
+    // },
+    getImgs: function(context) {
+      const group = context.matchAll(/data-echo="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[1])
+      }
       return imgArray
     }
   }
