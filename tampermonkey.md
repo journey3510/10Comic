@@ -25,59 +25,61 @@
   - 添加脚本反馈/评分跳转链接
 - 搜索 (默认隐藏)
   - 对多个网站搜索漫画，可跳转指定漫画网页
+<br /><br />
 
-
+## 2023.2.10
+  脚本开源-[GitHub](https://github.com/journey3510/10Comic)
 ## 2023.2.7 
-    从 **1.4.0** 版本起脚本更改为任意网页运行，脚本默认不加载界面，可通过快捷键 **Alt + V** 加载界面，或点击浏览器油猴扩展图标点击本脚本中的-加载UI
+  从 **1.4.0** 版本起脚本更改为任意网页运行，脚本默认不加载界面，可通过快捷键 **Alt + V** 加载界面，或点击浏览器油猴扩展图标点击本脚本中的-加载UI
   当然也可以在脚本设置中恢复默认加载界面（不建议，脚本使用 Vant 组件库, 可能影响原网站样式，如会改变网站的字体大小等
-
+<br /><br />
 
 ## 操作指北
  - <sapn id='browserapi'> 油猴-浏览器API
     - 油猴 - 设置 - 通用 - 配置模式 - 选高级
     - 设置 - 下载 BETA - 下载模式 - 选浏览器API
+<br /><br />
 
 
 ## 漫画网站列表
-  <div style="width:200px">**网站**</div>  | <div style="width:290px">**首页** </div>                     
-----------------------|-------------------------------------
- **动漫之家**      | https://manhua\.dmzj\.com/        
- **动漫之家2**     | https://www\.dmzj\.com/           
- **Mangabz**   | http://www\.mangabz\.com/         
- **极速漫画**      | https://www\.1kkk\.com/           
- **动漫屋**       | https://www\.dm5\.com/            
- **奇漫屋**       | http://www\.qiman58\.com/         
- **咚漫**        | https://www\.dongmanmanhua\.cn/   
- **腾讯漫画**      | https://ac\.qq\.com/              
- **酷漫屋**       | http://www\.kumw6\.com/           
- **哔哩哔哩**      | https://manga\.bilibili\.com/     
- **哔哩哔哩漫画国际版** | https://www\.bilibilicomics\.com/ 
- **百漫谷\(简\)**  | https://www\.darpou\.com/         
- **百漫谷\(繁\)**  | https://darpou\.com/              
- **武侠漫画（手机）**  | https://m\.wuxiamh\.com/          
- **武侠漫画网（电脑）** | https://www\.wuxiamh\.com/        
- **七夕漫画**      | http://qiximh3\.com/              
- **36漫画网**     | https://www\.36manga\.com/        
- **古风漫画网**     | https://www\.gufengmanhua\.com/   
- **古风漫画网 2**   | https://www\.123gf\.com/          
- **滴滴漫画**      | http://www\.txydd\.com/           
- **动漫戏说**      | https://comic\.acgn\.cc/          
- **新新漫画**      | https://www\.77mh\.xyz/           
- **漫画星球**      | http://www\.mhxqiu2\.com/         
- **漫画屋**       | https://www\.mhua5\.com/          
- **27漫画网**     | https://www\.2mzx\.com/           
- **最漫画**       | https://www\.zuimh\.com/          
- **六漫画**       | http://www\.sixmh7\.com/          
- **漫画芯**       | https://www\.mhxin\.com/          
- **包子漫画**      | https://cn\.baozimh\.com/         
- **爱国漫**       | https://www\.aiguoman\.com/       
- **快看漫画**      | https://www\.kuaikanmanhua\.com/  
- **好看的漫画网**    | https://www\.cnanjie\.com/        
- **漫画猫**       | https://www\.maofly\.com/         
- **好漫8**       | https://www\.haoman8\.com/        
+| **webName** | **homepage**                      |
+|-------------|-----------------------------------|
+| 动漫之家        | https://manhua\.dmzj\.com/        |
+| 动漫之家2       | https://www\.dmzj\.com/           |
+| Mangabz     | http://www\.mangabz\.com/         |
+| 极速漫画        | https://www\.1kkk\.com/           |
+| 动漫屋         | https://www\.dm5\.com/            |
+| 奇漫屋         | http://www\.qiman58\.com/         |
+| 咚漫          | https://www\.dongmanmanhua\.cn/   |
+| 腾讯漫画        | https://ac\.qq\.com/              |
+| 酷漫屋         | http://www\.kumw6\.com/           |
+| 哔哩哔哩        | https://manga\.bilibili\.com/     |
+| 哔哩哔哩漫画国际版   | https://www\.bilibilicomics\.com/ |
+| 百漫谷\(简\)    | https://www\.darpou\.com/         |
+| 百漫谷\(繁\)    | https://darpou\.com/              |
+| 武侠漫画（手机）    | https://m\.wuxiamh\.com/          |
+| 武侠漫画网（电脑）   | https://www\.wuxiamh\.com/        |
+| 七夕漫画        | http://qiximh3\.com/              |
+| 36漫画网       | https://www\.36manga\.com/        |
+| 古风漫画网       | https://www\.gufengmanhua\.com/   |
+| 古风漫画网 2     | https://www\.123gf\.com/          |
+| 滴滴漫画        | http://www\.txydd\.com/           |
+| 动漫戏说        | https://comic\.acgn\.cc/          |
+| 新新漫画        | https://www\.77mh\.xyz/           |
+| 漫画星球        | http://www\.mhxqiu2\.com/         |
+| 漫画屋         | https://www\.mhua5\.com/          |
+| 27漫画网       | https://www\.2mzx\.com/           |
+| 最漫画         | https://www\.zuimh\.com/          |
+| 六漫画         | http://www\.sixmh7\.com/          |
+| 漫画芯         | https://www\.mhxin\.com/          |
+| 包子漫画        | https://cn\.baozimh\.com/         |
+| 爱国漫         | https://www\.aiguoman\.com/       |
+| 快看漫画        | https://www\.kuaikanmanhua\.com/  |
+| 好看的漫画网      | https://www\.cnanjie\.com/        |
+| 漫画猫         | https://www\.maofly\.com/         |
+| 好漫8         | https://www\.haoman8\.com/        |
 
-
-
+<br />
 
 ## <font color="#dd0000">* 声明/注意</font>
   - **该脚本及其产生的内容数据仅限用于个人学习，不要将其用于任何非法使用，后果与作者无关**
@@ -88,6 +90,7 @@
   - **刷新页面** 任务会终止
   - 如更新脚本后脚本运行出错(新版本存储数据格式可能有不同)，请尝试脚本中初始化设置数据
   - 如压缩下载有较多油猴弹窗提示跨域,建议直接下载
+<br /><br />
 
 
 ## 自定义添加规则（可适用于部分静态网页）
@@ -159,15 +162,18 @@
   },{……},{……},{……}
 ]
 ```
+<br />
 
 
-### v1.5 更新记录
+## v1.5 更新记录
   - 2023/2/10 *v1.5.0* 
     - 修改README与配置文件
+    - 脚本开源-[GitHub](https://github.com/journey3510/10Comic)
+
+<br />
 
 
-
-### 感谢
+## 感谢
   - [Tampermonkey-Vue](https://github.com/huangxubo23/tampermonkey-vue)
   - [用JS实现多个任务并行执行的队列](https://juejin.cn/post/6844903961728647181)
 
