@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         TEST__APP
+// @name         10Comic-Test
 // @namespace    http://tampermonkey2.net/
 // @version      TEST__APP_VERSION
-// @description  10测试脚本
+// @description  10Comic_测试脚本
 // @author       journey3510
 // @run-at       document-end
 // @grant        GM_getValue
@@ -20,7 +20,7 @@
 // @require      https://unpkg.com/vant@2.12/lib/vant.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/jszip/3.7.1/jszip.min.js
 //
-// @require      file://D:\work\tampermonkey-comic-vue2.0\dist\tampermonkey-vue.user.test.js
+// @require      file://项目保存目录\10Comic\dist\10comic.test.js
 //
 // @include      *
 // @connect      *
