@@ -1,6 +1,4 @@
-## 漫画 搜索|下载
-
-### 功能
+## 功能
 - 默认 **隐藏在网页右侧**，点击按钮可切换显示/隐藏，含（主页，加载，下载，设置）四个标签栏，点击切换显示各自内容
 - 主页
   - 显示脚本目前适用的漫画网站和导入规则网站，点击可 *跳转* 至网站
@@ -29,18 +27,60 @@
   - 对多个网站搜索漫画，可跳转指定漫画网页
 
 
-## 2023.2.7   v1.4.0
-  从 **1.4.0**版本起脚本更改为任意网页运行，脚本默认不加载界面，可通过快捷键 **Alt + V** 加载界面，或点击浏览器油猴扩展图标点击本脚本中的-加载UI
-  当然也可以也可以在脚本设置中恢复默认加载界面（不建议，脚本使用 Vant 组件库, 可能影响原网站样式，如会改变网站的字体大小等
+## 2023.2.7 
+    从 **1.4.0** 版本起脚本更改为任意网页运行，脚本默认不加载界面，可通过快捷键 **Alt + V** 加载界面，或点击浏览器油猴扩展图标点击本脚本中的-加载UI
+  当然也可以在脚本设置中恢复默认加载界面（不建议，脚本使用 Vant 组件库, 可能影响原网站样式，如会改变网站的字体大小等
 
 
-### 操作指北
+## 操作指北
  - <sapn id='browserapi'> 油猴-浏览器API
     - 油猴 - 设置 - 通用 - 配置模式 - 选高级
     - 设置 - 下载 BETA - 下载模式 - 选浏览器API
 
-### <font color="#dd0000">* 声明/注意</font>
-  - 该脚本及其产生的内容数据仅限用于个人学习，不可用于其他用途，否则后果自负
+
+## 漫画网站列表
+  <div style="width:200px">**网站**</div>  | <div style="width:290px">**首页** </div>                     
+----------------------|-------------------------------------
+ **动漫之家**      | https://manhua\.dmzj\.com/        
+ **动漫之家2**     | https://www\.dmzj\.com/           
+ **Mangabz**   | http://www\.mangabz\.com/         
+ **极速漫画**      | https://www\.1kkk\.com/           
+ **动漫屋**       | https://www\.dm5\.com/            
+ **奇漫屋**       | http://www\.qiman58\.com/         
+ **咚漫**        | https://www\.dongmanmanhua\.cn/   
+ **腾讯漫画**      | https://ac\.qq\.com/              
+ **酷漫屋**       | http://www\.kumw6\.com/           
+ **哔哩哔哩**      | https://manga\.bilibili\.com/     
+ **哔哩哔哩漫画国际版** | https://www\.bilibilicomics\.com/ 
+ **百漫谷\(简\)**  | https://www\.darpou\.com/         
+ **百漫谷\(繁\)**  | https://darpou\.com/              
+ **武侠漫画（手机）**  | https://m\.wuxiamh\.com/          
+ **武侠漫画网（电脑）** | https://www\.wuxiamh\.com/        
+ **七夕漫画**      | http://qiximh3\.com/              
+ **36漫画网**     | https://www\.36manga\.com/        
+ **古风漫画网**     | https://www\.gufengmanhua\.com/   
+ **古风漫画网 2**   | https://www\.123gf\.com/          
+ **滴滴漫画**      | http://www\.txydd\.com/           
+ **动漫戏说**      | https://comic\.acgn\.cc/          
+ **新新漫画**      | https://www\.77mh\.xyz/           
+ **漫画星球**      | http://www\.mhxqiu2\.com/         
+ **漫画屋**       | https://www\.mhua5\.com/          
+ **27漫画网**     | https://www\.2mzx\.com/           
+ **最漫画**       | https://www\.zuimh\.com/          
+ **六漫画**       | http://www\.sixmh7\.com/          
+ **漫画芯**       | https://www\.mhxin\.com/          
+ **包子漫画**      | https://cn\.baozimh\.com/         
+ **爱国漫**       | https://www\.aiguoman\.com/       
+ **快看漫画**      | https://www\.kuaikanmanhua\.com/  
+ **好看的漫画网**    | https://www\.cnanjie\.com/        
+ **漫画猫**       | https://www\.maofly\.com/         
+ **好漫8**       | https://www\.haoman8\.com/        
+
+
+
+
+## <font color="#dd0000">* 声明/注意</font>
+  - **该脚本及其产生的内容数据仅限用于个人学习，不要将其用于任何非法使用，后果与作者无关**
   - 请合理使用线程
   - 如存在**付费章节**需**登录并提前购买**，部分网站不能正常阅读，下载也可能会失败
   - 文件后缀名为 **.xx** 表示 *下载该图片失败*
@@ -49,7 +89,8 @@
   - 如更新脚本后脚本运行出错(新版本存储数据格式可能有不同)，请尝试脚本中初始化设置数据
   - 如压缩下载有较多油猴弹窗提示跨域,建议直接下载
 
-### 自定义添加规则（适用于部分静态网页）
+
+## 自定义添加规则（可适用于部分静态网页）
 - JOSN 字段说明 (未加入搜索字段)
 
 ```js
@@ -62,33 +103,35 @@
     chapterCss，String, 含有所有章节链接的dom的CSS选择器,
     readtype， Number, 值:1 -卷轴阅读或SPA网页, 值:0 -翻页阅读 (指不能一次性获取到某章节所有图片地址)
     iswork， Boolean,  网站是否正常运行
+    webDesc, String,  一些网站备注或提醒信息
+
     getImgs，String,  字符内容为获取章节图片的函数,
-      * 1
+      * 1、(readtype == 1) - 卷轴阅读或SPA网页
       * @param {String} (context)  
         * context 某一章节链接的请求正文
       * @return {Array} imgArray
-          * readtype == 1 时，要求返回imgArray 数组 含章节所有图片地址
+          * 要求返回imgArray 数组 包含该章节所有图片地址
           * 例如 return ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
           
-      * 2
+      * 2、(readtype == 0) - 翻页阅读
       * @param {String, Object} (context, processData)
         * context 章节某一页链接的请求正文
-        * processData 进程反馈数据及保存数据,首次不存在
+        * processData 进程反馈数据及自定义保存的数据,首页请求时 processData 未定义
       * @return {Object} 
-          * readtype == 0 （翻页） 时，要求返回 { *imgUrlArr, *nextPageUrl, *imgCount, otherData }
-          * imgUrlArr -当前页的图片地址, imgUrlArr.length == 0 结束下载, 否则请求下一页地址
-          * nextPageUrl -下一页地址, 为 '' 则结束下载, 
-          * imgCount -图片总数量
-          * otherData -(可选值)结束当前页请求后自定义保存需要的数据，下次在参数processData中可获取到
+          * 要求返回 { *imgUrlArr, *nextPageUrl, *imgCount, otherData }
+          * imgUrlArr -当前页的所有图片地址, 如果本页 imgUrlArr.length == 0 结束下载, 否则请求下一页地址
+          * nextPageUrl -下一页地址, nextPageUrl == '' 可以结束下载
+          * imgCount -章节图片总数量
+          * otherData -(可选值)结束当前页请求后自定义保存需要的数据，请求下一页数据时 processData.otherData可获取到
           * 参考 
             * return  { 
               imgUrlArr: ['http://xx.xx.xx/3.jpg','http://xx.xx.xx/4.jpg']
-              nextPageUrl: 'http://xx.xx.xx/xx.html'
+              nextPageUrl: 'http://xx.xx.xx/xxx/3.html'
               imgCount: 12,
               otherData: {
-                currentPage: 5,
+                currentPage: 2,
                 sign: 'FSFRGGFDBFRHHEYSDGHNTRRSSGS',
-                …
+                ……
               }
             }
   }
@@ -117,19 +160,11 @@
 ]
 ```
 
-- 最后脚本添加// @match   域名
-  - 如    //@match   \*://xx.xx.com/\*
 
+### v1.5 更新记录
+  - 2023/2/10 *v1.5.0* 
+    - 修改README与配置文件
 
-### v1.4 更新记录
-  - 2023/2/10 *v1.4.1* 
-    - 新增咚漫
-    - 修改漫画搜索正则匹配图片地址
-    - 调整漫画列表顺序、注释掉\/修复 部分网站失效搜索
-  - 2023/2/7 *v1.4.0* 
-    - 增加快看漫画、哔哩哔哩漫画国际版、修改酷漫屋域名
-    - 增加为章节添加序号的可选功能
-    - 脚本更改为任意网站运行、默认脚本不加载界面
 
 
 ### 感谢
