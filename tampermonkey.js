@@ -82,6 +82,7 @@
 // @connect      nicefee.com
 // @connect      dcarimg.com
 // @connect      baozimh.com
+// @connect      pstatic.net
 // @license      GPLv3
 // @include      *
 // @connect      *

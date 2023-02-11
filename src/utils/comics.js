@@ -243,12 +243,35 @@ export const comicsWebInfo = [
     webName: '咚漫',
     comicNameCss: 'h1.subj',
     chapterCss: '#_listUl',
+    chapterNameReg: /alt="(.*?)"/,
     readtype: 1,
     headers: {
       referer: 'https://www.dongmanmanhua.cn/'
     },
     getImgs: async function(context) {
       const str = context.match(/class="viewer_lst[\s\S]*?input/)[0]
+      const imgobj = str.matchAll(/img src[\s\S]*?data-url="(.*?)"/g)
+      const imgUrlArr = []
+      for (const item of imgobj) {
+        imgUrlArr.push(item[1])
+      }
+      return imgUrlArr
+    }
+  },
+  {
+    domain: 'www.webtoons.com',
+    homepage: 'https://www.webtoons.com/',
+    webName: 'webtoons',
+    comicNameCss: 'h1.subj',
+    chapterCss: '#_listUl',
+    chapterNameReg: /alt="(.*?)"/,
+    readtype: 1,
+    webDesc: '？需要魔法？',
+    headers: {
+      referer: 'https://www.webtoons.com/'
+    },
+    getImgs: async function(context) {
+      const str = context.match(/class="viewer_lst[\s\S]*?class="viewer_ad_area"/)[0]
       const imgobj = str.matchAll(/img src[\s\S]*?data-url="(.*?)"/g)
       const imgUrlArr = []
       for (const item of imgobj) {
@@ -303,7 +326,6 @@ export const comicsWebInfo = [
     comicNameCss: '.info h1',
     chapterCss: '.view-win-list',
     readtype: 1,
-    iswork: true,
     searchTemplate_1: {
       search_add_url: 'search.php?keyword=',
       alllist_dom_css: '.box.container > div > ul',
@@ -575,7 +597,7 @@ export const comicsWebInfo = [
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-4 li:not(:first-of-type)',
     readtype: 1,
-    iswork: false,
+    webDesc: '？可访问 ？',
     getImgs: function(context) {
       const group = context.matchAll(/chapterImages = ([\s\S]+?);var chapterPath = "([\s\S]+?)";var chapterPrice/g)
       let imgarr = []
@@ -758,7 +780,7 @@ export const comicsWebInfo = [
     comicNameCss: '.bar .position strong',
     chapterCss: '#play_0 #chapter-list-1',
     readtype: 1,
-    iswork: false,
+    webDesc: '？可访问 ？',
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
       const imgs = eval(imgStr)
