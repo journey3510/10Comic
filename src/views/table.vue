@@ -342,12 +342,20 @@ export default {
     // 获取章节数据
     getChapterData(nodeList, currentComics, type) {
       const hasSpend = currentComics.hasSpend
+      const chapterNameReg = currentComics.chapterNameReg
       nodeList.forEach(dom => {
         const urls = dom.querySelectorAll('a')
         const readtype = currentComics.readtype
+
         urls.forEach((element, index) => {
-          let chapterName = element.innerText.replace(/\n|\r/g, '')
-          chapterName = chapterName.split('\n')[0].trim()
+          let chapterName = ''
+          if (!chapterNameReg) {
+            chapterName = element.innerText.replace(/\n|\r/g, '')
+            chapterName = chapterName.split('\n')[0].trim()
+          } else {
+            const linkOuterHTML = element.outerHTML
+            chapterName = linkOuterHTML.match(chapterNameReg)[1]
+          }
 
           // 获取付费标志
           let currentIsPay = false

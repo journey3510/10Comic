@@ -2,17 +2,21 @@
   使用 Vue + Vant 开发的油猴插件脚本（Tampermonkey）
 
   基于浏览器油猴插件的使用，任意网页提供漫画搜索；漫画分章节下载(可直接下载/压缩下载)，可用于动漫之家、极速漫画、腾讯漫画、哔哩哔哩等30+网站；对个别漫画网站修改阅读样式；可按需编写定义规则JSON导入以支持其他漫画网站
-<br /><br /><br />
+
+  [![github](https://img.shields.io/badge/journey3510-10Comic_-blue?style=flat&logo=github)](https://github.com/journey3510/10Comic)
+[![github](https://img.shields.io/github/commit-activity/y/journey3510/10Comic?logo=github)](https://github.com/journey3510/10Comic)
+[![10Comic](https://img.shields.io/badge/GreasyFork-10Comic_-blue?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3ggEBCQHM3fXsAAAAVdJREFUOMudkz2qwkAUhc/goBaGJBgUtBCZyj0ILkpwAW7Bws4yO3AHLiCtEFD8KVREkoiFxZzX5A2KGfN4F04zMN+ce+5c4LMUgDmANYBnrnV+plBSi+FwyHq9TgA2LQpvCiEiABwMBtzv95RSfoNEHy8DYBzHrNVqVEr9BWKcqNFoxF6vx3a7zc1mYyC73a4MogBg7vs+z+czO50OW60Wt9stK5UKp9Mpj8cjq9WqDTBHnjAdxzGQZrPJw+HA31oulzbAWgLoA0CWZVBKIY5jzGYzdLtdE9DlcrFNrY98zobqOA6TJKHW2jg4nU5sNBpFDp6mhVe5rsvVasUwDHm9Xqm15u12o+/7Hy0gD8KatOd5vN/v1FozTVN6nkchxFuI6hsAAIMg4OPxMJCXdtTbR7JJCMEgCJhlGUlyPB4XfumozInrupxMJpRSRtZlKoNYl+m/6/wDuWAjtPfsQuwAAAAASUVORK5CYII=)](https://greasyfork.org/zh-CN/scripts/447819)
+<br /><br />
 
 ## 脚本使用
 - 安装Tampermonkey插件
   请在浏览器安装[Tampermonkey](https://tampermonkey.net/)插件
 
 - 安装脚本
-  安装地址-[10图漫](https://greasyfork.org/zh-CN/scripts/447819)
+  安装地址：[10图漫](https://greasyfork.org/zh-CN/scripts/447819)
 
 - 使用时可通过 快捷键 **Alt + V** 唤起界面
-- 更多使用说明见 [tampermonkey.md](https://github.com/journey3510/10Comic/blob/master/tampermonkey.md) 或 [10图漫](https://greasyfork.org/zh-CN/scripts/447819) 
+- 更多使用说明见 [tampermonkey.md](https://github.com/journey3510/10Comic/blob/master/tampermonkey.md) 或 [greasyfork-10图漫](https://greasyfork.org/zh-CN/scripts/447819) 
 <br /><br />
 
 
@@ -60,42 +64,43 @@ npm run build
 
 
 ### 漫画网站列表
-| **webName** | **homepage**                      |
+| **网站** | **网站首页**                      |
 |-------------|-----------------------------------|
-| 动漫之家        | https://manhua\.dmzj\.com/        |
-| 动漫之家2       | https://www\.dmzj\.com/           |
-| Mangabz     | http://www\.mangabz\.com/         |
-| 极速漫画        | https://www\.1kkk\.com/           |
-| 动漫屋         | https://www\.dm5\.com/            |
-| 奇漫屋         | http://www\.qiman58\.com/         |
-| 咚漫          | https://www\.dongmanmanhua\.cn/   |
-| 腾讯漫画        | https://ac\.qq\.com/              |
-| 酷漫屋         | http://www\.kumw6\.com/           |
-| 哔哩哔哩        | https://manga\.bilibili\.com/     |
-| 哔哩哔哩漫画国际版   | https://www\.bilibilicomics\.com/ |
-| 百漫谷\(简\)    | https://www\.darpou\.com/         |
-| 百漫谷\(繁\)    | https://darpou\.com/              |
-| 武侠漫画（手机）    | https://m\.wuxiamh\.com/          |
-| 武侠漫画网（电脑）   | https://www\.wuxiamh\.com/        |
-| 七夕漫画        | http://qiximh3\.com/              |
-| 36漫画网       | https://www\.36manga\.com/        |
-| 古风漫画网       | https://www\.gufengmanhua\.com/   |
-| 古风漫画网 2     | https://www\.123gf\.com/          |
-| 滴滴漫画        | http://www\.txydd\.com/           |
-| 动漫戏说        | https://comic\.acgn\.cc/          |
-| 新新漫画        | https://www\.77mh\.xyz/           |
-| 漫画星球        | http://www\.mhxqiu2\.com/         |
-| 漫画屋         | https://www\.mhua5\.com/          |
-| 27漫画网       | https://www\.2mzx\.com/           |
-| 最漫画         | https://www\.zuimh\.com/          |
-| 六漫画         | http://www\.sixmh7\.com/          |
-| 漫画芯         | https://www\.mhxin\.com/          |
-| 包子漫画        | https://cn\.baozimh\.com/         |
-| 爱国漫         | https://www\.aiguoman\.com/       |
-| 快看漫画        | https://www\.kuaikanmanhua\.com/  |
-| 好看的漫画网      | https://www\.cnanjie\.com/        |
-| 漫画猫         | https://www\.maofly\.com/         |
-| 好漫8         | https://www\.haoman8\.com/        |
+| 动漫之家        | https://manhua.dmzj.com/        |
+| 动漫之家2       | https://www.dmzj.com/           |
+| Mangabz     | http://www.mangabz.com/         |
+| 极速漫画        | https://www.1kkk.com/           |
+| 动漫屋         | https://www.dm5.com/            |
+| 奇漫屋         | http://www.qiman58.com/         |
+| 咚漫          | https://www.dongmanmanhua.cn/   |
+| webtoon          | https://www.webtoons.com/   |
+| 腾讯漫画        | https://ac.qq.com/              |
+| 酷漫屋         | http://www.kumw6.com/           |
+| 哔哩哔哩        | https://manga.bilibili.com/     |
+| 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ |
+| 百漫谷(简)    | https://www.darpou.com/         |
+| 百漫谷(繁)    | https://darpou.com/              |
+| 武侠漫画（手机）    | https://m.wuxiamh.com/          |
+| 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |
+| 七夕漫画        | http://qiximh3.com/              |
+| 36漫画网       | https://www.36manga.com/        |
+| 古风漫画网       | https://www.gufengmanhua.com/   |
+| 古风漫画网 2     | https://www.123gf.com/          |
+| 滴滴漫画        | http://www.txydd.com/           |
+| 动漫戏说        | https://comic.acgn.cc/          |
+| 新新漫画        | https://www.77mh.xyz/           |
+| 漫画星球        | http://www.mhxqiu2.com/         |
+| 漫画屋         | https://www.mhua5.com/          |
+| 27漫画网       | https://www.2mzx.com/           |
+| 最漫画         | https://www.zuimh.com/          |
+| 六漫画         | http://www.sixmh7.com/          |
+| 漫画芯         | https://www.mhxin.com/          |
+| 包子漫画        | https://cn.baozimh.com/         |
+| 爱国漫         | https://www.aiguoman.com/       |
+| 快看漫画        | https://www.kuaikanmanhua.com/  |
+| 好看的漫画网      | https://www.cnanjie.com/        |
+| 漫画猫         | https://www.maofly.com/         |
+| 好漫8         | https://www.haoman8.com/        |
 
 <br /><br />
 
