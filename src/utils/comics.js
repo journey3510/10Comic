@@ -1049,9 +1049,33 @@ export const matchWeb = (url) => {
       }
     }
     if (currentComics !== null && typeof currentComics.getImgs === 'string') {
-      // eslint-disable-next-line no-eval
-      currentComics.getImgs = eval('(function(){return ' + currentComics.getImgs + ' })()')
+      window.request = request
+      currentComics.getImgs = funSplicing(currentComics.getImgs)
     }
   }
+}
+
+function funSplicing(funStr) {
+  const getImgsGroup = funStr.match(/((async )?function\(.*{)([\s\S]*)/)
+  const funHead = getImgsGroup[1]
+  const funTail = getImgsGroup[3]
+  let insertCode = ''
+  if (funStr.includes('funstrToData')) {
+    insertCode = insertCode + funstrToData.toString() + '\n'
+  }
+  if (funStr.includes('request')) {
+    insertCode = insertCode + 'const request = window.request' + '\n'
+  }
+  const code = `
+  (function(){
+    return ${funHead}
+  // 注入开始
+  ${insertCode}
+  // 注入结束
+  ${funTail}
+  })()`
+  const fun = eval(code)
+  // console.log('fun: ', fun.toString())
+  return fun
 }
 

@@ -53,7 +53,7 @@ export const getImage = async(processData) => {
   }
 }
 
-export const request = async(...details) => {
+export const request = async function request(...details) {
   let headers
   if (currentComics !== null) {
     headers = currentComics.headers
@@ -155,7 +155,7 @@ export const parseToDOM = (str) => {
   return div
 }
 
-export const funstrToData = (str, reg) => {
+export const funstrToData = function funstrToData(str, reg) {
   const group = str.matchAll(reg)
   const func = []
   for (const item of group) {
