@@ -83,6 +83,7 @@
 // @connect      dcarimg.com
 // @connect      baozimh.com
 // @connect      pstatic.net
+// @connect      komiic.com
 // @license      GPLv3
 // @include      *
 // @connect      *

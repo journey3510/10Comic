@@ -54,33 +54,29 @@ export const getImage = async(processData) => {
 }
 
 export const request = async(...details) => {
-  let headers
-  if (currentComics !== null) {
+  let method, url, data, headers, responseType, timeout, useCookie, cookie, onload, onerror, ontimeout, tail
+  // 只有一个参数
+  if (details.length === 1) {
+    ({ method, url, data, headers, responseType, timeout, useCookie, onload, onerror, ontimeout } = details[0])
+    useCookie ? cookie = document.cookie : ''
+  } else { // 含多个参数时 [*method, *url, data, headers]
+    [method, url, ...tail] = details
+    if (tail) {
+      tail.length > 0 ? (data = tail[0]) : ''
+      tail.length > 1 ? (headers = tail[1]) : ''
+    }
+  }
+
+  // 设置currentComics中的 headers
+  if (!headers && currentComics !== null) {
     headers = currentComics.headers
   }
-  let method, url, data, newHeaders, responseType, timeout, useCookie, cookie, onload, onerror, ontimeout
-  if (details.length === 1) {
-    ({ method, url, data, responseType, timeout, useCookie, onload, onerror, ontimeout } = details[0]);
-    //
-    (details[0].headers || details[0].headers === '') ? newHeaders = details[0].headers : ''
-    useCookie ? cookie = document.cookie : ''
-  } else {
-    method = details[0]
-    url = details[1]
-    data = details[2]
-    details[3] ? (newHeaders = details[3]) : ''
-  }
+
+  // 无效地址
   if (url === null || url === '') {
     return new Promise((resolve, reject) => {
       resolve('')
     })
-  }
-
-  let theHeaders
-  if (newHeaders === '') {
-    theHeaders = ''
-  } else {
-    theHeaders = (newHeaders || headers || '')
   }
 
   return new Promise((resolve, reject) => {
@@ -88,10 +84,10 @@ export const request = async(...details) => {
     GM_xmlhttpRequest({
       method,
       url,
-      headers: theHeaders,
+      headers: (headers || ''),
       data: (data || null),
       responseType,
-      timeout: (timeout || 15 * 1000),
+      timeout: (timeout || 30 * 1000),
       cookie: (cookie || ''),
       onload: (onload || function(res) {
         resolve(res)

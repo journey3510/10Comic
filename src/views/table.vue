@@ -246,7 +246,7 @@ export default {
         if (times === undefined) {
           setTimeout(() => {
             this.getInfo(1)
-          }, 2000)
+          }, 1000)
         }
         console.log('error: ', error)
       }
@@ -410,6 +410,7 @@ export default {
     reloadList() {
       this.list = []
       this.selectResult = []
+      this.getInfo(1)
       this.getSelectList()
     },
     characterSequenceChange() {
