@@ -78,6 +78,7 @@ npm run build
 | 酷漫屋         | http://www.kumw6.com/           |
 | 哔哩哔哩        | https://manga.bilibili.com/     |
 | 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ |
+| Komiic漫画        | https://komiic.com/     |
 | 百漫谷(简)    | https://www.darpou.com/         |
 | 百漫谷(繁)    | https://darpou.com/              |
 | 武侠漫画（手机）    | https://m.wuxiamh.com/          |
@@ -105,7 +106,7 @@ npm run build
 <br /><br />
 
 ## 声明
-  **本项目及其产生的内容数据仅限用于个人学习，不可将其用于任何非法使用，产生后果与作者无关**
+  **本项目及其产生的内容数据仅限用于个人学习使用，不可将其用于任何非法用途，产生后果与作者无关**
 
 <br />
 

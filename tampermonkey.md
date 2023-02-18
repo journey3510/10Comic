@@ -64,6 +64,7 @@
 | 酷漫屋         | http://www.kumw6.com/           |
 | 哔哩哔哩        | https://manga.bilibili.com/     |
 | 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ |
+| Komiic漫画        | https://komiic.com/     |
 | 百漫谷(简)    | https://www.darpou.com/         |
 | 百漫谷(繁)    | https://darpou.com/              |
 | 武侠漫画（手机）    | https://m.wuxiamh.com/          |
@@ -127,13 +128,13 @@
       * 2、(readtype == 0) - 翻页阅读
       * @param {String, Object} (context, processData)
         * context 章节某一页链接的请求正文
-        * processData 进程反馈数据及自定义保存的数据,首页请求时 processData 未定义
+        * processData 进程反馈数据及自定义保存的数据
       * @return {Object} 
           * 要求返回 { *imgUrlArr, *nextPageUrl, *imgCount, otherData }
           * imgUrlArr -当前页的所有图片地址, 如果本页 imgUrlArr.length == 0 结束下载, 否则请求下一页地址
-          * nextPageUrl -下一页地址, nextPageUrl == '' 可以结束下载
+          * nextPageUrl -下一页地址,如果 nextPageUrl == '' ，获取完 imgUrlArr 后结束下载
           * imgCount -章节图片总数量
-          * otherData -(可选值)结束当前页请求后自定义保存需要的数据，请求下一页数据时 processData.otherData可获取到
+          * otherData -(可选值)结束当前页请求后自定义保存需要的数据，请求下一页数据时 processData.otherData可获取到,首页请求时 otherData 未定义
           * 参考 
             * return  { 
               imgUrlArr: ['http://xx.xx.xx/3.jpg','http://xx.xx.xx/4.jpg']
@@ -174,6 +175,10 @@
 
 
 ## v1.5 更新记录
+  - 2023/2/18 *v1.5.2* 
+    - 新增 Komiic漫画
+    - 优化请求 request 方法、图片 请求|下载 请求头添加 referer 
+    - 重载列表时重新获取漫画名（修复SPA网页更换时获取漫画名异常）
   - 2023/2/11 *v1.5.1* 
     - 新增 webtoons 网站
     - 获取漫画章节列表可选正则来匹配章节名称
