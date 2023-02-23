@@ -238,7 +238,7 @@ export default {
         setTimeout(() => {
           this.comicName = document.querySelector(comicNameCss).innerText.split('\n')[0].trim()
           this.$bus.$emit('getComicName', this.comicName)
-        }, 2000)
+        }, 500)
         //
         this.zipDownFlag = getStorage('zipDownFlag')
       // eslint-disable-next-line no-empty
@@ -349,12 +349,16 @@ export default {
 
         urls.forEach((element, index) => {
           let chapterName = ''
-          if (!chapterNameReg) {
-            chapterName = element.innerText.replace(/\n|\r/g, '')
-            chapterName = chapterName.split('\n')[0].trim()
-          } else {
-            const linkOuterHTML = element.outerHTML
-            chapterName = linkOuterHTML.match(chapterNameReg)[1]
+          try {
+            if (!chapterNameReg) {
+              chapterName = element.innerText.replace(/\n|\r/g, '')
+              chapterName = chapterName.split('\n')[0].trim()
+            } else {
+              const linkOuterHTML = element.outerHTML
+              chapterName = linkOuterHTML.match(chapterNameReg)[1]
+            }
+          } catch (error) {
+            // console.log()
           }
 
           // 获取付费标志
@@ -410,6 +414,7 @@ export default {
     reloadList() {
       this.list = []
       this.selectResult = []
+      this.getInfo(1)
       this.getSelectList()
     },
     characterSequenceChange() {
