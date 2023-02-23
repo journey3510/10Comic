@@ -59,7 +59,7 @@
       </van-collapse-item>
       <van-collapse-item name="3">
         <template #title>
-          <div :style="{display:'flex'}">已下载
+          <div :style="{display:'flex'}">已下载记录
             <van-icon
               style="line-height: 25px;margin-left: 10px;"
               name="delete-o"

@@ -281,6 +281,28 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'comic.naver.com',
+    homepage: 'https://comic.naver.com/',
+    webName: 'comic.naver',
+    comicNameCss: '#content > div.comicinfo > div.detail > h2 > span.title',
+    chapterCss: 'tbody',
+    chapterNameReg: /\)">(.*?)<\/a>/,
+    webDesc: '找到漫画目录页再使用',
+    readtype: 1,
+    headers: {
+      referer: 'https://comic.naver.com/'
+    },
+    getImgs: async function(context) {
+      const str = context.match(/class="wt_viewer"[\s\S]*?(<\/div>)/)[0]
+      const imgobj = str.matchAll(/img src="(.*?)" title/g)
+      const imgUrlArr = []
+      for (const item of imgobj) {
+        imgUrlArr.push(item[1])
+      }
+      return imgUrlArr
+    }
+  },
+  {
     domain: 'ac.qq.com',
     homepage: 'https://ac.qq.com/',
     webName: '腾讯漫画',
