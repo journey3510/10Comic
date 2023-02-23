@@ -97,6 +97,9 @@ export default class Queue {
       downFile({
         url: imgurl,
         name: newName,
+        headers: {
+          referer: this.worker[index].url
+        },
         onload: result => {
           _this.worker[index].successNum = _this.worker[index].successNum + 1
           _this.worker[index].progress = parseInt(_this.worker[index].imgIndex / _this.worker[index].totalNumber * 100)
@@ -109,7 +112,10 @@ export default class Queue {
             request({
               method: 'get',
               url: imgurl,
-              responseType: 'blob'
+              responseType: 'blob',
+              headers: {
+                referer: this.worker[index].url
+              }
             }).then((res) => {
               const name_2 = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' + addZeroForNum(imgIndex, this.imgIndexBitNum) + '.' + this.getSuffix(res.finalUrl)
               _this.worker[index].successNum = _this.worker[index].successNum + 1
@@ -153,6 +159,9 @@ export default class Queue {
         method: 'get',
         url: imgurl,
         responseType: 'blob',
+        headers: {
+          referer: _this.worker[index].url
+        },
         onload: function(gmRes) {
           _this.worker[index].successNum = _this.worker[index].successNum + 1
           _this.worker[index].progress = parseInt(_this.worker[index].imgIndex / _this.worker[index].totalNumber * 100)

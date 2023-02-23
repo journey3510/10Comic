@@ -281,6 +281,28 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'comic.naver.com',
+    homepage: 'https://comic.naver.com/',
+    webName: 'comic.naver',
+    comicNameCss: '#content > div.comicinfo > div.detail > h2 > span.title',
+    chapterCss: 'tbody',
+    chapterNameReg: /\)">(.*?)<\/a>/,
+    webDesc: '找到漫画目录页再使用',
+    readtype: 1,
+    headers: {
+      referer: 'https://comic.naver.com/'
+    },
+    getImgs: async function(context) {
+      const str = context.match(/class="wt_viewer"[\s\S]*?(<\/div>)/)[0]
+      const imgobj = str.matchAll(/img src="(.*?)" title/g)
+      const imgUrlArr = []
+      for (const item of imgobj) {
+        imgUrlArr.push(item[1])
+      }
+      return imgUrlArr
+    }
+  },
+  {
     domain: 'ac.qq.com',
     homepage: 'https://ac.qq.com/',
     webName: '腾讯漫画',
@@ -482,6 +504,40 @@ export const comicsWebInfo = [
       imgObjArr.forEach(imgObj => {
         saveImg.push(`${imgObj.url}?token=${imgObj.token}`)
       })
+      return saveImg
+    }
+  },
+  {
+    domain: 'komiic.com',
+    homepage: 'https://komiic.com/',
+    webName: 'Komiic漫画',
+    comicNameCss: 'h1.ComicMain__title',
+    chapterCss: '.container .v-window-item .container .row',
+    chapterNameReg: /ComicChapters__serial">(\d*\.?\d*)</,
+    webDesc: 'SPA页面, 新页面需“重载列表”重新匹配新名称',
+    headers: {
+      referer: 'https://komiic.com/'
+    },
+    readtype: 1,
+    getImgs: async function(context, processData) {
+      const { url } = processData
+      const chapter_id = url.match(/chapter\/(\d*)\/images/)[1]
+      const postUrl = 'https://komiic.com/api/query'
+      const data = {
+        'operationName': 'imagesByChapterId',
+        'variables': {
+          'chapterId': chapter_id
+        },
+        'query': 'query imagesByChapterId($chapterId: ID!) {\n  imagesByChapterId(chapterId: $chapterId) {\n    id\n    kid\n    height\n    width\n    __typename\n  }\n}\n'
+      }
+      const headers = { 'Content-Type': 'application/json' }
+      const { responseText } = await request({ method: 'post', url: postUrl, headers, data: JSON.stringify(data) })
+      const img_data = JSON.parse(responseText).data.imagesByChapterId
+      const saveImg = []
+      img_data.forEach(element => {
+        saveImg.push('https://komiic.com/api/image/' + element.kid)
+      })
+      console.log('saveImg: ', saveImg)
       return saveImg
     }
   },
