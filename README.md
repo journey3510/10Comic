@@ -73,6 +73,7 @@ npm run build
 | 动漫屋         | https://www.dm5.com/            |
 | 奇漫屋         | http://www.qiman58.com/         |
 | 咚漫          | https://www.dongmanmanhua.cn/   |
+| naver          | https://comic.naver.com/   |
 | webtoon          | https://www.webtoons.com/   |
 | 腾讯漫画        | https://ac.qq.com/              |
 | 酷漫屋         | http://www.kumw6.com/           |
