@@ -578,23 +578,24 @@ export const comicsWebInfo = [
       return txtContext.match(imgReg)
     }
   },
-  {
-    domain: 'm.wuxiamh.com',
-    homepage: 'https://m.wuxiamh.com/',
-    webName: '武侠漫画（手机）',
-    comicNameCss: '.view-sub.autoHeight .title',
-    chapterCss: '#chapter-list-1',
-    readtype: 1,
-    nextpageRgeCss: '.action-list li:nth-child(3) a',
-    getImgs: async function(context) {
-      const imgobj = context.matchAll(/<mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
-      const imgUrlArr = []
-      for (const item of imgobj) {
-        imgUrlArr.push(item[1])
-      }
-      return imgUrlArr
-    }
-  },
+  // {
+  //   domain: 'm.wuxiamh.com',
+  //   homepage: 'https://m.wuxiamh.com/',
+  //   webName: '武侠漫画（手机）',
+  //   comicNameCss: '.view-sub.autoHeight .title',
+  //   chapterCss: '#chapter-list-1',
+  //   readtype: 0,
+  //   getImgs: async function(context) {
+  //     const imgobj = context.matchAll(/<mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
+  //     const imgUrlArr = []
+  //     for (const item of imgobj) {
+  //       imgUrlArr.push(item[1])
+  //     }
+  //     const nextPageUrl = context.match(/<mip-link href="(.*?)">下一页/)[1]
+  //     console.log('nextPageUrl: ', nextPageUrl)
+  //     return { imgUrlArr, nextPageUrl }
+  //   }
+  // },
   {
     domain: 'www.wuxiamh.com',
     homepage: 'https://www.wuxiamh.com/',
@@ -610,8 +611,17 @@ export const comicsWebInfo = [
     },
     getImgs: async function(context) {
       const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
-      const imgs = eval(imgStr)
-      return imgs
+      let imgarr = eval(imgStr)
+      const josnRes = await request('get', this.homepage + 'js/config.js')
+      const josnContext = josnRes.responseText
+      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+      imgarr = imgarr.map((item) => {
+        if (item.search('http') === -1) {
+          return imageDomian + item
+        }
+        return item
+      })
+      return imgarr
     }
   },
   {
