@@ -82,7 +82,6 @@ npm run build
 | Komiic漫画        | https://komiic.com/     |
 | 百漫谷(简)    | https://www.darpou.com/         |
 | 百漫谷(繁)    | https://darpou.com/              |
-| 武侠漫画（手机）    | https://m.wuxiamh.com/          |
 | 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |
 | 七夕漫画        | http://qiximh3.com/              |
 | 36漫画网       | https://www.36manga.com/        |

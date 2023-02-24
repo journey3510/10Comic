@@ -68,7 +68,6 @@
 | Komiic漫画        | https://komiic.com/     |
 | 百漫谷(简)    | https://www.darpou.com/         |
 | 百漫谷(繁)    | https://darpou.com/              |
-| 武侠漫画（手机）    | https://m.wuxiamh.com/          |
 | 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |
 | 七夕漫画        | http://qiximh3.com/              |
 | 36漫画网       | https://www.36manga.com/        |
@@ -176,6 +175,8 @@
 
 
 ## v1.5 更新记录
+  - 2023/2/24 *v1.5.4* 
+    - 修复武侠漫画网漫画提取图片地址存在个别缺失域名
   - 2023/2/23 *v1.5.3* 
     - 新增 naver
   - 2023/2/18 *v1.5.2* 
