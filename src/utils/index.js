@@ -93,10 +93,11 @@ export const request = async function request(...details) {
         resolve(res)
       }),
       onerror: (onerror || function(e) {
-        reject('onerror')
+        resolve('onerror')
       }),
       ontimeout: (ontimeout || function() {
-        reject('timeout')
+        console.log('ontimeout: ', ontimeout)
+        resolve('timeout')
       })
     })
   })
