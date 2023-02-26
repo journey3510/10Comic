@@ -401,6 +401,7 @@ export default {
       this.selectResult.forEach(num => {
         const item = this.list[num]
         item.zipDownFlag = this.zipDownFlag
+        item.downHeaders = currentComics.downHeaders
         if (item.chapterNumStr !== '') {
           item.chapterName = item.chapterNumStr + '-' + item.chapterName
         }

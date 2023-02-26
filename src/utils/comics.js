@@ -117,6 +117,9 @@ export const comicsWebInfo = [
     headers: {
       referer: 'http://www.mangabz.com/'
     },
+    downHeaders: {
+      referer: 'http://www.mangabz.com/'
+    },
     readtype: 0,
     searchTemplate_1: {
       search_add_url: 'search?title=',
@@ -139,6 +142,7 @@ export const comicsWebInfo = [
       const { responseText } = await request('get', reqUrl)
       const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
       const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
+      console.log('imgUrlArr: ', imgUrlArr)
       const otherData = { group }
       return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
     }
@@ -234,6 +238,7 @@ export const comicsWebInfo = [
     getImgs: async function(context) {
       let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
+      console.log('JSON.parse(imgStr): ', JSON.parse(imgStr))
       return JSON.parse(imgStr)
     }
   },
@@ -723,11 +728,12 @@ export const comicsWebInfo = [
       const josnContext = josnRes.responseText
       const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
       let imgarr = JSON.parse(strArr[0])
-      if (imgarr[0].search('http') === -1) {
-        imgarr = imgarr.map((item) => {
+      imgarr = imgarr.map((item) => {
+        if (imgarr[0].search('http') === -1) {
           return imageDomian + '/' + strArr[1] + item
-        })
-      }
+        }
+        return item
+      })
       return imgarr
     }
   },
@@ -923,14 +929,15 @@ export const comicsWebInfo = [
         strArr.push(item[2])
       }
       let imgarr = JSON.parse(strArr[0])
-      if (imgarr[0].search('http') === -1) {
-        const josnRes = await request('get', this.homepage + 'js/config.js')
-        const josnContext = josnRes.responseText
-        const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
-        imgarr = imgarr.map((item) => {
+      const josnRes = await request('get', this.homepage + 'js/config.js')
+      const josnContext = josnRes.responseText
+      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+      imgarr = imgarr.map((item) => {
+        if (imgarr[0].search('http') === -1) {
           return imageDomian + '/' + strArr[1] + item
-        })
-      }
+        }
+        return item
+      })
       return imgarr
     }
   },
@@ -998,18 +1005,18 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.cnanjie.com',
-    homepage: 'https://www.cnanjie.com/',
-    webName: '好看的漫画网',
+    domain: 'www.chashengchen.com',
+    homepage: 'https://www.chashengchen.com/',
+    webName: '生辰漫画网',
     comicNameCss: '.title h1',
     chapterCss: '#chapter-list-1',
     readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'search/?keywords=',
-      alllist_dom_css: '#dmList ul',
-      minlist_dom_css: 'li',
-      img_src: 'src'
-    },
+    // searchTemplate_1: {
+    //   search_add_url: 'search/?keywords=',
+    //   alllist_dom_css: '#dmList ul',
+    //   minlist_dom_css: 'li',
+    //   img_src: 'src'
+    // },
     getImgs: async function(context) {
       const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
       const strArr = []
@@ -1017,14 +1024,15 @@ export const comicsWebInfo = [
         strArr.push(item[1])
       }
       let imgarr = JSON.parse(strArr[0])
-      if (imgarr[0].search('http') === -1) {
-        const josnRes = await request('get', this.homepage + 'js/config.js')
-        const josnContext = josnRes.responseText
-        const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
-        imgarr = imgarr.map((item) => {
+      const josnRes = await request('get', this.homepage + 'js/config.js')
+      const josnContext = josnRes.responseText
+      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+      imgarr = imgarr.map((item) => {
+        if (item.search('http') === -1) {
           return imageDomian + item
-        })
-      }
+        }
+        return item
+      })
       return imgarr
     }
   },
