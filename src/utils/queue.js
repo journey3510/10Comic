@@ -99,13 +99,13 @@ export default class Queue {
         _this.refresh()
         resolve(false)
       }
-      console.log('imgurl: ', imgurl)
 
       request({
         method: 'get',
         url: imgurl,
         responseType: 'blob',
-        headers: newHeaders || headers
+        headers: newHeaders || headers,
+        timeout: 60 * 1000
       }).then((res) => {
         const name = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' +
         addZeroForNum(imgIndex, this.imgIndexBitNum) + '.'
@@ -158,6 +158,7 @@ export default class Queue {
         url: imgurl,
         responseType: 'blob',
         headers: newHeaders || headers,
+        timeout: 60 * 1000,
         onload: function(gmRes) {
           _this.worker[index].successNum = _this.worker[index].successNum + 1
           _this.worker[index].progress = parseInt(_this.worker[index].imgIndex / _this.worker[index].totalNumber * 100)
