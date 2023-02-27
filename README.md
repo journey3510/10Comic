@@ -99,7 +99,7 @@ npm run build
 | 包子漫画        | https://cn.baozimh.com/         |
 | 爱国漫         | https://www.aiguoman.com/       |
 | 快看漫画        | https://www.kuaikanmanhua.com/  |
-| 好看的漫画网      | https://www.cnanjie.com/        |
+| 生辰漫画网      | https://www.chashengchen.com/        |
 | 漫画猫         | https://www.maofly.com/         |
 | 好漫8         | https://www.haoman8.com/        |
 

@@ -238,7 +238,6 @@ export const comicsWebInfo = [
     getImgs: async function(context) {
       let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
       imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
-      console.log('JSON.parse(imgStr): ', JSON.parse(imgStr))
       return JSON.parse(imgStr)
     }
   },

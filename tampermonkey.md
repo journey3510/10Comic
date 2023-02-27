@@ -86,7 +86,7 @@
 | 包子漫画        | https://cn.baozimh.com/         |
 | 爱国漫         | https://www.aiguoman.com/       |
 | 快看漫画        | https://www.kuaikanmanhua.com/  |
-| 好看的漫画网      | https://www.cnanjie.com/        |
+| 生辰漫画网      | https://www.chashengchen.com/        |
 | 漫画猫         | https://www.maofly.com/         |
 | 好漫8         | https://www.haoman8.com/        |
 
@@ -177,8 +177,9 @@
 
 ## v1.5 更新记录
   - 2023/2/26 *v1.5.5* 
-    - 好看漫画网更换为生辰漫画网
+    - 好看漫画网更换为生辰漫画网，修改部分网站获取图片方法
     - 取消直接使用 GM_download 进行直接下载图片
+    - 部分下载错误和下载超时 txt文件 记录图片地址
   - 2023/2/24 *v1.5.4* 
     - 修复武侠漫画网提取图片地址存在个别缺失域名
     - 修改规则“getImgs”字符导入方法，可添加request请求
