@@ -109,16 +109,16 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.mangabz.com',
-    homepage: 'http://www.mangabz.com/',
+    domain: 'mangabz.com',
+    homepage: 'https://mangabz.com/',
     webName: 'Mangabz',
     comicNameCss: 'p.detail-info-title',
     chapterCss: '#chapterlistload',
     headers: {
-      referer: 'http://www.mangabz.com/'
+      referer: 'https://mangabz.com/'
     },
     downHeaders: {
-      referer: 'http://www.mangabz.com/'
+      referer: 'https://mangabz.com/'
     },
     readtype: 0,
     searchTemplate_1: {
@@ -137,7 +137,7 @@ export const comicsWebInfo = [
       if (processData.imgIndex !== undefined) {
         page = processData.imgIndex + 1
       }
-      const reqUrl = `http://www.mangabz.com/m${group[2]}/chapterimage.ashx?cid=${group[2]}&page=${page}&key=&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5]}&_sign=${group[4]}`
+      const reqUrl = `https://mangabz.com/m${group[2]}/chapterimage.ashx?cid=${group[2]}&page=${page}&key=&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5]}&_sign=${group[4]}`
 
       const { responseText } = await request('get', reqUrl)
       const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)

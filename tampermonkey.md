@@ -55,7 +55,7 @@
 |-------------|-----------------------------------|
 | 动漫之家        | https://manhua.dmzj.com/        |
 | 动漫之家2       | https://www.dmzj.com/           |
-| Mangabz     | http://www.mangabz.com/         |
+| Mangabz     | https://mangabz.com/        |
 | 极速漫画        | https://www.1kkk.com/           |
 | 动漫屋         | https://www.dm5.com/            |
 | 奇漫屋         | http://www.qiman58.com/         |
@@ -176,6 +176,8 @@
 
 
 ## v1.5 更新记录
+  - 2023/2/28 *v1.5.6* 
+    - 更改Mangabz域名、网站列表加载失败提示并3秒后停止动画
   - 2023/2/26 *v1.5.5* 
     - 好看漫画网更换为生辰漫画网，修改部分网站获取图片方法
     - 取消直接使用 GM_download 进行直接下载图片
