@@ -315,29 +315,40 @@ export default {
     },
     async getSelectList() {
       this.overlayShow = true
-
-      // 单页面应用 获取信息
-      if (currentComics.getComicInfo) {
-        this.list = await currentComics.getComicInfo()
-        this.overlayShow = false
-        this.showSelectList = true
-        return
-      }
-
-      setTimeout(() => {
-        // 单章数据
-        const nodeList = document.querySelectorAll(currentComics.chapterCss)
-        this.getChapterData(nodeList, currentComics, 'one')
-
-        // （如果存在）分卷数据
-        if (currentComics.chapterCss_2) {
-          const nodeList_2 = document.querySelectorAll(currentComics.chapterCss_2)
-          this.getChapterData(nodeList_2, currentComics, 'many')
+      try {
+        // 单页面应用 获取信息
+        if (currentComics.getComicInfo) {
+          this.list = await currentComics.getComicInfo()
+          this.overlayShow = false
+          this.showSelectList = true
+          return
         }
 
-        this.overlayShow = false
-        this.showSelectList = true
-      }, 100)
+        setTimeout(() => {
+        // 单章数据
+          const nodeList = document.querySelectorAll(currentComics.chapterCss)
+          this.getChapterData(nodeList, currentComics, 'one')
+
+          // （如果存在）分卷数据
+          if (currentComics.chapterCss_2) {
+            const nodeList_2 = document.querySelectorAll(currentComics.chapterCss_2)
+            this.getChapterData(nodeList_2, currentComics, 'many')
+          }
+
+          this.overlayShow = false
+          this.showSelectList = true
+        }, 100)
+      } catch (error) {
+        console.log('error: ', error)
+        Toast({
+          message: '网站未匹配或方法已失效',
+          getContainer: '.card',
+          position: 'bottom'
+        })
+        setTimeout(() => {
+          this.overlayShow = false
+        }, 3000)
+      }
     },
     // 获取章节数据
     getChapterData(nodeList, currentComics, type) {

@@ -68,7 +68,7 @@ npm run build
 |-------------|-----------------------------------|
 | 动漫之家        | https://manhua.dmzj.com/        |
 | 动漫之家2       | https://www.dmzj.com/           |
-| Mangabz     | http://www.mangabz.com/         |
+| Mangabz     | https://mangabz.com/       |
 | 极速漫画        | https://www.1kkk.com/           |
 | 动漫屋         | https://www.dm5.com/            |
 | 奇漫屋         | http://www.qiman58.com/         |
