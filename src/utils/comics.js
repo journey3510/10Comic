@@ -314,6 +314,7 @@ export const comicsWebInfo = [
     chapterCss: '.chapter-page-all.works-chapter-list',
     headers: '',
     readtype: 1,
+    webDesc: '2023.3.2起, 需要APP观看的章节无法完整下载',
     hasSpend: true,
     payKey: 'ui-icon-pay',
     searchTemplate_1: {

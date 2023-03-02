@@ -51,44 +51,45 @@
 
 
 ## 漫画网站列表
-| **网站** | **网站首页**                      |
-|-------------|-----------------------------------|
-| 动漫之家        | https://manhua.dmzj.com/        |
-| 动漫之家2       | https://www.dmzj.com/           |
-| Mangabz     | https://mangabz.com/        |
-| 极速漫画        | https://www.1kkk.com/           |
-| 动漫屋         | https://www.dm5.com/            |
-| 奇漫屋         | http://www.qiman58.com/         |
-| 咚漫          | https://www.dongmanmanhua.cn/   |
-| naver          | https://comic.naver.com/   |
-| webtoon          | https://www.webtoons.com/   |
-| 腾讯漫画        | https://ac.qq.com/              |
-| 酷漫屋         | http://www.kumw6.com/           |
-| 哔哩哔哩        | https://manga.bilibili.com/     |
-| 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ |
-| Komiic漫画        | https://komiic.com/     |
-| 百漫谷(简)    | https://www.darpou.com/         |
-| 百漫谷(繁)    | https://darpou.com/              |
-| 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |
-| 七夕漫画        | http://qiximh3.com/              |
-| 36漫画网       | https://www.36manga.com/        |
-| 古风漫画网       | https://www.gufengmanhua.com/   |
-| 古风漫画网 2     | https://www.123gf.com/          |
-| 滴滴漫画        | http://www.txydd.com/           |
-| 动漫戏说        | https://comic.acgn.cc/          |
-| 新新漫画        | https://www.77mh.xyz/           |
-| 漫画星球        | http://www.mhxqiu2.com/         |
-| 漫画屋         | https://www.mhua5.com/          |
-| 27漫画网       | https://www.2mzx.com/           |
-| 最漫画         | https://www.zuimh.com/          |
-| 六漫画         | http://www.sixmh7.com/          |
-| 漫画芯         | https://www.mhxin.com/          |
-| 包子漫画        | https://cn.baozimh.com/         |
-| 爱国漫         | https://www.aiguoman.com/       |
-| 快看漫画        | https://www.kuaikanmanhua.com/  |
-| 生辰漫画网      | https://www.chashengchen.com/        |
-| 漫画猫         | https://www.maofly.com/         |
-| 好漫8         | https://www.haoman8.com/        |
+| **网站** | **首页**                    | **提示**                 |
+|-------------|---------------------------------|-----------------------------|
+| 动漫之家        | https://manhua.dmzj.com/        |                             |
+| 动漫之家2       | https://www.dmzj.com/           |                             |
+| Mangabz     | https://mangabz.com/            |                             |
+| 极速漫画        | https://www.1kkk.com/           |                             |
+| 动漫屋         | https://www.dm5.com/            |                             |
+| 奇漫屋         | http://www.qiman58.com/         |                             |
+| 咚漫          | https://www.dongmanmanhua.cn/   |                             |
+| webtoons    | https://www.webtoons.com/       | ？需要魔法？                      |
+| comic.naver | https://comic.naver.com/        | 找到漫画目录页再使用                  |
+| 腾讯漫画        | https://ac.qq.com/              | 2023.3.2起, 需要APP观看的章节无法完整下载 |
+| 酷漫屋         | http://www.kumw6.com/           |                             |
+| 哔哩哔哩        | https://manga.bilibili.com/     |                             |
+| 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ | ？需要魔法？                      |
+| Komiic漫画    | https://komiic.com/             | SPA页面, 新页面需“重载列表”重新匹配新名称    |
+| 百漫谷(简)      | https://www.darpou.com/         |                             |
+| 百漫谷(繁)      | https://darpou.com/             |                             |
+| 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |                             |
+| 七夕漫画        | http://qiximh3.com/             |                             |
+| 36漫画网       | https://www.36manga.com/        | ？可访问 ？                      |
+| 古风漫画网       | https://www.gufengmanhua.com/   |                             |
+| 古风漫画网 2     | https://www.123gf.com/          |                             |
+| 滴滴漫画        | http://www.txydd.com/           |                             |
+| 动漫戏说        | https://comic.acgn.cc/          |                             |
+| 新新漫画        | https://www.77mh.xyz/           |                             |
+| 漫画星球        | http://www.mhxqiu2.com/         |                             |
+| 漫画屋         | https://www.mhua5.com/          |                             |
+| 27漫画网       | https://www.2mzx.com/           | ？可访问 ？                      |
+| 最漫画         | https://www.zuimh.com/          |                             |
+| 六漫画         | http://www.sixmh7.com/          |                             |
+| 漫画芯         | https://www.mhxin.com/          |                             |
+| 包子漫画        | https://cn.baozimh.com/         |                             |
+| 爱国漫         | https://www.aiguoman.com/       |                             |
+| 快看漫画        | https://www.kuaikanmanhua.com/  |                             |
+| 生辰漫画网       | https://www.chashengchen.com/   |                             |
+| 漫画猫         | https://www.maofly.com/         | ?可访问?                       |
+| 好漫8         | https://www.haoman8.com/        |                             |
+
 
 <br />
 
@@ -176,6 +177,8 @@
 
 
 ## v1.5 更新记录
+  - 2023/3/2 *v1.5.7* 
+    - 增加TX网站提示，修改阅读说明
   - 2023/2/28 *v1.5.6* 
     - 更改Mangabz域名、网站列表加载失败提示并3秒后停止动画
   - 2023/2/26 *v1.5.5* 
