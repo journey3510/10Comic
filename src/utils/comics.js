@@ -946,7 +946,7 @@ export const comicsWebInfo = [
     homepage: 'https://cn.baozimh.com/',
     webName: '包子漫画',
     comicNameCss: 'h1.comics-detail__title',
-    chapterCss: '.comics-detail > .l-content:nth-of-type(3)',
+    chapterCss: '.comics-detail > .l-content:nth-of-type(3) #chapter-items, #chapters_other_list',
     readtype: 1,
     searchTemplate_1: {
       search_add_url: 'search/?keyword=',
@@ -955,12 +955,25 @@ export const comicsWebInfo = [
       img_reg: /src=('|")(.*?)\?/,
       match_reg_num: 2
     },
-    getImgs: async function(context) {
-      const group = context.matchAll(/<img.*src="(.*?)"/g)
+    getImgs: async function(context, processData) {
       const imgArray = []
-      for (const item of group) {
-        imgArray.push(item[1])
-      }
+      const nextReg = /next_chapter"><a href="(.*)?"[\s\S]{1,10}点击进入下一页/
+      let hasNext = false
+      let nextHtml = ''
+      do {
+        const group = context.matchAll(/<img.*src="(.*?)"/g)
+        for (const item of group) {
+          if (!imgArray.includes(item[1])) {
+            imgArray.push(item[1])
+          }
+        }
+        hasNext = nextReg.test(context)
+        if (hasNext) {
+          nextHtml = context.match(nextReg)[1]
+          const { responseText } = await request('get', nextHtml)
+          context = responseText
+        }
+      } while (hasNext)
       return imgArray
     }
   },
