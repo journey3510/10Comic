@@ -24,7 +24,7 @@ export const loadStyle2 = (url) => {
   })
 }
 
-export const getDataType = (obj) => {
+export const getType = (obj) => {
   const type = typeof obj
   if (type !== 'object') {
     return type

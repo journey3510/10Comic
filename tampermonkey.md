@@ -111,7 +111,7 @@
 ```js
 [
   {
-    domain，String,  域名,
+    domain，String || Array,  域名,
     homepage，String, 网站主页,
     webName，String, 网站名,
     comicNameCss，String, 漫画名的CSS选择器,
@@ -177,6 +177,9 @@
 
 
 ## v1.5 更新记录
+  - 2023/3/16 *v1.5.9* 
+    - Vue中添加全局方法$getType
+    - 同一个网站可多个域名访问-网站匹配增加判断
   - 2023/3/9 *v1.5.8* 
     - 修改包子漫画获取图片方法
   - 2023/3/2 *v1.5.7* 

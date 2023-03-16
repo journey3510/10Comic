@@ -2,7 +2,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request, parseToDOM, funstrToData } from '@/utils/index'
+import { request, parseToDOM, funstrToData, getType } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
 export const searchFunTemplate_1 = async(data, keyword) => {
@@ -109,7 +109,7 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'mangabz.com',
+    domain: ['mangabz.com', 'www.mangabz.com'],
     homepage: 'https://mangabz.com/',
     webName: 'Mangabz',
     comicNameCss: 'p.detail-info-title',
@@ -1111,6 +1111,7 @@ export const getWebList = () => {
 
 export let currentComics = null
 
+// 网站匹配
 export const matchWeb = (url) => {
   let hname = ''
   var domain = url.split('/')
@@ -1125,6 +1126,12 @@ export const matchWeb = (url) => {
       currentComics = comicsWebInfo[i]
       break
     }
+    if (getType(comicsWebInfo[i].domain) === 'Array') {
+      if (comicsWebInfo[i].domain.includes(hname)) {
+        currentComics = comicsWebInfo[i]
+        break
+      }
+    }
   }
   // 导入规则列表匹配
   if (currentComics === null) {
@@ -1133,6 +1140,12 @@ export const matchWeb = (url) => {
       if (userWebInfo[a].domain === hname) {
         currentComics = userWebInfo[a]
         break
+      }
+      if (getType(comicsWebInfo[i].domain) === 'Array') {
+        if (comicsWebInfo[i].domain.includes(hname)) {
+          currentComics = comicsWebInfo[i]
+          break
+        }
       }
     }
     if (currentComics !== null && typeof currentComics.getImgs === 'string') {

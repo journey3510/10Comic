@@ -6,7 +6,7 @@ import './styles/global.scss'
 import './styles/global.less'
 
 import { isDev } from './config'
-import { loadStyle2 } from './utils'
+import { loadStyle2, getType } from './utils'
 import { getStorage, appLoadinit, setinit } from '@/config/setup'
 
 var id = null
@@ -42,6 +42,7 @@ async function loadUI() {
   root.id = id
   document.body.appendChild(root)
   Vue.prototype.$bus = new Vue()
+  Vue.prototype.$getType = getType
 
   if (isDev) {
     loadStyle2('https://unpkg.com/vant@2.12/lib/index.css').then((res) => {
