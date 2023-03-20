@@ -65,8 +65,8 @@ export const searchFunTemplate_1 = async(data, keyword) => {
 
 export const comicsWebInfo = [
   {
-    domain: 'manhua.dmzj.com',
-    homepage: 'https://manhua.dmzj.com/',
+    domain: 'manhua.idmzj.com',
+    homepage: 'https://manhua.idmzj.com/',
     webName: '动漫之家',
     comicNameCss: '.odd_anim_title_m .anim_title_text h1',
     chapterCss: '.cartoon_online_border',
@@ -84,14 +84,14 @@ export const comicsWebInfo = [
       let imgArray = JSON.parse(imgStr)
       if (imgArray[0].search('http') === -1) {
         imgArray = imgArray.map((item) => {
-          return 'https://images.dmzj.com/' + item
+          return 'https://images.idmzj.com/' + item
         })
       }
       return imgArray
     }
   }, {
-    domain: 'www.dmzj.com',
-    homepage: 'https://www.dmzj.com/',
+    domain: 'www.idmzj.com',
+    homepage: 'https://www.idmzj.com/',
     webName: '动漫之家2',
     comicNameCss: '.comic_deCon h1 a',
     chapterCss: '.tab-content-selected .list_con_li.autoHeight',
@@ -102,7 +102,7 @@ export const comicsWebInfo = [
       let imgArray = info['page_url'].split('\r\n')
       if (imgArray[0].search('http') === -1) {
         imgArray = imgArray.map((item) => {
-          return 'https://images.dmzj.com/' + item
+          return 'https://images.idmzj.com/' + item
         })
       }
       return imgArray

@@ -25,7 +25,7 @@
 // @connect      manga8.xyz
 // @connect      wuxiamh.com
 // @connect      169gouwu.com
-// @connect      dmzj.com
+// @connect      idmzj.com
 // @connect      qiximh3.com
 // @connect      byteimg.com
 // @connect      arc-theday.com
