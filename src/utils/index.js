@@ -32,15 +32,54 @@ export const getType = (obj) => {
   return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1')
 }
 
+const getFrameContent = async(id, url) => {
+  const iframePromise = new Promise((resolve, reject) => {
+    const iframe = document.createElement('iframe')
+    iframe.id = id
+    iframe.style.display = 'none'
+    iframe.src = url
+    document.body.appendChild(iframe)
+    if (iframe.attachEvent) {
+      iframe.attachEvent('onload', function() {
+        resolve(iframe.contentDocument.body.outerHTML)
+      })
+    } else {
+      iframe.onload = function() {
+        resolve(iframe.contentDocument.body.outerHTML)
+      }
+    }
+  })
+
+  return new Promise((resolve, reject) => {
+    iframePromise.then(
+      (success) => {
+        resolve(success)
+      },
+      error => {
+        console.log(error)
+        reject('')
+      }
+    )
+  })
+}
+
 export const getImage = async(processData) => {
   try {
     const url = processData.url
     let response = ''
     // 获取网页内容
-    if (!currentComics.getComicInfo) {
+    if (!currentComics.useFrame) {
       const data = await request({ method: 'get', url, useCookie: processData.isPay })
       response = data.response
+    } else {
+      const arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'g', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+      const random1 = Math.round(Math.random() * 25) + 0
+      const random2 = Math.round(Math.random() * 25) + 0
+      const id = 'ifr' + new Date().getTime() + arr[random1] + arr[random2]
+      response = await getFrameContent(id, url)
+      processData.frameId = id
     }
+
     const imgs = await currentComics.getImgs(response, processData)
     return new Promise((resolve, reject) => {
       resolve(imgs)

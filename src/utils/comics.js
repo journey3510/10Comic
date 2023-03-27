@@ -223,8 +223,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.qiman58.com',
-    homepage: 'http://www.qiman58.com/',
+    domain: 'www.qiman59.com',
+    homepage: 'http://www.qiman59.com/',
     webName: '奇漫屋',
     comicNameCss: 'h1.name_mh',
     chapterCss: '#chapter-list1',
@@ -692,12 +692,6 @@ export const comicsWebInfo = [
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-1,#chapter-list-10',
     readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'search/?keywords=',
-      alllist_dom_css: '.book-list',
-      minlist_dom_css: 'li',
-      img_src: 'src'
-    },
     getImgs: function(context) {
       const imgStr = context.match(/chapterImages = ([\s\S]+?);var chapterPath/)[1]
       let imgarr = JSON.parse(imgStr)
@@ -717,6 +711,12 @@ export const comicsWebInfo = [
     chapterCss: '#chapter-list-1,#chapter-list-10',
     readtype: 1,
     readCssText: '.img_info {display: none;}.tbCenter img {border: 0px;}',
+    searchTemplate_1: {
+      search_add_url: 'search/?keywords=',
+      alllist_dom_css: '.book-list',
+      minlist_dom_css: 'li',
+      img_src: 'src'
+    },
     getImgs: async function(context) {
       const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
       const strArr = []
@@ -751,6 +751,49 @@ export const comicsWebInfo = [
         imgArray.push(item[3])
       }
       return imgArray
+    }
+  },
+  {
+    domain: 'kanbook.net',
+    homepage: 'https://kanbook.net/',
+    webName: '快岸漫画',
+    comicNameCss: 'h2.comic-title.one-line',
+    chapterCss: 'ol.links-of-books.num_div',
+    readtype: 1,
+    hasSpend: true,
+    useFrame: true,
+    webDesc: '首次打开网站章节页可能需自行输入验证码',
+    searchTemplate_1: {
+      search_add_url: 'search/',
+      alllist_dom_css: '.row.m-0 ul',
+      minlist_dom_css: 'li',
+      img_src: 'data-src'
+    },
+    getImgs: async function(context, processData) {
+      const iframe = document.getElementById(processData.frameId).contentWindow
+      const part_url = processData.url.match(/comic\/(\d+\/\d+\/\d+)/)[1]
+      const code1 = funstrToData(context, /(function\(p,a,c,k,e,d\){e[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+
+      const host = code1.match(/host="(.*?)";var x_tokens=(.*?);/)[1]
+      const x_tokens = code1.match(/host="(.*?)";var x_tokens=(.*?);/)[2]
+
+      const arr = []
+      for (var i in x_tokens) {
+        arr.push(iframe.my_sha2(x_tokens[i]))
+      }
+      let imgStr = ''
+      arr.forEach(element => {
+        imgStr += element
+      })
+      const imgs = imgStr.split('undefined')
+      const filterResult = []
+      imgs.forEach(element => {
+        if (element !== '') {
+          filterResult.push(host + part_url + '/' + element)
+        }
+      })
+      document.getElementById(processData.frameId).remove()
+      return filterResult
     }
   },
   {
@@ -915,12 +958,12 @@ export const comicsWebInfo = [
     chapterCss: '.zj_list_con #chapter-list-1',
     readtype: 1,
     readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
-    searchTemplate_1: {
-      search_add_url: 'search/?keywords=',
-      alllist_dom_css: '.list_con_li',
-      minlist_dom_css: 'li.list-comic',
-      img_src: 'src'
-    },
+    // searchTemplate_1: {
+    //   search_add_url: 'search/?keywords=',
+    //   alllist_dom_css: '.list_con_li',
+    //   minlist_dom_css: 'li.list-comic',
+    //   img_src: 'src'
+    // },
     getImgs: async function(context) {
       const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
       const strArr = []

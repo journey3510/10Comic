@@ -71,7 +71,7 @@ npm run build
 | Mangabz     | https://mangabz.com/       |
 | 极速漫画        | https://www.1kkk.com/           |
 | 动漫屋         | https://www.dm5.com/            |
-| 奇漫屋         | http://www.qiman58.com/         |
+| 奇漫屋         | http://www.qiman59.com/         |
 | 咚漫          | https://www.dongmanmanhua.cn/   |
 | naver          | https://comic.naver.com/   |
 | webtoon          | https://www.webtoons.com/   |
@@ -88,6 +88,7 @@ npm run build
 | 古风漫画网       | https://www.gufengmanhua.com/   |
 | 古风漫画网 2     | https://www.123gf.com/          |
 | 滴滴漫画        | http://www.txydd.com/           |
+| 快岸漫画        | https://kanbook.net/            | 
 | 动漫戏说        | https://comic.acgn.cc/          |
 | 新新漫画        | https://www.77mh.xyz/           |
 | 漫画星球        | http://www.mhxqiu2.com/         |

@@ -67,7 +67,7 @@
 // @connect      bilibili.com
 // @connect      hdslb.com
 // @connect      mangabz.com
-// @connect      qiman57.com
+// @connect      qiman59.com
 // @connect      dcarimg.com
 // @connect      1kkk.com
 // @connect      cdndm5.com
@@ -85,6 +85,7 @@
 // @connect      pstatic.net
 // @connect      komiic.com
 // @connect      newtoki15.org
+// @connect      kanbook.net
 // @license      GPLv3
 // @include      *
 // @connect      *

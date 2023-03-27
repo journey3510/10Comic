@@ -58,7 +58,7 @@
 | Mangabz     | https://mangabz.com/            |                             |
 | 极速漫画        | https://www.1kkk.com/           |                             |
 | 动漫屋         | https://www.dm5.com/            |                             |
-| 奇漫屋         | http://www.qiman58.com/         |                             |
+| 奇漫屋         | http://www.qiman59.com/         |                             |
 | 咚漫          | https://www.dongmanmanhua.cn/   |                             |
 | webtoons    | https://www.webtoons.com/       | ？需要魔法？                      |
 | comic.naver | https://comic.naver.com/        | 找到漫画目录页再使用                  |
@@ -75,6 +75,7 @@
 | 古风漫画网       | https://www.gufengmanhua.com/   |                             |
 | 古风漫画网 2     | https://www.123gf.com/          |                             |
 | 滴滴漫画        | http://www.txydd.com/           |                             |
+| 快岸漫画        | https://kanbook.net/            | 首次打开网站章节页可能需自行输入验证码      |
 | 动漫戏说        | https://comic.acgn.cc/          |                             |
 | 新新漫画        | https://www.77mh.xyz/           |                             |
 | 漫画星球        | http://www.mhxqiu2.com/         |                             |
@@ -175,6 +176,10 @@
 ```
 <br />
 
+## v1.6 更新记录
+  - 2023/3/27 *v1.6.0* 
+    - 增加使用 iframe 获取网页内容
+    - 修复部分网站，新增快岸漫画网站
 
 ## v1.5 更新记录
   - 2023/3/20 *v1.5.10* 
