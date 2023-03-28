@@ -772,7 +772,7 @@ export const comicsWebInfo = [
     getImgs: async function(context, processData) {
       const iframe = document.getElementById(processData.frameId).contentWindow
       const part_url = processData.url.match(/comic\/(\d+\/\d+\/\d+)/)[1]
-      const code1 = funstrToData(context, /(function\(p,a,c,k,e,d\){e[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      const code1 = funstrToData(context, /(function\(p,a.*?d\){e[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
 
       const host = code1.match(/host="(.*?)";var x_tokens=(.*?);/)[1]
       const x_tokens = code1.match(/host="(.*?)";var x_tokens=(.*?);/)[2]
