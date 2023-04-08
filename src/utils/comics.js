@@ -196,6 +196,9 @@ export const comicsWebInfo = [
     headers: {
       referer: 'https://www.dm5.com/'
     },
+    downHeaders: {
+      referer: ''
+    },
     searchTemplate_1: {
       search_add_url: 'search?title=',
       alllist_dom_css: '.mh-list',
@@ -217,7 +220,6 @@ export const comicsWebInfo = [
 
       const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
       const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
-
       const otherData = { group }
       return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
     }
