@@ -225,6 +225,39 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'tel.dm5.com',
+    homepage: 'https://tel.dm5.com/',
+    webName: '动漫屋2',
+    comicNameCss: '.banner_detail_form > .info > p.title',
+    chapterCss: '#detail-list-select-1',
+    hasSpend: true,
+    payKey: '-lock',
+    readtype: 0,
+    headers: {
+      referer: 'https://tel.dm5.com/'
+    },
+    downHeaders: {
+      referer: ''
+    },
+    getImgs: async function(context, processData) {
+      let group; let page = 1
+      if (processData.otherData) {
+        group = processData.otherData.group
+      } else {
+        group = context.match(/DM5_MID=(\d+?);.*DM5_CID=(\d+?);.*DM5_IMAGE_COUNT=(\d+?);.*DM5_VIEWSIGN="(.*?)".*DM5_VIEWSIGN_DT="(.*?)"/)
+      }
+      if (processData.imgIndex !== undefined) {
+        page = processData.imgIndex + 1
+      }
+      const reqUrl = `https://tel.dm5.com/ch1-${group[2]}/chapterfun.ashx?cid=${group[2]}&page=${page}&key=&language=1&gtk=6&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5].replaceAll(' ', '+').replaceAll(':', '%3A')}&_sign=${group[4]}`
+      const { responseText } = await request({ method: 'get', url: reqUrl, useCookie: processData.isPay })
+      const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
+      const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
+      const otherData = { group }
+      return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
+    }
+  },
+  {
     domain: 'www.qiman59.com',
     homepage: 'http://www.qiman59.com/',
     webName: '奇漫屋',
