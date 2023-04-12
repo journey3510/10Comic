@@ -26,6 +26,7 @@
 // @connect      wuxiamh.com
 // @connect      169gouwu.com
 // @connect      idmzj.com
+// @connect      dmzj.com
 // @connect      qiximh3.com
 // @connect      byteimg.com
 // @connect      arc-theday.com
@@ -86,6 +87,7 @@
 // @connect      komiic.com
 // @connect      newtoki15.org
 // @connect      kanbook.net
+// @connect      cdndm5.com
 // @license      GPLv3
 // @include      *
 // @connect      *

@@ -66,8 +66,8 @@ npm run build
 ### 漫画网站列表
 | **网站** | **网站首页**                      |
 |-------------|-----------------------------------|
-| 动漫之家        | https://manhua.idmzj.com/        |
-| 动漫之家2       | https://www.idmzj.com/           |
+| 动漫之家        | https://manhua.dmzj.com/        |
+| 动漫之家2       | https://www.dmzj.com/           |
 | Mangabz     | https://mangabz.com/       |
 | 极速漫画        | https://www.1kkk.com/           |
 | 动漫屋         | https://www.dm5.com/            |
