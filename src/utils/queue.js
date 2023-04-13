@@ -285,7 +285,31 @@ export default class Queue {
 
     // 是否压缩
     if (zipDownFlag) {
-      const result = await this.makeZip(workerId)
+      // const result = await this.makeZip(workerId)
+      // return new Promise((resolve, reject) => {
+      //   resolve(result)
+      // })
+      const canvas = await this.combineImages(workerId)
+      console.log('canvas: ', canvas)
+
+      // const href = canvas.toDataURL() // 获取canvas对应的base64编码
+      // const a = document.createElement('a') // 创建a标签
+      // a.download = 'name.jpg' // 设置图片名字
+      // a.href = href
+      // console.log('href: ', href)
+      // a.dispatchEvent(new MouseEvent('click'))
+
+      const _this = this
+      canvas.toBlob(function(imgblob) {
+        _this.downloadFile('xx\\xx.jpg', imgblob)
+      }, 'image/jpeg', 1)
+      // console.log('result: ', result)
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
+    } else if (true) {
+      const result = await this.combineImages(workerId)
+      console.log('result: ', result)
       return new Promise((resolve, reject) => {
         resolve(result)
       })
@@ -378,6 +402,64 @@ export default class Queue {
         resolve()
         return
       })
+    })
+  }
+
+  async combineImages(workerId) {
+    console.log('workerId: ', workerId)
+    var canvas = document.createElement('canvas')
+    // canvas.width = canvas.Width
+    canvas.height = 0
+    canvas.height = 4000
+
+    var offsetY = 0
+    var context = canvas.getContext('2d')
+
+    async function asyncLoadImg(src) {
+      return new Promise((resolve, reject) => {
+        const img = document.createElement('img')
+        img.onload = () => {
+          console.log('img: ', img)
+          resolve(img)
+        }
+        img.onerror = () => {
+          const error = new Error(`图片加载失败，url：${src}`)
+          reject(error)
+        }
+        img.src = src
+      })
+    }
+
+    async function drawImage(src) {
+      console.log('src: ', src)
+      const img = asyncLoadImg(src)
+      console.log('img.height: ', img.height)
+      // canvas.height += img.height
+
+      canvas.width = img.width
+
+      context.drawImage(img, 0, offsetY, img.width, img.height)
+      offsetY = offsetY + parseInt(img.height)
+    }
+
+    for (let index = 0; index < this.workerDownInfo[workerId].length; index++) {
+      const item = this.workerDownInfo[workerId][index]
+
+      const imgblob = item.blob
+      // if (imgblob === 1 || imgblob === 0) {
+      //   const txtBlob = new Blob([item.imgurl], { type: 'text/plain' })
+      //   return
+      // }
+      const newurl = window.URL.createObjectURL(imgblob)
+      drawImage(newurl)
+    }
+
+    context.fillStyle = '#FFFFFF'
+    // context.fillRect(0, 0, 400, 4000)
+
+    return new Promise((resolve, reject) => {
+      console.log(9999999999)
+      resolve(canvas)
     })
   }
 }
