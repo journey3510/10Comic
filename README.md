@@ -76,17 +76,16 @@ npm run build
 | naver          | https://comic.naver.com/   |
 | webtoon          | https://www.webtoons.com/   |
 | 腾讯漫画        | https://ac.qq.com/              |
-| 酷漫屋         | http://www.kumw6.com/           |
+| 酷漫屋         | http://www.kumw7.com/           |
 | 哔哩哔哩        | https://manga.bilibili.com/     |
 | 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ |
 | Komiic漫画        | https://komiic.com/     |
 | 百漫谷(简)    | https://www.darpou.com/         |
 | 百漫谷(繁)    | https://darpou.com/              |
 | 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |
-| 七夕漫画        | http://qiximh3.com/              |
+| 七夕漫画        | http://www.qiximh2.com/               |
 | 36漫画网       | https://www.36manga.com/        |
-| 古风漫画网       | https://www.gufengmanhua.com/   |
-| 古风漫画网 2     | https://www.123gf.com/          |
+| 古风漫画网       | https://www.gufengmh.com/   |
 | 滴滴漫画        | http://www.txydd.com/           |
 | 快岸漫画        | https://kanbook.net/            | 
 | 动漫戏说        | https://comic.acgn.cc/          |

@@ -20,17 +20,17 @@
 // @require      https://unpkg.com/vant@2.12/lib/vant.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/jszip/3.7.1/jszip.min.js
 //
-// @connect      kumw6.com
+// @connect      kumw7.com
 // @connect      darpou.com
 // @connect      manga8.xyz
 // @connect      wuxiamh.com
 // @connect      169gouwu.com
 // @connect      idmzj.com
 // @connect      dmzj.com
-// @connect      qiximh3.com
+// @connect      qiximh2.com
 // @connect      byteimg.com
 // @connect      arc-theday.com
-// @connect      gufengmanhua.com
+// @connect      gufengmh.com
 // @connect      123gf.com
 // @connect      xiaoqinre.com
 // @connect      bdstatic.com

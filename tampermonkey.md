@@ -64,17 +64,16 @@
 | webtoons    | https://www.webtoons.com/       | ？需要魔法？                      |
 | comic.naver | https://comic.naver.com/        | 找到漫画目录页再使用                  |
 | 腾讯漫画        | https://ac.qq.com/              | 2023.3.2起, 需要APP观看的章节无法完整下载 |
-| 酷漫屋         | http://www.kumw6.com/           |                             |
+| 酷漫屋         | http://www.kumw7.com/          |                             |
 | 哔哩哔哩        | https://manga.bilibili.com/     |                             |
 | 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ | ？需要魔法？                      |
 | Komiic漫画    | https://komiic.com/             | SPA页面, 新页面需“重载列表”重新匹配新名称    |
 | 百漫谷(简)      | https://www.darpou.com/         |                             |
 | 百漫谷(繁)      | https://darpou.com/             |                             |
 | 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |                             |
-| 七夕漫画        | http://qiximh3.com/             |                             |
+| 七夕漫画        | http://www.qiximh2.com/             |                             |
 | 36漫画网       | https://www.36manga.com/        | ？可访问 ？                      |
-| 古风漫画网       | https://www.gufengmanhua.com/   |                             |
-| 古风漫画网 2     | https://www.123gf.com/          |                             |
+| 古风漫画网     | https://www.gufengmh.com/          |                             |
 | 滴滴漫画        | http://www.txydd.com/           |                             |
 | 快岸漫画        | https://kanbook.net/            | 首次打开网站章节页可能需自行输入验证码      |
 | 动漫戏说        | https://comic.acgn.cc/          |                             |
@@ -180,6 +179,8 @@
 
 
 ## v1.6 更新记录
+  - 2023/4/14 *v1.6.4* 
+    - 修复酷漫屋、七夕漫画、古风漫画网
   - 2023/4/12 *v1.6.3* 
     - 更换动漫之家域名
   - 2023/4/10 *v1.6.2* 

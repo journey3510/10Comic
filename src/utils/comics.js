@@ -382,30 +382,29 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.kumw6.com',
-    homepage: 'http://www.kumw6.com/',
+    domain: 'www.kumw7.com',
+    homepage: 'http://www.kumw7.com/',
     webName: '酷漫屋',
     comicNameCss: '.info h1',
     chapterCss: '.view-win-list',
     readtype: 1,
+    useFrame: true,
     searchTemplate_1: {
       search_add_url: 'search.php?keyword=',
       alllist_dom_css: '.box.container > div > ul',
       minlist_dom_css: 'li',
       img_src: 'data-src'
     },
-    getImgs: function(context) {
-      const reg = /var km[^>]*_img_url='[^>]*'/gi
-      const s1 = context.match(reg)
-      const base64Context = s1[0].match(/'(\S*)'/)[1]
-      let imgstr = window.atob(base64Context)
-      imgstr = eval(imgstr).toString()
-      const imgArray = imgstr.matchAll(/(http[\s\S]+?),/g)
-      const imgUrl = []
-      for (const item of imgArray) {
-        imgUrl.push(item[1])
+    getImgs: function(context, processData) {
+      const str = document.getElementById(processData.frameId).contentDocument.body.outerHTML
+      const imgStr = str.match(/main_img[\s\S]*?class="chapend/)[0]
+      const group = imgStr.matchAll(/data-src="(.*?)"/g)
+      const imgarr = []
+      for (const item of group) {
+        imgarr.push(item[1])
       }
-      return imgUrl
+      document.getElementById(processData.frameId).remove()
+      return imgarr
     }
   },
   {
@@ -665,35 +664,29 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'qiximh3.com',
-    homepage: 'http://qiximh3.com/',
+    domain: ['qiximh2.com', 'www.qiximh2.com'],
+    homepage: 'http://www.qiximh2.com/',
     webName: '七夕漫画',
-    comicNameCss: '.comic_name .name',
-    chapterCss: '.catalog_list.row_catalog_list',
+    comicNameCss: '.cy_title h1',
+    chapterCss: '.cy_plist ul',
     readtype: 1,
-    searchFun: async function(keyword) {
-      const searchUrl = 'http://qiximh3.com/search.php'
-      const data = new FormData()
-      data.append('keyword', keyword)
-      const { responseText } = await request('post', searchUrl, data, '')
-      const resJson = JSON.parse(responseText)
-      const searchList = []
-      resJson.search_data.forEach(element => {
-        const obj = {}
-        obj.name = element.name
-        obj.url = this.homepage + element.id + '/'
-        obj.imageUrl = element.imgs
-        searchList.push(obj)
-      })
-      return new Promise((resolve, reject) => {
-        resolve(searchList)
-      })
+    useFrame: true,
+    searchTemplate_1: {
+      search_add_url: 'search?keyword=',
+      alllist_dom_css: '.cy_list_r .cy_list_mh',
+      minlist_dom_css: 'ul',
+      img_src: 'src'
     },
-    getImgs: function(context) {
-      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
-      const imgArray = JSON.parse(imgStr)
-      return imgArray
+    getImgs: function(context, processData) {
+      const str = document.getElementById(processData.frameId).contentDocument.body.outerHTML
+      const imgStr = str.match(/main_img[\s\S]*?class="cy_intro_r/)[0]
+      const group = imgStr.matchAll(/data-src="(.*?)"/g)
+      const imgarr = []
+      for (const item of group) {
+        imgarr.push(item[1])
+      }
+      document.getElementById(processData.frameId).remove()
+      return imgarr
     }
   },
   {
@@ -721,27 +714,9 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.gufengmanhua.com',
-    homepage: 'https://www.gufengmanhua.com/',
+    domain: 'www.gufengmh.com',
+    homepage: 'https://www.gufengmh.com/',
     webName: '古风漫画网',
-    comicNameCss: '.book-title h1 span',
-    chapterCss: '#chapter-list-1,#chapter-list-10',
-    readtype: 1,
-    getImgs: function(context) {
-      const imgStr = context.match(/chapterImages = ([\s\S]+?);var chapterPath/)[1]
-      let imgarr = JSON.parse(imgStr)
-      if (imgarr[0].search('http') === -1) {
-        imgarr = imgarr.map((item) => {
-          return 'https://res5.gufengmanhua.com' + item
-        })
-      }
-      return imgarr
-    }
-  },
-  {
-    domain: 'www.123gf.com',
-    homepage: 'https://www.123gf.com/',
-    webName: '古风漫画网 2',
     comicNameCss: '.book-title h1 span',
     chapterCss: '#chapter-list-1,#chapter-list-10',
     readtype: 1,
