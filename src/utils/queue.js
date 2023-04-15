@@ -191,7 +191,7 @@ export default class Queue {
 
   // 网站翻页阅读
   async down2(workerId) {
-    const { url, zipDownFlag, totalNumber, isPay, imgIndex, downHeaders } = this.worker[workerId]
+    const { url, downType, totalNumber, isPay, imgIndex, downHeaders } = this.worker[workerId]
 
     const processData = { url, imgIndex, totalNumber, isPay }
     processData.otherData = this.worker[workerId].otherData
@@ -211,7 +211,7 @@ export default class Queue {
           break
         }
         const imgIndex = ++this.worker[workerId].imgIndex
-        if (zipDownFlag) {
+        if (downType) {
           promise.push(this.addImgPromise(workerId, imgUrlArr[0], downHeaders))
         } else {
           promise.push(this.addImgDownPromise(workerId, imgUrlArr[0], imgIndex, downHeaders))
@@ -235,11 +235,16 @@ export default class Queue {
         }, 1000)
       })
     } else {
-      // 是否压缩
-      if (zipDownFlag) {
+      // 压缩
+      if (downType === 1) {
         const result = await this.makeZip(workerId)
         return new Promise((resolve, reject) => {
           resolve(result)
+        })
+      } else if (downType === 2) { // 拼接
+        await this.combineImages(workerId)
+        return new Promise((resolve, reject) => {
+          resolve()
         })
       } else {
         return new Promise((resolve, reject) => {
@@ -251,7 +256,7 @@ export default class Queue {
 
   // 网站卷轴阅读
   async down(workerId) {
-    const { imgs, zipDownFlag, downHeaders } = this.worker[workerId]
+    const { imgs, downType, downHeaders } = this.worker[workerId]
     const promise = []
     let len = imgs.length
     let pictureNum = this.pictureNum
@@ -259,7 +264,7 @@ export default class Queue {
     while (pictureNum-- && len > 0) {
       // 是否压缩
       const imgIndex = ++this.worker[workerId].imgIndex
-      if (zipDownFlag) {
+      if (downType) {
         promise.push(this.addImgPromise(workerId, imgs[0], downHeaders))
       } else {
         promise.push(this.addImgDownPromise(workerId, imgs[0], imgIndex, downHeaders))
@@ -283,35 +288,16 @@ export default class Queue {
       })
     }
 
-    // 是否压缩
-    if (zipDownFlag) {
-      // const result = await this.makeZip(workerId)
-      // return new Promise((resolve, reject) => {
-      //   resolve(result)
-      // })
-      const canvas = await this.combineImages(workerId)
-      console.log('canvas: ', canvas)
-
-      // const href = canvas.toDataURL() // 获取canvas对应的base64编码
-      // const a = document.createElement('a') // 创建a标签
-      // a.download = 'name.jpg' // 设置图片名字
-      // a.href = href
-      // console.log('href: ', href)
-      // a.dispatchEvent(new MouseEvent('click'))
-
-      const _this = this
-      canvas.toBlob(function(imgblob) {
-        _this.downloadFile('xx\\xx.jpg', imgblob)
-      }, 'image/jpeg', 1)
-      // console.log('result: ', result)
-      return new Promise((resolve, reject) => {
-        resolve()
-      })
-    } else if (true) {
-      const result = await this.combineImages(workerId)
-      console.log('result: ', result)
+    // 压缩
+    if (downType === 1) {
+      const result = await this.makeZip(workerId)
       return new Promise((resolve, reject) => {
         resolve(result)
+      })
+    } else if (downType === 2) { // 拼接
+      await this.combineImages(workerId)
+      return new Promise((resolve, reject) => {
+        resolve()
       })
     } else {
       return new Promise((resolve, reject) => {
@@ -341,7 +327,7 @@ export default class Queue {
           progress: 0, // 进度百分比
           readtype: item.readtype, // 阅读(下载)方式类型
           func: this.exeDown(i),
-          zipDownFlag: item.zipDownFlag, // 是否压缩
+          downType: item.downType, // 下载方式 0：直接  1：压缩  2：拼接
           hasError: false,
           downHeaders: item.downHeaders,
           otherData: undefined // 自定义存储其他下载数据
@@ -406,20 +392,17 @@ export default class Queue {
   }
 
   async combineImages(workerId) {
-    console.log('workerId: ', workerId)
-    var canvas = document.createElement('canvas')
-    // canvas.width = canvas.Width
-    canvas.height = 0
-    canvas.height = 4000
-
-    var offsetY = 0
-    var context = canvas.getContext('2d')
+    const { comicName, chapterName } = this.worker[workerId]
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')
+    const imgArray = []
+    let canvasHeight = 0
+    let offsetY = 0
 
     async function asyncLoadImg(src) {
       return new Promise((resolve, reject) => {
         const img = document.createElement('img')
         img.onload = () => {
-          console.log('img: ', img)
           resolve(img)
         }
         img.onerror = () => {
@@ -430,35 +413,31 @@ export default class Queue {
       })
     }
 
-    async function drawImage(src) {
-      console.log('src: ', src)
-      const img = asyncLoadImg(src)
-      console.log('img.height: ', img.height)
-      // canvas.height += img.height
-
-      canvas.width = img.width
-
-      context.drawImage(img, 0, offsetY, img.width, img.height)
-      offsetY = offsetY + parseInt(img.height)
-    }
-
     for (let index = 0; index < this.workerDownInfo[workerId].length; index++) {
-      const item = this.workerDownInfo[workerId][index]
-
-      const imgblob = item.blob
-      // if (imgblob === 1 || imgblob === 0) {
-      //   const txtBlob = new Blob([item.imgurl], { type: 'text/plain' })
-      //   return
-      // }
+      const imgblob = this.workerDownInfo[workerId][index].blob
+      if (imgblob === 1 || imgblob === 0) {
+        continue
+      }
       const newurl = window.URL.createObjectURL(imgblob)
-      drawImage(newurl)
+      const image = await asyncLoadImg(newurl)
+      canvasHeight += image.height
+      imgArray.push(image)
+    }
+    canvas.height = canvasHeight
+    canvas.width = imgArray[0].width
+
+    for (const imgItem of imgArray) {
+      context.drawImage(imgItem, 0, offsetY, imgItem.width, imgItem.height)
+      offsetY = offsetY + parseInt(imgItem.height)
     }
 
-    context.fillStyle = '#FFFFFF'
-    // context.fillRect(0, 0, 400, 4000)
+    const name = comicName + '\\' + chapterName + '.jpg'
+    const _this = this
+    canvas.toBlob(function(imgblob) {
+      _this.downloadFile(name, imgblob)
+    }, 'image/jpeg', 1)
 
     return new Promise((resolve, reject) => {
-      console.log(9999999999)
       resolve(canvas)
     })
   }
