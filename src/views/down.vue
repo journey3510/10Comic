@@ -118,7 +118,6 @@ export default {
       },
       maxChapterNum: 3,
       maxPictureNum: 2,
-      zipDownFlag: true,
       imgIndexBitNum: 3,
       historyData: []
     }
@@ -143,7 +142,6 @@ export default {
         this.maxChapterNum = getStorage('maxChapterNum')
         this.maxPictureNum = getStorage('maxPictureNum')
         this.imgIndexBitNum = getStorage('imgIndexBitNum')
-        this.zipDownFlag = getStorage('zipDownFlag')
         this.queue = new Queue(this.maxChapterNum, this.maxPictureNum, this.imgIndexBitNum, this)
       }
       this.queue.addList(arr)

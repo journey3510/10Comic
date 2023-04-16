@@ -15,13 +15,16 @@
       }"
     >
       <van-cell-group title="选项" :style="{display: 'flex',flexDirection: 'column', width: '350px', margin: '10px auto'}" inset>
-        <van-cell title="本次压缩下载">
+        <label style="margin-left: 16px;" for="">本次下载(临时更改)</label>
+        <van-cell title="">
           <template #right-icon>
-            <van-checkbox
-              v-model="zipDownFlag"
-              label-position="left"
-              class="rightbutton"
-            />
+            <br>
+            <van-radio-group v-model="downType" direction="horizontal">
+              <van-radio :name="0">直接下载</van-radio>
+              <van-radio :name="1">压缩下载</van-radio>
+              <van-radio :name="2" title="有大小限制，不建议">拼接下载<van-icon name="info-o" color="red" /></van-radio>
+
+            </van-radio-group>
           </template>
         </van-cell>
 
@@ -193,7 +196,7 @@ export default {
       comicName: '------',
 
       paylogoArr: [],
-      zipDownFlag: true,
+      downType: 0,
       useCharacterNum: false,
       characterNumSequence: false
 
@@ -240,7 +243,7 @@ export default {
           this.$bus.$emit('getComicName', this.comicName)
         }, 500)
         //
-        this.zipDownFlag = getStorage('zipDownFlag')
+        this.downType = getStorage('downType')
       // eslint-disable-next-line no-empty
       } catch (error) {
         if (times === undefined) {
@@ -411,7 +414,7 @@ export default {
       }
       this.selectResult.forEach(num => {
         const item = this.list[num]
-        item.zipDownFlag = this.zipDownFlag
+        item.downType = this.downType
         item.downHeaders = currentComics.downHeaders
         if (item.chapterNumStr !== '') {
           item.chapterName = item.chapterNumStr + '-' + item.chapterName

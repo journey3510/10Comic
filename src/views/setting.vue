@@ -170,39 +170,60 @@
             <van-cell
               title-class="cellleftvalue"
               value-class="cellrightvalue"
-              label="*本次启动默认设置, 不勾选则下载图片"
+              label="*本次默认设置，修改后下次启动默认生效"
               center
             >
               <template #title>
-                <span class="custom-title">压缩下载</span>
+                <span class="custom-title">下载方式</span>
                 <van-popover
-                  v-model="zipDownPopover"
+                  v-model="downTypePopover"
                   placement="right"
                   get-container="#downpart"
                   :offset="[-18,10]"
                   :close-on-click-outside="true"
                 >
                   <div>
-                    <code class="popovertext">* 如需保存在文件夹需要设置油猴下载模式为浏览器API</code><br>
-                    <code class="popovertext">* 如有较多油猴弹窗提示跨域,建议取消勾选直接下载</code>
+                    <code class="popovertext">* 如需保存在文件夹需要设置油猴下载模式为浏览器API</code>
                   </div>
                   <template #reference>
                     <van-icon
                       name="info-o"
                       color="red"
-                      @mouseover="zipDownPopover = true"
-                      @mouseleave="zipDownPopover = false"
+                      @mouseover="downTypePopover = true"
+                      @mouseleave="downTypePopover = false"
                     />
                   </template>
                 </van-popover>
               </template>
 
               <template #default>
-                <van-checkbox
-                  v-model="zipDownFlag"
-                  class="rightbutton"
-                  @change="onChangeData('zipDownFlag', zipDownFlag)"
-                />
+                <div
+                  class="dropdown"
+                  @mouseover="showDropDown = true"
+                  @mouseleave="showDropDown = false"
+                >
+                  <button
+                    class="dropbtn"
+                  >{{ dropItem[downType].Text }}</button>
+
+                  <div
+                    v-show="showDropDown"
+                    id="myDropdown"
+                    class="dropdown-content"
+                  >
+                    <a
+                      v-for="(item,index) in dropItem"
+                      :key="index"
+                      href="#"
+                      @click="changeDownType(item.value)"
+                    >
+                      <div :title="item.hint">
+                        {{ item.Text }}
+                        <van-icon v-show="item.hint" name="info-o" color="red" />
+                      </div>
+                    </a>
+                  </div>
+                </div>
               </template>
             </van-cell>
 
@@ -373,15 +394,22 @@ export default {
       appCenterSize: 100,
       maxChapterNum: 1,
       maxPictureNum: 2,
-      zipDownFlag: true,
       imgIndexBitNum: 3,
       imgSplicingFlag: false,
       //
-      zipDownPopover: false,
+      downTypePopover: false,
       addZeroHint: false,
       showPopover: false,
       showUiPopover: false,
-      setupOtherPage: 0
+      setupOtherPage: 0,
+
+      showDropDown: false,
+      downType: 0,
+      dropItem: [
+        { Text: '直接下载', value: 0 },
+        { Text: '压缩下载', value: 1 },
+        { Text: '拼接下载', value: 2, hint: '有大小限制，不建议' }
+      ]
 
     }
   },
@@ -438,6 +466,12 @@ export default {
       this.$refs.swipe2.swipeTo(val)
       this.setupOtherPage = val
     },
+    changeDownType(val) {
+      if (this.downType !== val) {
+        this.downType = val
+        this.onChangeData('downType', val)
+      }
+    },
     exeFun(flag, basic) {
       let rightSize = 100; let centerSize = 100
       basic.rightSize ? rightSize = basic.rightSize : ''
@@ -454,7 +488,7 @@ export default {
       try {
         this.maxChapterNum = GM_getValue('maxChapterNum')
         this.maxPictureNum = GM_getValue('maxPictureNum')
-        this.zipDownFlag = GM_getValue('zipDownFlag')
+        this.downType = GM_getValue('downType')
         this.imgIndexBitNum = GM_getValue('imgIndexBitNum')
         this.imgSplicingFlag = GM_getValue('imgSplicingFlag')
         //
@@ -533,11 +567,60 @@ export default {
     .van-cell {
       width: 100%;
       padding: 10px 1px;
+      overflow: visible !important;
+
+      .van-cell__value {
+        overflow: visible !important;
+
+      }
       .cellleftvalue {
         flex: 1;
       }
       .cellrightvalue {
         flex: 0.5 !important;
+
+        // 下拉
+        .dropbtn {
+          width: 90px;
+          background-color: #aadafb;
+          color: white;
+          padding: 2px 5px;
+          font-size: 16px;
+          border: none;
+          cursor: pointer;
+        }
+
+        .dropbtn:hover, .dropbtn:focus {
+          background-color: #47b1f7;
+        }
+
+        .dropdown {
+          position: relative;
+          // display: inline-block;
+        }
+
+        .dropdown-content {
+          // display: none;
+          position: absolute;
+          right: 0;
+          background-color: #fff;
+          min-width: 90px;
+          overflow: auto;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 0px 2px;
+          text-decoration: none;
+          text-align: center;
+          display: block;
+        }
+
+        .dropdown a:hover {background-color: #ddd;}
+
+        .show {display: block;}
       }
       // 右侧按钮
       .rightbutton {
