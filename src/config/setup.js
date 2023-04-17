@@ -14,14 +14,14 @@ const configDefault = {
   },
   maxChapterNum: 2,
   maxPictureNum: 3,
-  zipDownFlag: false,
+  downType: 0,
   imgIndexBitNum: 3,
   imgSplicingFlag: true,
   downHistory: '[]',
   userWebInfo: []
 }
 
-// 废弃变量  暂无
+// 废弃变量
 const abandonDefault = []
 
 export const appLoadinit = () => {
@@ -48,9 +48,6 @@ export const appLoadinit = () => {
 
   GM_setValue('version', AppVersion)
   GM_setValue('maxChapterNum', 2)
-  if (AppVersion === '1.5.0') {
-    setStorage('appLoadDefault', false, 'isShowUI')
-  }
 
   return true
 }
