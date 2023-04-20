@@ -408,7 +408,7 @@ export default {
       dropItem: [
         { Text: '直接下载', value: 0 },
         { Text: '压缩下载', value: 1 },
-        { Text: '拼接下载', value: 2, hint: '有大小限制，总高度不超过65535像素' }
+        { Text: '拼接下载', value: 2, hint: '拼接后单张高度不超过 10000 像素' }
       ]
 
     }

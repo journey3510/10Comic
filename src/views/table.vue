@@ -22,7 +22,7 @@
             <van-radio-group v-model="downType" direction="horizontal">
               <van-radio :name="0">直接下载</van-radio>
               <van-radio :name="1">压缩下载</van-radio>
-              <van-radio :name="2" title="有大小限制，总高度不超过65535像素">拼接下载<van-icon name="info-o" color="red" /></van-radio>
+              <van-radio :name="2" title="拼接后单张高度不超过 10000 像素">拼接下载<van-icon name="info-o" color="red" /></van-radio>
 
             </van-radio-group>
           </template>
@@ -121,7 +121,7 @@
         <div id="select-list-1-left">
           <span>颜色</span>
           <span class="span-circle" style="background: blue;" title="免费" />
-          <span class="span-circle" style="background: #AA6680;" title="单行本/卷" />
+          <span class="span-circle" style="background: #AA6680;" title="最新/其它/单行本/卷" />
           <span class="span-circle" style="background: red;" title="付费" />
           <span class="span-circle" style="background: #ccc;" title="无效" />
         </div>

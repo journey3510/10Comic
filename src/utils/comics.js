@@ -999,7 +999,8 @@ export const comicsWebInfo = [
     homepage: 'https://cn.baozimh.com/',
     webName: '包子漫画',
     comicNameCss: 'h1.comics-detail__title',
-    chapterCss: '.comics-detail > .l-content:nth-of-type(3) #chapter-items, #chapters_other_list',
+    chapterCss: '.comics-detail > .l-content:nth-of-type(3) #chapter-items',
+    chapterCss_2: '.comics-detail > .l-content:nth-of-type(3) .pure-g',
     readtype: 1,
     searchTemplate_1: {
       search_add_url: 'search/?keyword=',

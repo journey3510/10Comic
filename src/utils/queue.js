@@ -393,11 +393,10 @@ export default class Queue {
 
   async combineImages(workerId) {
     const { comicName, chapterName } = this.worker[workerId]
-    const canvas = document.createElement('canvas')
-    const context = canvas.getContext('2d')
-    const imgArray = []
-    let canvasHeight = 0
-    let offsetY = 0
+    let imgNum = 0
+    let curHeight = 0
+    let totalHeight = 0
+    const saveImg = []
 
     async function asyncLoadImg(src) {
       return new Promise((resolve, reject) => {
@@ -407,9 +406,19 @@ export default class Queue {
         }
         img.onerror = () => {
           const error = new Error(`图片加载失败，url：${src}`)
-          reject(error)
+          console.log('error: ', error)
+          reject('')
         }
         img.src = src
+      })
+    }
+
+    async function asyncCanvas(canvas, name) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(async function(imgblob) {
+          await _this.downloadFile(name, imgblob)
+          resolve()
+        }, 'image/jpeg', 1)
       })
     }
 
@@ -420,25 +429,50 @@ export default class Queue {
       }
       const newurl = window.URL.createObjectURL(imgblob)
       const image = await asyncLoadImg(newurl)
-      canvasHeight += image.height
-      imgArray.push(image)
+      if (image === '') {
+        continue
+      }
+      if (totalHeight === 0) {
+        const obj = { num: imgNum, width: image.width, height: image.height, img: [image] }
+        curHeight = image.height
+        totalHeight += image.height
+        saveImg.push(obj)
+        continue
+      }
+      if (curHeight + image.height > 10000) {
+        const newobj = { num: ++imgNum, width: image.width, height: image.height, img: [image] }
+        curHeight = image.height
+        saveImg.push(newobj)
+      } else {
+        curHeight += image.height
+        saveImg[imgNum].height += image.height
+        saveImg[imgNum].img.push(image)
+      }
+      totalHeight += image.height
     }
-    canvas.height = canvasHeight
-    canvas.width = imgArray[0].width
 
-    for (const imgItem of imgArray) {
-      context.drawImage(imgItem, 0, offsetY, imgItem.width, imgItem.height)
-      offsetY = offsetY + parseInt(imgItem.height)
-    }
-
-    const name = comicName + '\\' + chapterName + '.jpg'
     const _this = this
-    canvas.toBlob(function(imgblob) {
-      _this.downloadFile(name, imgblob)
-    }, 'image/jpeg', 1)
+
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')
+    let offsetY = 0
+    for (let i = 0; i < saveImg.length; i++) {
+      const item = saveImg[i]
+      canvas.width = item.width
+      canvas.height = item.height
+      offsetY = 0
+
+      for (let len = 0; len < item.img.length; len++) {
+        const element = item.img[len]
+        context.drawImage(element, 0, offsetY, element.width, element.height)
+        offsetY = offsetY + parseInt(element.height)
+      }
+      const name = comicName + '\\' + chapterName + '\\' + addZeroForNum(item.num + 1, this.imgIndexBitNum) + '.jpg'
+      await asyncCanvas(canvas, name)
+    }
 
     return new Promise((resolve, reject) => {
-      resolve(canvas)
+      resolve(true)
     })
   }
 }
