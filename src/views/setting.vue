@@ -179,7 +179,7 @@
                   v-model="downTypePopover"
                   placement="right"
                   get-container="#downpart"
-                  :offset="[-18,10]"
+                  :offset="[-8,10]"
                   :close-on-click-outside="true"
                 >
                   <div>
@@ -223,6 +223,51 @@
                       </div>
                     </a>
                   </div>
+                </div>
+              </template>
+            </van-cell>
+
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              label="*下载拼接前生效"
+              center
+            >
+              <template #title>
+                <span class="custom-title">拼接图片最大高度</span>
+                <van-popover
+                  v-model="splicingHeightPopover"
+                  placement="right"
+                  get-container="#downpart"
+                  :offset="[-8,10]"
+                  :close-on-click-outside="true"
+                >
+                  <div>
+                    <code class="popovertext">* chrome和Edge 最大不超过 65530</code>
+                  </div>
+                  <template #reference>
+                    <van-icon
+                      name="info-o"
+                      color="red"
+                      @mouseover="splicingHeightPopover = true"
+                      @mouseleave="splicingHeightPopover = false"
+                    />
+                  </template>
+                </van-popover>
+              </template>
+
+              <template #default>
+                <div>
+                  <input
+                    id="max-splicing-height-input"
+                    v-model="maxSplicingHeight"
+                    type="number"
+                    :min="10000"
+                    :max="65530"
+                    class="rightbutton"
+                    onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                    @blur="splicingHeightBlur"
+                  >
                 </div>
               </template>
             </van-cell>
@@ -405,6 +450,8 @@ export default {
 
       showDropDown: false,
       downType: 0,
+      maxSplicingHeight: 20000,
+      splicingHeightPopover: false,
       dropItem: [
         { Text: '直接下载', value: 0 },
         { Text: '压缩下载', value: 1 },
@@ -472,6 +519,12 @@ export default {
         this.onChangeData('downType', val)
       }
     },
+    splicingHeightBlur(event) {
+      const val = event.currentTarget.value
+      if (val < 10000) this.maxSplicingHeight = 10000
+      if (val > 65530) this.maxSplicingHeight = 65530
+      this.onChangeData('maxSplicingHeight', this.maxSplicingHeight)
+    },
     exeFun(flag, basic) {
       let rightSize = 100; let centerSize = 100
       basic.rightSize ? rightSize = basic.rightSize : ''
@@ -489,6 +542,7 @@ export default {
         this.maxChapterNum = GM_getValue('maxChapterNum')
         this.maxPictureNum = GM_getValue('maxPictureNum')
         this.downType = GM_getValue('downType')
+        this.maxSplicingHeight = GM_getValue('maxSplicingHeight')
         this.imgIndexBitNum = GM_getValue('imgIndexBitNum')
         this.imgSplicingFlag = GM_getValue('imgSplicingFlag')
         //
@@ -629,6 +683,24 @@ export default {
       .custom-title {
         text-align: left;
       }
+
+      #max-splicing-height-input {
+        width: 80px;
+        height: 18px;
+        margin-right: 2px;
+        border: 1px #66ccff solid;
+        border-radius: 10px;
+        text-align: center;
+        background: #fff;
+      }
+
+      #max-splicing-height-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+      #max-splicing-height-input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+      }
+
       #hot-key-input {
         width: 35px;
         height: 18px;

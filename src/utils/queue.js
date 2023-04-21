@@ -392,6 +392,7 @@ export default class Queue {
   }
 
   async combineImages(workerId) {
+    const maxSplicingHeight = getStorage('maxSplicingHeight')
     const { comicName, chapterName } = this.worker[workerId]
     let imgNum = 0
     let curHeight = 0
@@ -418,7 +419,7 @@ export default class Queue {
         canvas.toBlob(async function(imgblob) {
           await _this.downloadFile(name, imgblob)
           resolve()
-        }, 'image/jpeg', 1)
+        }, 'image/jpeg', 0.8)
       })
     }
 
@@ -439,7 +440,7 @@ export default class Queue {
         saveImg.push(obj)
         continue
       }
-      if (curHeight + image.height > 10000) {
+      if (curHeight + image.height > maxSplicingHeight) {
         const newobj = { num: ++imgNum, width: image.width, height: image.height, img: [image] }
         curHeight = image.height
         saveImg.push(newobj)

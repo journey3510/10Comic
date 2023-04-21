@@ -15,6 +15,7 @@ const configDefault = {
   maxChapterNum: 2,
   maxPictureNum: 3,
   downType: 0,
+  maxSplicingHeight: 20000,
   imgIndexBitNum: 3,
   imgSplicingFlag: true,
   downHistory: '[]',
