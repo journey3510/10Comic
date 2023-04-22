@@ -9,13 +9,13 @@
       :style="{
         position: 'absolute' ,
         width: '100%',
-        height: '30%',
+        height: '40%',
         borderTop: '1px solid #fcadad',
         marginTop: '-15px'
       }"
     >
       <van-cell-group title="选项" :style="{display: 'flex',flexDirection: 'column', width: '350px', margin: '10px auto'}" inset>
-        <label style="margin-left: 16px;" for="">本次下载(临时更改)</label>
+        <label style="margin-top: 5px;margin-left: 16px;text-align: left;">本次下载(临时更改)</label>
         <van-cell title="">
           <template #right-icon>
             <br>
@@ -23,7 +23,6 @@
               <van-radio :name="0">直接下载</van-radio>
               <van-radio :name="1">压缩下载</van-radio>
               <van-radio :name="2" title="拼接后单张高度不超过 10000 像素">拼接下载<van-icon name="info-o" color="red" /></van-radio>
-
             </van-radio-group>
           </template>
         </van-cell>
@@ -44,7 +43,36 @@
             >—序号反序
             </van-checkbox>
           </div>
+        </van-cell>
 
+        <div
+          style="margin-top: 8px;
+          display: flex;
+          height: 25px;
+          line-height: 25px;
+          justify-content: space-between;"
+        >
+          <label style="margin-left: 16px;text-align: left;" for="">下载当前阅读章节 (测试)</label>
+          <van-button
+            type="default"
+            size="mini"
+            @click="getCurrentWebData"
+          >获取</van-button>
+        </div>
+
+        <van-cell title="" style="padding-top: 0px;">
+          <template #right-icon>
+            <van-field
+              v-model="defineComicName"
+              name="defineComicName"
+              placeholder="漫画名"
+            />
+            <van-field
+              v-model="definechapterName"
+              name="definechapterName"
+              placeholder="章节名"
+            />
+          </template>
         </van-cell>
 
       </van-cell-group>
@@ -198,7 +226,10 @@ export default {
       paylogoArr: [],
       downType: 0,
       useCharacterNum: false,
-      characterNumSequence: false
+      characterNumSequence: false,
+
+      defineComicName: '',
+      definechapterName: ''
 
     }
   },
@@ -402,6 +433,43 @@ export default {
           }
         })
       })
+    },
+
+    // 获取当前所在章节 下载
+    getCurrentWebData() {
+      if (!currentComics) {
+        Toast({
+          message: '未在匹配网站',
+          getContainer: '.card',
+          position: 'bottom'
+        })
+        return
+      }
+      if (this.defineComicName === '' || this.definechapterName === '') {
+        Toast({
+          message: '请输入名称',
+          getContainer: '.card',
+          position: 'bottom'
+        })
+        return
+      }
+      const item = {
+        comicName: this.defineComicName,
+        chapterNumStr: '',
+        chapterName: this.definechapterName,
+        url: window.location.href,
+        characterType: 'one',
+        readtype: currentComics.readtype,
+        isPay: currentComics.hasSpend,
+        downType: this.downType,
+        downHeaders: currentComics.downHeaders
+      }
+      this.downResult.push(item)
+
+      this.$bus.$emit('selectDown', this.downResult)
+      this.$bus.$emit('changTab', 2)
+      this.downResult = []
+      this.show = false
     },
     downSelectList() {
       if (this.selectResult.length === 0) {
