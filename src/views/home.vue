@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <div class="homeindex">
     <div
@@ -19,6 +20,7 @@
     <van-cell-group v-if="checkValue == 1" inset>
       <van-cell
         v-for="(item, index) in originalInfo"
+        v-if="!item.showInList"
         :key="index"
         is-link
         @click="jump(item.homepage)"
