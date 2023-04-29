@@ -199,7 +199,7 @@
 
 import { currentComics } from '@/utils/comics'
 import { getStorage } from '@/config/setup'
-import { addZeroForNum } from '@/utils/index'
+import { addZeroForNum, trimSpecial } from '@/utils/index'
 
 import { Toast } from 'vant'
 
@@ -419,9 +419,9 @@ export default {
           }
 
           const data = {
-            comicName: this.comicName,
+            comicName: trimSpecial(this.comicName),
             chapterNumStr: '',
-            chapterName: chapterName,
+            chapterName: trimSpecial(chapterName),
             url: element.href,
             characterType: type,
             readtype,

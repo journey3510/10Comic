@@ -2,7 +2,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request, parseToDOM, funstrToData, getType } from '@/utils/index'
+import { request, parseToDOM, funstrToData, getType, trimSpecial } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
 export const searchFunTemplate_1 = async(data, keyword) => {
@@ -444,14 +444,14 @@ export const comicsWebInfo = [
       const getUrl = 'https://manga.bilibili.com/twirp/comic.v1.Comic/ComicDetail?device=pc&platform=web'
       const { responseText } = await request('post', getUrl, data)
       const comic = JSON.parse(responseText)
-      const comicName = comic.data.title
+      const comicName = trimSpecial(comic.data.title)
       const comic_list = comic.data.ep_list
       const allList = []
       comic_list.forEach(element => {
         const url = `https://manga.bilibili.com/mc${comicid}/${element.id}`
         const data = {
           comicName: comicName,
-          chapterName: element.short_title + ' ' + element.title,
+          chapterName: trimSpecial(element.short_title + ' ' + element.title),
           chapterNumStr: '',
           url,
           readtype: this.readtype,
@@ -504,14 +504,14 @@ export const comicsWebInfo = [
       const getUrl = 'https://www.bilibilicomics.com/twirp/comic.v1.Comic/ComicDetail?device=pc&platform=web'
       const { responseText } = await request('post', getUrl, data)
       const comic = JSON.parse(responseText)
-      const comicName = comic.data.title
+      const comicName = trimSpecial(comic.data.title)
       const comic_list = comic.data.ep_list
       const allList = []
       comic_list.forEach(element => {
         const url = `https://www.bilibilicomics.com/mc${comicid}/${element.id}`
         const data = {
           comicName: comicName,
-          chapterName: element.short_title + ' ' + element.title,
+          chapterName: trimSpecial(element.short_title + ' ' + element.title),
           chapterNumStr: '',
           url,
           readtype: this.readtype,
@@ -1084,11 +1084,11 @@ export const comicsWebInfo = [
       const code = document.body.outerHTML.match(/\(function\(a,b,c.*?(\)\))/g)[0]
       const data = eval(code)
       const list = data.data[0].comicList
-      const comicName = data.data[0].topicInfo.title
+      const comicName = trimSpecial(data.data[0].topicInfo.title)
       const newlist = list.map((item) => {
         return {
           comicName: comicName,
-          chapterName: item.title,
+          chapterName: trimSpecial(item.title),
           chapterNumStr: '',
           url: 'https://m.kuaikanmanhua.com/mobile/comics/' + item.id,
           readtype: 1,

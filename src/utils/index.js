@@ -24,6 +24,14 @@ export const loadStyle2 = (url) => {
   })
 }
 
+export function trimSpecial(string) {
+  if (string !== '') {
+    const pattern = /[`~!@#$^\-&*|{}'<>?:;~']/g
+    string = string.replace(pattern, '')
+  }
+  return string
+}
+
 export const getType = (obj) => {
   const type = typeof obj
   if (type !== 'object') {
