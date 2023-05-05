@@ -407,7 +407,7 @@ export default class Queue {
         }
         img.onerror = () => {
           const error = new Error(`图片加载失败，url：${src}`)
-          console.log('error: ', error)
+          console.log('combineImages-e: ', error)
           reject('')
         }
         img.src = src

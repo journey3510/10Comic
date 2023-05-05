@@ -59,7 +59,6 @@ export const setinit = async() => {
       resolve(false)
     }
     for (const key in configDefault) {
-      console.log('configDefault[key]: ', configDefault[key])
       GM_setValue(key, configDefault[key])
     }
     resolve(true)

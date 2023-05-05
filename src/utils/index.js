@@ -26,8 +26,9 @@ export const loadStyle2 = (url) => {
 
 export function trimSpecial(string) {
   if (string !== '') {
-    const pattern = /[`~!@#$^\-&*|{}'<>?:;~']/g
+    const pattern = /[`~!@#$^\&*|{}'<>?:;~']/g
     string = string.replace(pattern, '')
+    string = string.replace(/\n|\r/g, '').trim()
   }
   return string
 }
@@ -140,6 +141,7 @@ export const request = async function request(...details) {
         resolve(res)
       }),
       onerror: (onerror || function(e) {
+        console.log('request-e: ', e)
         resolve('onerror')
       }),
       ontimeout: (ontimeout || function() {
@@ -170,7 +172,7 @@ export const downFile = async(...detail) => {
         resolve(true)
       }),
       onerror: (onerror || function(e) {
-        console.log('onerror: ', onerror)
+        console.log('downFile-e: ', e)
         resolve(false)
       }),
       ontimeout: (ontimeout || function() {

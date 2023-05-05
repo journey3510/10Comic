@@ -576,7 +576,6 @@ export const comicsWebInfo = [
       img_data.forEach(element => {
         saveImg.push('https://komiic.com/api/image/' + element.kid)
       })
-      console.log('saveImg: ', saveImg)
       return saveImg
     }
   },
@@ -631,7 +630,6 @@ export const comicsWebInfo = [
   //       imgUrlArr.push(item[1])
   //     }
   //     const nextPageUrl = context.match(/<mip-link href="(.*?)">下一页/)[1]
-  //     console.log('nextPageUrl: ', nextPageUrl)
   //     return { imgUrlArr, nextPageUrl }
   //   }
   // },

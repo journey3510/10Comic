@@ -176,7 +176,6 @@
               :style="titleStyle(item.url, item.isPay, item.characterType)"
               :title="showComicTitleName(item.chapterNumStr, item.chapterName)"
             >
-              <!-- :title="item.chapterName" -->
               <template #right-icon>
                 <van-checkbox
                   :name="index"
@@ -282,7 +281,7 @@ export default {
             this.getInfo(1)
           }, 2000)
         }
-        console.log('error: ', error)
+        console.log('getInfo-e: ', error)
       }
       return
     },
@@ -373,7 +372,7 @@ export default {
           this.showSelectList = true
         }, 100)
       } catch (error) {
-        console.log('error: ', error)
+        console.log('getSelectList-e: ', error)
         Toast({
           message: '网站未匹配或方法已失效',
           getContainer: '.card',
@@ -396,12 +395,11 @@ export default {
           let chapterName = ''
           try {
             if (!chapterNameReg) {
-              chapterName = element.innerText.replace(/\n|\r/g, '')
-              chapterName = chapterName.split('\n')[0].trim()
+              chapterName = element.innerText
             } else {
-              const linkOuterHTML = element.outerHTML
-              chapterName = linkOuterHTML.match(chapterNameReg)[1]
+              chapterName = element.outerHTML.match(chapterNameReg)[1]
             }
+            chapterName = trimSpecial(chapterName)
           } catch (error) {
             // console.log()
           }
@@ -421,7 +419,7 @@ export default {
           const data = {
             comicName: trimSpecial(this.comicName),
             chapterNumStr: '',
-            chapterName: trimSpecial(chapterName),
+            chapterName,
             url: element.href,
             characterType: type,
             readtype,
