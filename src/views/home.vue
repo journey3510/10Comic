@@ -20,7 +20,6 @@
     <van-cell-group v-if="checkValue == 1" inset>
       <van-cell
         v-for="(item, index) in originalInfo"
-        v-if="!item.showInList"
         :key="index"
         is-link
         @click="jump(item.homepage)"
@@ -86,7 +85,7 @@ export default {
   methods: {
     getWeb() {
       const { originalInfo, userWebInfo } = getWebList()
-      this.originalInfo = originalInfo
+      this.originalInfo = originalInfo.filter((item) => { return item.showInList !== false })
       this.userWebInfo = userWebInfo
     },
     checkContent(val, title) {

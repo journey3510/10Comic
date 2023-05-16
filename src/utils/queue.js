@@ -88,7 +88,7 @@ export default class Queue {
   }
 
   // 直接下载图片 Promise
-  addImgDownPromise(index, imgurl, imgIndex, newHeaders) {
+  addImgDownPromise(index, imgurl, imgIndex, newHeaders, retryTimes) {
     const headers = {
       referer: this.worker[index].url
     }
@@ -118,6 +118,11 @@ export default class Queue {
 
         let newurl = ''
         if (res === 'onerror' || res === 'timeout') {
+          if (retryTimes !== 2) {
+            if (retryTimes === undefined) retryTimes = 0
+            return resolve(_this.addImgDownPromise(index, imgurl, imgIndex, newHeaders, ++retryTimes))
+          }
+
           _this.worker[index].hasError = true
           suffix = 'txt'
           const newBlob = new Blob([imgurl], { type: 'text/plain' })
@@ -138,7 +143,7 @@ export default class Queue {
   }
 
   // 请求图片Blob Promise (后用于压缩)
-  addImgPromise(index, imgurl, newHeaders) {
+  addImgPromise(index, imgurl, newHeaders, retryTimes) {
     const headers = {
       referer: this.worker[index].url
     }
@@ -168,6 +173,10 @@ export default class Queue {
             suffix: suffix })
         },
         onerror: function(e) {
+          if (retryTimes !== 2) {
+            if (retryTimes === undefined) retryTimes = 0
+            return resolve(_this.addImgPromise(index, imgurl, newHeaders, ++retryTimes))
+          }
           _this.worker[index].hasError = true
           resolve({
             blob: 1,
@@ -175,6 +184,10 @@ export default class Queue {
             suffix: '' })
         },
         ontimeout: function() {
+          if (retryTimes !== 2) {
+            if (retryTimes === undefined) retryTimes = 0
+            return resolve(_this.addImgPromise(index, imgurl, newHeaders, ++retryTimes))
+          }
           resolve({
             blob: 0,
             imgurl,
