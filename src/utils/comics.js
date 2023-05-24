@@ -688,6 +688,24 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.manhuagui.com',
+    homepage: 'https://www.manhuagui.com/',
+    webName: '漫画框',
+    comicNameCss: '.book-title h1',
+    chapterCss: '.chapter-list',
+    readtype: 1,
+    useFrame: true,
+    getImgs: function(context, processData) {
+      const str = document.getElementById(processData.frameId).contentDocument.body.outerHTML
+
+      const code1 = funstrToData(str, /(function\(p,a.*?d\){e[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
+      console.log('code1: ', code1)
+
+      document.getElementById(processData.frameId).remove()
+      return imgarr
+    }
+  },
+  {
     domain: 'www.36manga.com',
     homepage: 'https://www.36manga.com/',
     webName: '36漫画网',
