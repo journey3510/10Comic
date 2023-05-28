@@ -76,6 +76,7 @@
 | 百漫谷(繁)      | https://darpou.com/             |                             |
 | 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |                             |
 | 七夕漫画        | http://www.qiximh2.com/             |                             |
+| 漫画柜       | https://www.manhuagui.com/        |                           |
 | 36漫画网       | https://www.36manga.com/        | ？可访问 ？                      |
 | 古风漫画网     | https://www.gufengmh.com/          |                             |
 | 滴滴漫画        | http://www.txydd.com/           |                             |
@@ -185,6 +186,8 @@
 ## v1.7 更新记录
   - 2023/5/16 *v1.7.0* 
     - 图片下载错误、超时 重新请求
+  - 2023/5/28 *v1.7.1* 
+    - 添加漫画柜网站
 
 
 <br />

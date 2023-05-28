@@ -690,19 +690,19 @@ export const comicsWebInfo = [
   {
     domain: 'www.manhuagui.com',
     homepage: 'https://www.manhuagui.com/',
-    webName: '漫画框',
+    webName: '漫画柜',
     comicNameCss: '.book-title h1',
     chapterCss: '.chapter-list',
     readtype: 1,
-    useFrame: true,
-    getImgs: function(context, processData) {
-      const str = document.getElementById(processData.frameId).contentDocument.body.outerHTML
-
-      const code1 = funstrToData(str, /(function\(p,a.*?d\){e[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      console.log('code1: ', code1)
-
-      document.getElementById(processData.frameId).remove()
-      return imgarr
+    getImgs: function(context) {
+      const dataStr = funstrToData(context, /window\["\\x65\\x76\\x61\\x6c"\]\((function[\s\S]+?return \S*?})(\([\s\S]+?{}\))/g)
+      const matchObj = /"files":(?<files>.*?),"finished".*"path":"(?<path>.*?)".*"e":(?<e>\d*),"m":"(?<m>.*)"}/g.exec(dataStr)
+      var { files, path, e, m } = matchObj.groups
+      files = JSON.parse(files)
+      const image = files.map(ele => {
+        return 'https://i.hamreus.com' + path + ele + '?e=' + e + '&m=' + m
+      })
+      return image
     }
   },
   {
