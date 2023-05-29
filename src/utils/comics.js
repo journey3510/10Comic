@@ -694,7 +694,12 @@ export const comicsWebInfo = [
     comicNameCss: '.book-title h1',
     chapterCss: '.chapter-list',
     readtype: 1,
+    // context 章节请求正文
     getImgs: function(context) {
+      // 获取到 html请求正文 context 的一段js代码字符 并执行这代码获取到 图片地址信息
+      // window["\x65\x76\x61\x6c"]  => eval
+      // (function[\s\S]+?return \S*?}) 匿名函数部分
+      // (\([\s\S]+?{}\)) 需要的参数
       const dataStr = funstrToData(context, /window\["\\x65\\x76\\x61\\x6c"\]\((function[\s\S]+?return \S*?})(\([\s\S]+?{}\))/g)
       const matchObj = /"files":(?<files>.*?),"finished".*"path":"(?<path>.*?)".*"e":(?<e>\d*),"m":"(?<m>.*)"}/g.exec(dataStr)
       var { files, path, e, m } = matchObj.groups

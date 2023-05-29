@@ -205,13 +205,25 @@ export const funstrToData = function funstrToData(str, reg) {
   const group = str.matchAll(reg)
   const func = []
   for (const item of group) {
+    // 匿名函数主体
+    // function (str){
+    //     console.log(str);
+    // }
     func.push(item[1])
-    func.push(item[2])
+    // 函数 执行参数部分
+    func.push(item[2]) // ("aaaaa")
   }
+  // 如没有 参数
   if (!func[1]) {
     func[1] = '()'
   }
   const code = '(' + func[0] + ')' + func[1]
+  // code =>
+  // (function (str){
+  //   //此时会输出 aaaaa
+  //   console.log(str);
+  // })("aaaaa")
+
   // eslint-disable-next-line no-eval
   const data = eval(code)
   return data
