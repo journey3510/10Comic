@@ -169,24 +169,23 @@
           id="select-list-2-1"
           inset
         >
-          <van-checkbox-group ref="checkboxGroup" v-model="selectResult">
-            <van-cell
-              v-for="(item,index) in list"
-              :key="index"
-              :style="titleStyle(item.url, item.isPay, item.characterType)"
-              :title="showComicTitleName(item.chapterNumStr, item.chapterName)"
-            >
-              <template #right-icon>
-                <van-checkbox
-                  :name="index"
-                  :disabled="item.url !== 'javascript:void();' ? false: true"
-                  class="selectChapter"
-                  icon-size="24px"
-                  @click="radioSelect(index)"
-                />
-              </template>
-            </van-cell>
-          </van-checkbox-group>
+          <van-cell
+            v-for="(item,index) in list"
+            :key="index"
+            :style="titleStyle(item.url, item.isPay, item.characterType)"
+            :title="showComicTitleName(item.chapterNumStr, item.chapterName)"
+          >
+            <template #right-icon>
+              <van-checkbox
+                v-model="item.isSelect"
+                :name="index"
+                :disabled="item.url !== 'javascript:void();' ? false: true"
+                class="selectChapter"
+                icon-size="24px"
+                @click="radioSelect(item.isSelect, index)"
+              />
+            </template>
+          </van-cell>
         </van-cell-group>
       </div>
     </div>
@@ -208,10 +207,8 @@ export default {
     return {
       list: [],
       listBack: [],
-      selectResult: [],
       downResult: [],
-      minListIndex: null,
-      maxListIndex: null,
+      lastSelectIndex: null,
       onShfit: false,
 
       showSelectList: false,
@@ -283,51 +280,51 @@ export default {
         }
         console.log('getInfo-e: ', error)
       }
+      this.lastSelectIndex = null
       return
     },
     reverseList() {
       this.overlayShow = true
       this.list = this.list.reverse()
-      const listLength = this.list.length
-      if (this.selectResult.length !== 0) {
-        this.selectResult = this.selectResult.map((item) => {
-          item = listLength - item - 1
-          return item
-        })
-      }
+      this.lastSelectIndex = null
       this.overlayShow = false
     },
     selectAll() {
-      this.$refs.checkboxGroup.toggleAll(false)
-      if (currentComics.hasSpend) {
-        this.list.forEach((element, index) => {
-          if (element.url !== 'javascript:void();') {
-            this.selectResult.push(index)
-          }
-        })
-        return
-      }
-      this.$refs.checkboxGroup.toggleAll(true)
+      this.list.forEach((element, index) => {
+        if (element.url !== 'javascript:void();') {
+          element.isSelect = true
+        }
+      })
+      this.lastSelectIndex = null
     },
     CancelSelect() {
-      this.$refs.checkboxGroup.toggleAll(false)
-      this.minListIndex = null
-      this.maxListIndex = null
+      this.list.forEach((element, index) => {
+        element.isSelect = false
+      })
+      this.lastSelectIndex = null
     },
-    radioSelect(index) {
-      if (this.minListIndex === null || index < this.minListIndex) {
-        this.minListIndex = index
+    radioSelect(isSelect, index) {
+      if (!isSelect) {
+        this.lastSelectIndex = null
+        return
       }
-      if (this.maxListIndex === null || index > this.maxListIndex) {
-        this.maxListIndex = index
+      let minIndex, maxIndex
+      if (this.lastSelectIndex < index) {
+        minIndex = this.lastSelectIndex
+        maxIndex = index
+      } else {
+        minIndex = index
+        maxIndex = this.lastSelectIndex
       }
-      if (this.minListIndex !== this.maxListIndex && this.onShfit) {
-        for (let i = this.minListIndex; i < this.maxListIndex; i++) {
-          if (this.list[i].url !== 'javascript:void();' && !this.selectResult.includes(i)) {
-            this.selectResult.push(i)
+
+      if (this.onShfit && this.lastSelectIndex !== null) {
+        for (let i = minIndex; i < maxIndex; i++) {
+          if (this.list[i].url !== 'javascript:void();') {
+            this.list[i].isSelect = true
           }
         }
       }
+      this.lastSelectIndex = index
     },
     watchKeyEvent() {
       const setKeyStatus = (keyCode, status) => {
@@ -423,7 +420,8 @@ export default {
             url: element.href,
             characterType: type,
             readtype,
-            isPay: currentIsPay
+            isPay: currentIsPay,
+            isSelect: false
           }
 
           if (data.chapterName !== '') {
@@ -470,7 +468,22 @@ export default {
       this.show = false
     },
     downSelectList() {
-      if (this.selectResult.length === 0) {
+      let hasSelect = false
+      this.list.forEach((item, index) => {
+        if (item.isSelect) {
+          item.downType = this.downType
+          item.downHeaders = currentComics.downHeaders
+          if (!hasSelect && item.isSelect) {
+            hasSelect = true
+          }
+          if (item.chapterNumStr !== '') {
+            item.chapterName = item.chapterNumStr + '-' + item.chapterName
+          }
+          this.downResult.push(item)
+        }
+      })
+
+      if (!hasSelect) {
         Toast({
           message: '请选择章节',
           getContainer: '.card',
@@ -478,23 +491,13 @@ export default {
         })
         return
       }
-      this.selectResult.forEach(num => {
-        const item = this.list[num]
-        item.downType = this.downType
-        item.downHeaders = currentComics.downHeaders
-        if (item.chapterNumStr !== '') {
-          item.chapterName = item.chapterNumStr + '-' + item.chapterName
-        }
-        this.downResult.push(item)
-      })
+
       this.$bus.$emit('selectDown', this.downResult)
       this.$bus.$emit('changTab', 2)
       this.downResult = []
-      this.selectResult = []
     },
     reloadList() {
       this.list = []
-      this.selectResult = []
       this.getInfo(1)
       this.getSelectList()
     },
