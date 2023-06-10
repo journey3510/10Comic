@@ -480,6 +480,7 @@ export default {
             item.chapterName = item.chapterNumStr + '-' + item.chapterName
           }
           this.downResult.push(item)
+          item.isSelect = false
         }
       })
 

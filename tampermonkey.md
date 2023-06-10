@@ -64,6 +64,7 @@
 | 动漫屋         | https://www.dm5.com/            |                             |
 | 动漫屋2         | https://tel.dm5.com/            |                             |
 | 奇漫屋         | http://www.qiman59.com/         |                             |
+| GoDa         | https://cn.godamanga.art/        |                             |
 | 咚漫          | https://www.dongmanmanhua.cn/   |                             |
 | webtoons    | https://www.webtoons.com/       | ？需要魔法？                      |
 | comic.naver | https://comic.naver.com/        | 找到漫画目录页再使用                  |
@@ -184,12 +185,14 @@
 
 
 ## v1.7 更新记录
-  - 2023/5/16 *v1.7.0* 
-    - 图片下载错误、超时 重新请求
-  - 2023/5/28 *v1.7.1* 
-    - 添加漫画柜网站
+  - 2023/6/10 *v1.7.3* 
+    - 新增GoDa网站、点击下载后列表取消勾选
   - 2023/6/5 *v1.7.2* 
     - 修改列表勾选方法
+  - 2023/5/28 *v1.7.1* 
+    - 添加漫画柜网站
+  - 2023/5/16 *v1.7.0* 
+    - 图片下载错误、超时 重新请求
 
 
 <br />
