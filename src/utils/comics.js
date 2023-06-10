@@ -277,6 +277,28 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'cn.godamanga.art',
+    homepage: 'https://cn.godamanga.art/',
+    webName: 'GoDa',
+    comicNameCss: 'h1.stk-block-heading__text',
+    chapterCss: 'ul.main',
+    chapterNameReg: />(.*?)<span/,
+    readtype: 1,
+    getImgs: async function(context) {
+      const dom = parseToDOM(context).querySelector('div.stk-block-content.stk-inner-blocks.stk-7a98277-inner-blocks')
+      const imgTag = dom.querySelectorAll('img')
+      const img = []
+      imgTag.forEach(element => {
+        if (!element.src.includes('data:image')) {
+          img.push(element.src)
+        } else {
+          img.push(element.dataset.src)
+        }
+      })
+      return img
+    }
+  },
+  {
     domain: 'www.dongmanmanhua.cn',
     homepage: 'https://www.dongmanmanhua.cn/',
     webName: '咚漫',
