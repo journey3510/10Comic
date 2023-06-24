@@ -225,6 +225,28 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.dmhua8.com',
+    homepage: 'https://www.dmhua8.com/',
+    webName: 'dmhua8',
+    comicNameCss: '.book-detail.pr.fr .book-title h1 span',
+    chapterCss: '.chapter-body.clearfix',
+    readtype: 1,
+    getImgs: async function(context) {
+      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+      let imgarr = eval(imgStr)
+      const josnRes = await request('get', this.homepage + 'js/config.js')
+      const josnContext = josnRes.responseText
+      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+      imgarr = imgarr.map((item) => {
+        if (item.search('http') === -1) {
+          return imageDomian + item
+        }
+        return item
+      })
+      return imgarr
+    }
+  },
+  {
     domain: 'tel.dm5.com',
     homepage: 'https://tel.dm5.com/',
     webName: '动漫屋2',
