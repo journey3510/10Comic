@@ -848,27 +848,15 @@ export const comicsWebInfo = [
       const iframe = document.getElementById(processData.frameId).contentWindow
       const part_url = processData.url.match(/comic\/(\d+\/\d+\/\d+)/)[1]
       const code1 = funstrToData(context, /(function\(p,a.*?d\){e[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-
-      const host = code1.match(/host="(.*?)";var x_tokens=(.*?);/)[1]
-      const x_tokens = code1.match(/host="(.*?)";var x_tokens=(.*?);/)[2]
-
-      const arr = []
+      // const x_tokens = code1.match(/host="(.*?)";var x_tokens=(.*?);/)[2]
+      const host = code1.match(/host="(.*?)"/)[1]
+      const x_tokens = iframe.x_tokens
+      const imgs = []
       for (var i in x_tokens) {
-        arr.push(iframe.my_sha2(x_tokens[i]))
+        imgs.push(host + part_url + '/' + iframe.my_sha2(x_tokens[i]))
       }
-      let imgStr = ''
-      arr.forEach(element => {
-        imgStr += element
-      })
-      const imgs = imgStr.split('undefined')
-      const filterResult = []
-      imgs.forEach(element => {
-        if (element !== '') {
-          filterResult.push(host + part_url + '/' + element)
-        }
-      })
       document.getElementById(processData.frameId).remove()
-      return filterResult
+      return imgs
     }
   },
   {
