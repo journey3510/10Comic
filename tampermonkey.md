@@ -63,6 +63,7 @@
 | 极速漫画        | https://www.1kkk.com/           |                             |
 | 动漫屋         | https://www.dm5.com/            |                             |
 | 动漫屋2         | https://tel.dm5.com/            |                             |
+| dmhua8         | https://www.dmhua8.com/          |                          |
 | 奇漫屋         | http://www.qiman59.com/         |                             |
 | GoDa         | https://cn.godamanga.art/        |                             |
 | 咚漫          | https://www.dongmanmanhua.cn/   |                             |
@@ -185,6 +186,8 @@
 
 
 ## v1.7 更新记录
+  - 2023/6/29 *v1.7.4* 
+    - 新增dmhua8网站、修复快岸漫画下载
   - 2023/6/10 *v1.7.3* 
     - 新增GoDa网站、点击下载后列表取消勾选
   - 2023/6/5 *v1.7.2* 
