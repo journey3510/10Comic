@@ -11,28 +11,41 @@ import { getStorage, appLoadinit, setinit } from '@/config/setup'
 
 var id = null
 var appLoadDefault = null
-try {
-  appLoadinit()
-  appLoadDefault = getStorage('appLoadDefault')
-  GM_registerMenuCommand(`加载UI (Alt + ${appLoadDefault.loadHotKey})`, loadUI)
-  GM_registerMenuCommand(`重置所有数据`, setinit)
-  document.addEventListener('keydown', (e) => {
-    if (e.altKey && e.key.toUpperCase() === appLoadDefault.loadHotKey.toUpperCase()) {
-      loadUI()
+var tryLoadTimes = 0
+loadMenu(tryLoadTimes)
+
+function loadMenu() {
+  tryLoadTimes += 1
+  try {
+    appLoadDefault = getStorage('appLoadDefault')
+    GM_registerMenuCommand(`加载UI (Alt + ${appLoadDefault.loadHotKey})`, loadUI)
+    GM_registerMenuCommand(`重置所有数据`, setinit)
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey && e.key.toUpperCase() === appLoadDefault.loadHotKey.toUpperCase()) {
+        loadUI(0)
+      }
+    })
+    if (appLoadDefault.isShowUI) {
+      loadUI(0)
     }
-  })
-  if (appLoadDefault.isShowUI) {
-    loadUI()
+  } catch (error) {
+    console.log('loadError: ', error)
+    loadUI(tryLoadTimes)
   }
-} catch (error) {
-  console.log('loadError: ', error)
-  loadUI()
 }
 
-async function loadUI() {
+async function loadUI(times) {
   if (id !== null) {
     return
   }
+
+  appLoadinit()
+  // 首次运行脚本无存储数据，无加载菜单， 重新载入
+  if (times === 1) {
+    loadMenu()
+    return
+  }
+
   var Vant = await import('vant')
   // import ('vant/lib/index.css')
   Vue.use(Vant)
