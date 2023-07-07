@@ -193,6 +193,21 @@ export const addZeroForNum = (num, bitNum) => {
   return newNum
 }
 
+// 网站匹配
+export const getdomain = (url) => {
+  if (!url) {
+    url = window.location.href
+  }
+  let hname = ''
+  var domain = url.split('/')
+  if (domain[2]) {
+    hname = domain[2]
+  } else {
+    hname = ''
+  }
+  return hname
+}
+
 export const parseToDOM = (str) => {
   var div = document.createElement('div')
   if (typeof str === 'string') {

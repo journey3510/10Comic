@@ -18,17 +18,29 @@ const configDefault = {
   maxSplicingHeight: 20000,
   imgIndexBitNum: 3,
   imgSplicingFlag: true,
-  downHistory: '[]',
+  // downHistory: '[]', // 废弃
   userWebInfo: []
 }
 
-// 废弃变量
-const abandonDefault = []
+// 网页 localStorage 存储信息
+const localStorageDefault = {
+  ylComicDownHistory: '[]'
+}
+
+// 油猴脚本存储 废弃变量
+const abandonDefault = ['downHistory']
 
 export const appLoadinit = () => {
   if (isDev) {
     return
   }
+
+  for (const key in localStorageDefault) {
+    if (localStorage.getItem(key) == null) {
+      localStorage.setItem(key, localStorageDefault[key])
+    }
+  }
+
   // 如条件全为false, 则更新设置
   if (GM_getValue('version') !== undefined && GM_getValue('version') === AppVersion) {
     console.log('不需要更新数据')
@@ -40,7 +52,8 @@ export const appLoadinit = () => {
       GM_setValue(key, configDefault[key])
     }
   }
-  // 去除废弃变量存储数量
+
+  // 油猴存储 去除废弃变量存储数量
   abandonDefault.forEach(word => {
     if (GM_getValue(word) !== undefined) {
       GM_deleteValue(word)

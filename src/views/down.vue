@@ -59,7 +59,11 @@
       </van-collapse-item>
       <van-collapse-item name="3">
         <template #title>
-          <div :style="{display:'flex'}">已下载记录
+          <div :style="{display:'flex'}">
+            <span :title="currentDomain">
+              下载记录
+              <van-icon name="info-o" color="#adadad" />
+            </span>
             <van-icon
               style="line-height: 25px;margin-left: 10px;"
               name="delete-o"
@@ -101,7 +105,8 @@
 
 <script>
 import Queue from '@/utils/queue'
-import { setStorage, getStorage } from '@/config/setup'
+import { getStorage } from '@/config/setup'
+import { getdomain } from '@/utils/index'
 
 import { Dialog } from 'vant'
 
@@ -111,6 +116,7 @@ export default {
     return {
       collapseActiveName: ['1', '2', '3'],
       comicName: null,
+      currentDomain: '当前记录 ' + getdomain(),
       queue: {
         'worker': '',
         'list': '',
@@ -148,16 +154,16 @@ export default {
       this.queue.run()
     },
     getHistoryData() {
-      const data = getStorage('downHistory')
+      const data = localStorage.getItem('ylComicDownHistory')
       this.historyData = JSON.parse(data || '[]')
     },
     deleteHistoryData(index, id) {
       this.historyData.splice(index, 1)
-      let data = getStorage('downHistory')
+      let data = localStorage.getItem('ylComicDownHistory')
       let historyData = JSON.parse(data || '[]')
       historyData = historyData.filter((item) => item.id !== id)
       data = JSON.stringify(historyData)
-      setStorage('downHistory', data)
+      localStorage.setItem('ylComicDownHistory', data)
     },
     deleteAllHistoryData() {
       Dialog.confirm({
@@ -166,7 +172,7 @@ export default {
       })
         .then(() => {
           this.historyData.splice(0, this.historyData.length)
-          setStorage('downHistory', '[]')
+          localStorage.setItem('ylComicDownHistory', '[]')
         })
         .catch(() => {
           // on cancel

@@ -1,6 +1,6 @@
 import JSZip from 'jszip'
 import { getImage, downFile, addZeroForNum, request } from '@/utils/index'
-import { setStorage, getStorage } from '@/config/setup'
+import { getStorage } from '@/config/setup'
 
 // 多个任务并行执行的队列
 // https://juejin.cn/post/6844903961728647181
@@ -34,12 +34,12 @@ export default class Queue {
     async function afterDown(index) {
       const { comicName, hasError } = _this.worker[index]
       const comicPageUrl = window.location.href
-      let historyData = getStorage('downHistory') || '[]'
+      let historyData = localStorage.getItem('ylComicDownHistory') || '[]'
       historyData = JSON.parse(historyData)
       const id = (new Date()).getTime()
       historyData.unshift({ id, comicName, chapterName, comicPageUrl, hasError })
       historyData = JSON.stringify(historyData)
-      setStorage('downHistory', historyData)
+      localStorage.setItem('ylComicDownHistory', historyData)
       _this.Vue.getHistoryData()
       _this.worker[index] = undefined
       // 休息下？
