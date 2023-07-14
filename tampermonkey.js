@@ -15,6 +15,7 @@
 // @grant        GM_getResourceText
 // @grant        GM_download
 // @grant        GM_registerMenuCommand
+// @grant        unsafeWindow
 // @resource   vantcss   https://unpkg.com/vant@2.12/lib/index.css
 // @require      https://unpkg.com/vue@2.6.12/dist/vue.min.js
 // @require      https://unpkg.com/vant@2.12/lib/vant.min.js

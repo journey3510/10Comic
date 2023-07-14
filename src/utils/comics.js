@@ -2,7 +2,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request, parseToDOM, funstrToData, getType, trimSpecial } from '@/utils/index'
+import { request, parseToDOM, funstrToData, getType, trimSpecial, getCookie } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
 export const searchFunTemplate_1 = async(data, keyword) => {
@@ -72,40 +72,23 @@ export const comicsWebInfo = [
     chapterCss: '.cartoon_online_border',
     chapterCss_2: '.cartoon_online_border_other',
     readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'tags/search.shtml?s=',
-      alllist_dom_css: '.tcaricature_block',
-      minlist_dom_css: 'ul',
-      img_src: 'src'
-    },
-    getImgs: async function(context) {
-      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
-      let imgArray = JSON.parse(imgStr)
-      if (imgArray[0].search('http') === -1) {
-        imgArray = imgArray.map((item) => {
-          return 'https://images.idmzj.com/' + item
-        })
-      }
-      return imgArray
-    }
-  }, {
-    domain: ['www.dmzj.com', 'www.idmzj.com'],
-    homepage: 'https://www.dmzj.com/',
-    webName: '动漫之家2',
-    comicNameCss: '.comic_deCon h1 a',
-    chapterCss: '.tab-content-selected .list_con_li.autoHeight',
-    readtype: 1,
-    getImgs: async function(context) {
-      const imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      const info = JSON.parse(imgStr.match(/{.*}/)[0])
-      let imgArray = info['page_url'].split('\r\n')
-      if (imgArray[0].search('http') === -1) {
-        imgArray = imgArray.map((item) => {
-          return 'https://images.idmzj.com/' + item
-        })
-      }
-      return imgArray
+    // searchTemplate_1: {
+    //   search_add_url: 'tags/search.shtml?s=',
+    //   alllist_dom_css: '.tcaricature_block',
+    //   minlist_dom_css: 'ul',
+    //   img_src: 'src'
+    // },
+    getImgs: async function(context, processData) {
+      const group = processData.url.match(/dmzj.com\/(.*?)\/(\d+)/)
+      const DATA = funstrToData(context, /(function[\s\S]+?return [\s\S]*?}})(\([\s\S]+?\))/g)
+      const params = DATA.pinia['app-store'].publicParams
+      const uid = getCookie('my').split('%7C')[0]
+
+      const reqUrl = `https://manhua.dmzj.com/api/v1/comic2/chapter/detail?channel=${params.channel}&app_name=${params.app_name}&version=${params.timestamp}&timestamp=${params.timestamp}&uid=${uid}&comic_py=${group[1]}&chapter_id=${group[2]}`
+
+      const { response } = await request('get', reqUrl)
+      const imgs = JSON.parse(response).data.chapterInfo.page_url
+      return imgs
     }
   },
   {
@@ -1111,9 +1094,27 @@ export const comicsWebInfo = [
     homepage: 'https://www.kuaikanmanhua.com/',
     webName: '快看漫画',
     comicNameCss: 'h3.title',
-    chapterCss: 'div.TopicList > div:nth-child(2)',
+    chapterCss: '.episode-title',
     readtype: 1,
     hasSpend: true,
+    getComicInfo: async function() {
+      const list = unsafeWindow.__NUXT__.data[0].comics
+      const comicName = unsafeWindow.__NUXT__.data[0].topicInfo.title
+      const newList = []
+      list.forEach(element => {
+        const url = `https://www.kuaikanmanhua.com/web/comic/${element.id}/`
+        const data = {
+          comicName: comicName,
+          chapterName: element.title,
+          chapterNumStr: '',
+          url,
+          readtype: this.readtype,
+          isPay: !element.is_free
+        }
+        newList.push(data)
+      })
+      return newList
+    },
     getImgs: async function(context, processData) {
       const data = funstrToData(context, /(function.*}})(\(.*)\);<\/script>/g)
       const comicImages = data.data[0].comicInfo.comicImages
@@ -1121,48 +1122,6 @@ export const comicsWebInfo = [
       comicImages.forEach(element => {
         imgarr.push(element.url)
       })
-      return imgarr
-    }
-  },
-  {
-    domain: 'm.kuaikanmanhua.com',
-    homepage: 'https://m.kuaikanmanhua.com/',
-    webName: '快看漫画m',
-    comicNameCss: '.mask p.title',
-    chapterCss: '',
-    readtype: 1,
-    hasSpend: true,
-    showInList: false,
-    useFrame: true,
-    getComicInfo: async function() {
-      const code = document.body.outerHTML.match(/\(function\(a,b,c.*?(\)\))/g)[0]
-      const data = eval(code)
-      const list = data.data[0].comicList
-      const comicName = trimSpecial(data.data[0].topicInfo.title)
-      const newlist = list.map((item) => {
-        return {
-          comicName: comicName,
-          chapterName: trimSpecial(item.title),
-          chapterNumStr: '',
-          url: 'https://m.kuaikanmanhua.com/mobile/comics/' + item.id,
-          readtype: 1,
-          isPay: !item.is_free
-        }
-      })
-      return newlist
-    },
-    getImgs: async function(context, processData) {
-      const str = document.getElementById(processData.frameId).contentDocument.body.outerHTML
-      const data = funstrToData(str, /(function.*}})(\(.*)\);<\/script>/g)
-      let comicImages = data.data[0].comicInfo.comicImages
-      const imgarr = []
-      if (!comicImages) {
-        comicImages = data.data[0].imgList
-      }
-      comicImages.forEach(element => {
-        imgarr.push(element.url)
-      })
-      document.getElementById(processData.frameId).remove()
       return imgarr
     }
   },

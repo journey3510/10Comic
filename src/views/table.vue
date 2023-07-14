@@ -265,10 +265,9 @@ export default {
         }
         const comicNameCss = this.currentComics.comicNameCss
         this.webname = currentComics.webName
-        setTimeout(() => {
-          this.comicName = document.querySelector(comicNameCss).innerText.split('\n')[0].trim()
-          this.$bus.$emit('getComicName', this.comicName)
-        }, 500)
+
+        this.comicName = document.querySelector(comicNameCss).innerText.split('\n')[0].trim()
+        this.$bus.$emit('getComicName', this.comicName)
         //
         this.downType = getStorage('downType')
       // eslint-disable-next-line no-empty
@@ -276,7 +275,7 @@ export default {
         if (times === undefined) {
           setTimeout(() => {
             this.getInfo(1)
-          }, 2000)
+          }, 3000)
         }
         console.log('getInfo-e: ', error)
       }
