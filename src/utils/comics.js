@@ -1126,6 +1126,48 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'm.kuaikanmanhua.com',
+    homepage: 'https://m.kuaikanmanhua.com/',
+    webName: '快看漫画m',
+    comicNameCss: '.mask p.title',
+    chapterCss: '',
+    readtype: 1,
+    hasSpend: true,
+    showInList: false,
+    useFrame: true,
+    getComicInfo: async function() {
+      const code = document.body.outerHTML.match(/\(function\(a,b,c.*?(\)\))/g)[0]
+      const data = eval(code)
+      const list = data.data[0].comicList
+      const comicName = trimSpecial(data.data[0].topicInfo.title)
+      const newlist = list.map((item) => {
+        return {
+          comicName: comicName,
+          chapterName: trimSpecial(item.title),
+          chapterNumStr: '',
+          url: 'https://m.kuaikanmanhua.com/mobile/comics/' + item.id,
+          readtype: 1,
+          isPay: !item.is_free
+        }
+      })
+      return newlist
+    },
+    getImgs: async function(context, processData) {
+      const str = document.getElementById(processData.frameId).contentDocument.body.outerHTML
+      const data = funstrToData(str, /(function.*}})(\(.*)\);<\/script>/g)
+      let comicImages = data.data[0].comicInfo.comicImages
+      const imgarr = []
+      if (!comicImages) {
+        comicImages = data.data[0].imgList
+      }
+      comicImages.forEach(element => {
+        imgarr.push(element.url)
+      })
+      document.getElementById(processData.frameId).remove()
+      return imgarr
+    }
+  },
+  {
     domain: 'www.chashengchen.com',
     homepage: 'https://www.chashengchen.com/',
     webName: '生辰漫画网',
