@@ -1,4 +1,5 @@
 import { currentComics } from '@/utils/comics'
+import { getStorage } from '@/config/setup'
 
 export const loadStyle = (url, name, text) => {
   const head = document.getElementsByTagName('head')[0]
@@ -152,6 +153,8 @@ export const request = async function request(...details) {
   })
 }
 
+const rootDir = getStorage('rootDir') || '10Comic'
+
 export const downFile = async(...detail) => {
   let url, name, headers, onload, onerror, ontimeout
   if (detail.length === 1) {
@@ -166,7 +169,7 @@ export const downFile = async(...detail) => {
     // eslint-disable-next-line no-undef
     GM_download({
       url,
-      name,
+      name: rootDir + '\\' + name,
       headers: headers,
       onload: (onload || function(res) {
         resolve(true)

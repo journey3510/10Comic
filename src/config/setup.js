@@ -19,7 +19,8 @@ const configDefault = {
   imgIndexBitNum: 3,
   imgSplicingFlag: true,
   // downHistory: '[]', // 废弃
-  userWebInfo: []
+  userWebInfo: [],
+  rootDir: '10Comic'
 }
 
 // 网页 localStorage 存储信息
