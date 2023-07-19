@@ -2,7 +2,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request, parseToDOM, funstrToData, getType, trimSpecial, getCookie } from '@/utils/index'
+import { request, parseToDOM, funstrToData, getType, trimSpecial } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
 export const searchFunTemplate_1 = async(data, keyword) => {
@@ -65,12 +65,10 @@ export const searchFunTemplate_1 = async(data, keyword) => {
 
 export const comicsWebInfo = [
   {
-    domain: ['manhua.dmzj.com', 'manhua.idmzj.com'],
+    domain: ['manhua.dmzj.com', 'www.dmzj.com'],
     homepage: 'https://manhua.dmzj.com/',
     webName: '动漫之家',
-    comicNameCss: '.odd_anim_title_m .anim_title_text h1',
-    chapterCss: '.cartoon_online_border',
-    chapterCss_2: '.cartoon_online_border_other',
+    comicNameCss: 'h1',
     readtype: 1,
     // searchTemplate_1: {
     //   search_add_url: 'tags/search.shtml?s=',
@@ -78,16 +76,33 @@ export const comicsWebInfo = [
     //   minlist_dom_css: 'ul',
     //   img_src: 'src'
     // },
+    getComicInfo: async function(comic_name) {
+      const arr = window.location.href.split('/')
+      let name = arr[arr.length - 1] ? arr[arr.length - 1] : arr[arr.length - 2]
+      name = name.split('.')[0]
+      const comicUrl = `https://m.dmzj.com/info/${name}.html`
+      const { responseText } = await request('get', comicUrl)
+
+      const str2 = responseText.match(/initIntroData\((.*)\)/)[1]
+      const comic_list = JSON.parse(str2)[0].data
+      const allList = []
+      comic_list.forEach(element => {
+        const url = `https://m.dmzj.com/view/${element.comic_id}/${element.id}.html/`
+        const data = {
+          comicName: comic_name,
+          chapterName: trimSpecial(element.chapter_name),
+          chapterNumStr: '',
+          url,
+          readtype: this.readtype,
+          isPay: false
+        }
+        allList.push(data)
+      })
+      return allList
+    },
     getImgs: async function(context, processData) {
-      const group = processData.url.match(/dmzj.com\/(.*?)\/(\d+)/)
-      const DATA = funstrToData(context, /(function[\s\S]+?return [\s\S]*?}})(\([\s\S]+?\))/g)
-      const params = DATA.pinia['app-store'].publicParams
-      const uid = getCookie('my').split('%7C')[0]
-
-      const reqUrl = `https://manhua.dmzj.com/api/v1/comic2/chapter/detail?channel=${params.channel}&app_name=${params.app_name}&version=${params.timestamp}&timestamp=${params.timestamp}&uid=${uid}&comic_py=${group[1]}&chapter_id=${group[2]}`
-
-      const { response } = await request('get', reqUrl)
-      const imgs = JSON.parse(response).data.chapterInfo.page_url
+      const str = context.match(/mReader.initData\(.*"page_url":(.*?]).*\)/)[1]
+      const imgs = JSON.parse(str)
       return imgs
     }
   },

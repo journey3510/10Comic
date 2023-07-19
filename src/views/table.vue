@@ -347,7 +347,7 @@ export default {
       try {
         // 单页面应用 获取信息
         if (currentComics.getComicInfo) {
-          this.list = await currentComics.getComicInfo()
+          this.list = await currentComics.getComicInfo(this.comicName)
           this.overlayShow = false
           this.showSelectList = true
           return
