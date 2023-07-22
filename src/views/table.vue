@@ -266,7 +266,7 @@ export default {
         const comicNameCss = this.currentComics.comicNameCss
         this.webname = currentComics.webName
 
-        this.comicName = document.querySelector(comicNameCss).innerText.split('\n')[0].trim()
+        this.comicName = document.querySelectorAll(comicNameCss)[0].innerText.split('\n')[0].trim()
         this.$bus.$emit('getComicName', this.comicName)
         //
         this.downType = getStorage('downType')

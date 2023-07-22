@@ -2,7 +2,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request, parseToDOM, funstrToData, getType, trimSpecial } from '@/utils/index'
+import { request, parseToDOM, funstrToData, getType, trimSpecial, getdomain } from '@/utils/index'
 import { getStorage } from '@/config/setup'
 
 export const searchFunTemplate_1 = async(data, keyword) => {
@@ -65,7 +65,7 @@ export const searchFunTemplate_1 = async(data, keyword) => {
 
 export const comicsWebInfo = [
   {
-    domain: ['manhua.dmzj.com', 'www.dmzj.com'],
+    domain: ['manhua.dmzj.com', 'www.dmzj.com', 'm.dmzj.com'],
     homepage: 'https://manhua.dmzj.com/',
     webName: '动漫之家',
     comicNameCss: 'h1',
@@ -77,13 +77,20 @@ export const comicsWebInfo = [
     //   img_src: 'src'
     // },
     getComicInfo: async function(comic_name) {
-      const arr = window.location.href.split('/')
-      let name = arr[arr.length - 1] ? arr[arr.length - 1] : arr[arr.length - 2]
-      name = name.split('.')[0]
-      const comicUrl = `https://m.dmzj.com/info/${name}.html`
-      const { responseText } = await request('get', comicUrl)
+      const domain = getdomain()
+      let text = ''
+      if (domain === 'm.dmzj.com') {
+        text = document.body.outerHTML
+      } else {
+        const arr = window.location.href.split('/')
+        let name = arr[arr.length - 1] ? arr[arr.length - 1] : arr[arr.length - 2]
+        name = name.split('.')[0]
+        const comicUrl = `https://m.dmzj.com/info/${name}.html`
+        const htmldata = await request('get', comicUrl)
+        text = htmldata.responseText
+      }
 
-      const str2 = responseText.match(/initIntroData\((.*)\)/)[1]
+      const str2 = text.match(/initIntroData\((.*)\)/)[1]
       const comic_list = JSON.parse(str2)[0].data
       const allList = []
       comic_list.forEach(element => {
@@ -140,44 +147,7 @@ export const comicsWebInfo = [
       const { responseText } = await request('get', reqUrl)
       const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
       const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
-      console.log('imgUrlArr: ', imgUrlArr)
-      const otherData = { group }
-      return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
-    }
-  },
-  {
-    domain: 'www.1kkk.com',
-    homepage: 'https://www.1kkk.com/',
-    webName: '极速漫画',
-    comicNameCss: '.banner_detail_form > .info > p.title',
-    chapterCss: '#detail-list-select-1',
-    hasSpend: true,
-    payKey: '-lock',
-    readtype: 0,
-    headers: {
-      referer: 'https://www.1kkk.com/'
-    },
-    searchTemplate_1: {
-      search_add_url: 'search?title=',
-      alllist_dom_css: '.mh-list',
-      minlist_dom_css: 'li',
-      use_background: true
-    },
-    getImgs: async function(context, processData) {
-      let group; let page = 1
-      if (processData.otherData) {
-        group = processData.otherData.group
-      } else {
-        group = context.match(/DM5_MID=(\d+?);.*DM5_CID=(\d+?);.*DM5_IMAGE_COUNT=(\d+?);.*DM5_VIEWSIGN="(.*?)".*DM5_VIEWSIGN_DT="(.*?)"/)
-      }
-      if (processData.imgIndex !== undefined) {
-        page = processData.imgIndex + 1
-      }
-      const reqUrl = `https://www.1kkk.com/ch1-${group[2]}/chapterfun.ashx?cid=${group[2]}&page=${page}&key=&language=1&gtk=6&_cid=${group[2]}&_mid=${group[1]}&_dt=${group[5].replaceAll(' ', '+').replaceAll(':', '%3A')}&_sign=${group[4]}`
-      const { responseText } = await request({ method: 'get', url: reqUrl, useCookie: processData.isPay })
-      // console.log('haveEAVL: ', responseText !== undefined)
-      const codeText = funstrToData(responseText, /(function.*return .*?})(\(.*?{}\))/g)
-      const imgUrlArr = funstrToData(codeText, /(function.*return .*?})/g)
+
       const otherData = { group }
       return { imgUrlArr, nextPageUrl: null, imgCount: group[3], otherData }
     }
@@ -424,8 +394,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.kumw7.com',
-    homepage: 'http://www.kumw7.com/',
+    domain: 'www.kumw8.com',
+    homepage: 'http://www.kumw8.com/',
     webName: '酷漫屋',
     comicNameCss: '.info h1',
     chapterCss: '.view-win-list',
@@ -622,9 +592,9 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.darpou.com',
+    domain: ['www.darpou.com', 'darpou.com'],
     homepage: 'https://www.darpou.com/',
-    webName: '百漫谷(简)',
+    webName: '百漫谷',
     comicNameCss: '.fed-part-eone.fed-font-xvi a',
     chapterCss: '.fed-play-item.fed-drop-item.fed-visible .fed-part-rows:nth-child(2)',
     readtype: 1,
@@ -635,21 +605,6 @@ export const comicsWebInfo = [
     //   namelink_index: 2,
     //   img_src: 'data-original'
     // },
-    getImgs: async function(context) {
-      const txtUrl = context.match(/http(\S*).txt/gi)[0]
-      const txtRes = await request('get', txtUrl)
-      const txtContext = txtRes.responseText
-      const imgReg = /http(\S*)jpg/g
-      return txtContext.match(imgReg)
-    }
-  },
-  {
-    domain: 'darpou.com',
-    homepage: 'https://darpou.com/',
-    webName: '百漫谷(繁)',
-    comicNameCss: '.fed-part-eone.fed-font-xvi a',
-    chapterCss: '.fed-play-item.fed-drop-item.fed-visible .fed-part-rows:nth-child(2)',
-    readtype: 1,
     getImgs: async function(context) {
       const txtUrl = context.match(/http(\S*).txt/gi)[0]
       const txtRes = await request('get', txtUrl)
@@ -811,22 +766,6 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.txydd.com',
-    homepage: 'http://www.txydd.com/',
-    webName: '滴滴漫画',
-    comicNameCss: '.content h1',
-    chapterCss: '#j_chapter_list',
-    readtype: 1,
-    getImgs: async function(context) {
-      const group = context.matchAll(/chapter-pid(\s|\S)*?(src)="(.*?)"/g)
-      const imgArray = []
-      for (const item of group) {
-        imgArray.push(item[3])
-      }
-      return imgArray
-    }
-  },
-  {
     domain: 'kanbook.net',
     homepage: 'https://kanbook.net/',
     webName: '快岸漫画',
@@ -950,20 +889,6 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.2mzx.com',
-    homepage: 'https://www.2mzx.com/',
-    webName: '27漫画网',
-    comicNameCss: '.bar .position strong',
-    chapterCss: '#play_0 #chapter-list-1',
-    readtype: 1,
-    webDesc: '？可访问 ？',
-    getImgs: async function(context) {
-      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
-      const imgs = eval(imgStr)
-      return imgs
-    }
-  },
-  {
     domain: 'www.zuimh.com',
     homepage: 'https://www.zuimh.com/',
     webName: '最漫画',
@@ -983,20 +908,20 @@ export const comicsWebInfo = [
       return imgs
     }
   },
-  // {
-  //   domain: 'www.qianwee.com',
-  //   homepage: 'https://www.qianwee.com/',
-  //   webName: '前未漫画',
-  //   comicNameCss: '.comic_deCon.autoHeight h1',
-  //   chapterCss: '.zj_list_con #chapter-list-1',
-  //   readtype: 1,
-  //   readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
-  //   getImgs: async function(context) {
-  //     const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
-  //     const imgs = eval(imgStr)
-  //     return imgs
-  //   }
-  // },
+  {
+    domain: 'www.qianmh.com',
+    homepage: 'https://www.qianmh.com/',
+    webName: '前未漫画',
+    comicNameCss: 'h1',
+    chapterCss: '#chapter-list-1',
+    readtype: 1,
+    readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
+    getImgs: async function(context) {
+      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
+      const imgs = eval(imgStr)
+      return imgs
+    }
+  },
   {
     domain: 'www.sixmh7.com',
     homepage: 'http://www.sixmh7.com/',
@@ -1179,38 +1104,6 @@ export const comicsWebInfo = [
         imgarr.push(element.url)
       })
       document.getElementById(processData.frameId).remove()
-      return imgarr
-    }
-  },
-  {
-    domain: 'www.chashengchen.com',
-    homepage: 'https://www.chashengchen.com/',
-    webName: '生辰漫画网',
-    comicNameCss: '.title h1',
-    chapterCss: '#chapter-list-1',
-    readtype: 1,
-    // searchTemplate_1: {
-    //   search_add_url: 'search/?keywords=',
-    //   alllist_dom_css: '#dmList ul',
-    //   minlist_dom_css: 'li',
-    //   img_src: 'src'
-    // },
-    getImgs: async function(context) {
-      const group = context.matchAll(/chapterImages = (.*?);var chapterPath = "(.*?)"/g)
-      const strArr = []
-      for (const item of group) {
-        strArr.push(item[1])
-      }
-      let imgarr = JSON.parse(strArr[0])
-      const josnRes = await request('get', this.homepage + 'js/config.js')
-      const josnContext = josnRes.responseText
-      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
-      imgarr = imgarr.map((item) => {
-        if (item.search('http') === -1) {
-          return imageDomian + item
-        }
-        return item
-      })
       return imgarr
     }
   },
