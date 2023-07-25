@@ -332,6 +332,22 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.manshiduo.net',
+    homepage: 'https://www.manshiduo.net/',
+    webName: '漫士多',
+    comicNameCss: '.comic-title',
+    chapterCss: 'ul.chapter__list-box',
+    readtype: 1,
+    getImgs: async function(context) {
+      const imgobj = context.matchAll(/data-original="(.*?)"/g)
+      const imgUrlArr = []
+      for (const item of imgobj) {
+        imgUrlArr.push(item[1])
+      }
+      return imgUrlArr
+    }
+  },
+  {
     domain: 'comic.naver.com',
     homepage: 'https://comic.naver.com/',
     webName: 'comic.naver',
