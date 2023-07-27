@@ -39,11 +39,13 @@ async function loadUI(times) {
     return
   }
 
-  appLoadinit()
-  // 首次运行脚本无存储数据，无加载菜单， 重新载入
-  if (times === 1) {
-    loadMenu()
-    return
+  if (!isDev) {
+    appLoadinit()
+    // 首次运行脚本无存储数据，无加载菜单， 重新载入
+    if (times === 1) {
+      loadMenu()
+      return
+    }
   }
 
   var Vant = await import('vant')

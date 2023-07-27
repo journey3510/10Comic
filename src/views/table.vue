@@ -156,9 +156,19 @@
         <div id="select-list-1-right">
           <van-icon
             :style="{cursor: 'pointer'}"
+            name="edit"
+            color="#66ccff"
+            size="18"
+            title="编辑"
+            @click="editList"
+          />
+
+          <van-icon
+            :style="{cursor: 'pointer'}"
             name="sort"
             color="#ee000088"
             size="18"
+            title="排序"
             @click="reverseList"
           />
         </div>
@@ -175,15 +185,22 @@
             :style="titleStyle(item.url, item.isPay, item.characterType)"
             :title="showComicTitleName(item.chapterNumStr, item.chapterName)"
           >
+            <!-- 左 -->
+            <template v-if="isEditList" #title>
+              <input v-model="item.chapterName" class="input-chaptername" type="text">
+            </template>
+            <!-- 右 -->
             <template #right-icon>
-              <van-checkbox
-                v-model="item.isSelect"
-                :name="index"
-                :disabled="item.url !== 'javascript:void();' ? false: true"
-                class="selectChapter"
-                icon-size="24px"
-                @click="radioSelect(item.isSelect, index)"
-              />
+              <div v-if="!isEditList">
+                <van-checkbox
+                  v-model="item.isSelect"
+                  :name="index"
+                  :disabled="item.url !== 'javascript:void();' ? false: true"
+                  class="selectChapter"
+                  icon-size="24px"
+                  @click="radioSelect(item.isSelect, index)"
+                />
+              </div>
             </template>
           </van-cell>
         </van-cell-group>
@@ -206,7 +223,6 @@ export default {
   data() {
     return {
       list: [],
-      listBack: [],
       downResult: [],
       lastSelectIndex: null,
       onShfit: false,
@@ -214,6 +230,7 @@ export default {
       showSelectList: false,
       overlayShow: false,
       show: false,
+      isEditList: false,
 
       currentComics: '',
       webname: '未匹配',
@@ -256,6 +273,11 @@ export default {
         return showname
       }
       return name
+    },
+    editList() {
+      this.overlayShow = true
+      this.isEditList = !this.isEditList
+      this.overlayShow = false
     },
     getInfo(times) {
       try {
@@ -520,33 +542,8 @@ export default {
           item.chapterNumStr = addZeroForNum(index + 1, 3)
         })
       }
-    },
-    characterSequenceChange1() {
-      if (!this.useCharacterNum) {
-        // 删除 前几个字符
-        this.list.forEach((item, index) => {
-          item.chapterName = item.chapterName.split()
-        })
-        // this.list = JSON.parse(JSON.stringify(this.listBack))
-        return
-      }
-
-      if (this.listBack.length === 0) {
-        this.listBack = JSON.parse(JSON.stringify(this.list))
-      }
-
-      if (this.characterNumSequence === true) {
-        const len = this.list.length
-        this.list.forEach((item, index) => {
-          item.chapterName = addZeroForNum(len - index, 3) + item.chapterName
-        })
-      } else {
-        this.list.forEach((item, index) => {
-          item.chapterName = addZeroForNum(index + 1, 3) + item.chapterName
-        })
-      }
-      // console.log('sequence: ', sequence)
     }
+
   }
 }
 </script>
@@ -596,6 +593,15 @@ export default {
       overflow-y:auto;
       ::-webkit-scrollbar-track-piece {
         background-color: #fff !important;
+      }
+      .input-chaptername {
+        border: 1px solid @yiColor;
+        width: 333px;
+        border-radius: 5px;
+        background: #fff;
+        line-height: 20px;
+        padding-left: 15px;
+        padding-top: 1px;
       }
     }
   }
