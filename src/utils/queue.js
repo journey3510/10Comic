@@ -170,6 +170,7 @@ export default class Queue {
           _this.refresh()
           resolve({
             blob: gmRes.response,
+            imgurl,
             suffix: suffix })
         },
         onerror: function(e) {
@@ -411,6 +412,7 @@ export default class Queue {
     let curHeight = 0
     let totalHeight = 0
     const saveImg = []
+    const _this = this
 
     async function asyncLoadImg(src) {
       return new Promise((resolve, reject) => {
@@ -437,11 +439,18 @@ export default class Queue {
     }
 
     for (let index = 0; index < this.workerDownInfo[workerId].length; index++) {
-      const imgblob = this.workerDownInfo[workerId][index].blob
-      if (imgblob === 1 || imgblob === 0) {
+      const data = this.workerDownInfo[workerId][index]
+      // 去除不是图片类型
+      if (data.blob === 1 || data.blob === 0 || !data.blob.type.includes('image')) {
+        this.worker[workerId].hasError = true
+        const error_name = comicName + '\\' + chapterName + '\\error_' + addZeroForNum(index + 1, this.imgIndexBitNum) + '.txt'
+        const imgurl = this.workerDownInfo[workerId][index].imgurl
+        const newBlob = new Blob([imgurl], { type: 'text/plain' })
+        _this.downloadFile(error_name, newBlob)
         continue
       }
-      const newurl = window.URL.createObjectURL(imgblob)
+
+      const newurl = window.URL.createObjectURL(data.blob)
       const image = await asyncLoadImg(newurl)
       if (image === '') {
         continue
@@ -464,8 +473,6 @@ export default class Queue {
       }
       totalHeight += image.height
     }
-
-    const _this = this
 
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
