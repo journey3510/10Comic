@@ -153,7 +153,13 @@ export const request = async function request(...details) {
   })
 }
 
-const rootDir = getStorage('rootDir') || '10Comic'
+let rootDir = '10Comic'
+
+try {
+  rootDir = getStorage('rootDir')
+} catch (error) {
+  //
+}
 
 export const downFile = async(...detail) => {
   let url, name, headers, onload, onerror, ontimeout
