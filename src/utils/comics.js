@@ -92,6 +92,10 @@ export const comicsWebInfo = [
 
       const str2 = text.match(/initIntroData\((.*)\)/)[1]
       const comic_list = JSON.parse(str2)[0].data
+      let comic_list_2 = []
+      if (JSON.parse(str2)[1]) {
+        comic_list_2 = JSON.parse(str2)[1].data
+      }
       const allList = []
       comic_list.forEach(element => {
         const url = `https://m.dmzj.com/view/${element.comic_id}/${element.id}.html/`
@@ -101,7 +105,23 @@ export const comicsWebInfo = [
           chapterNumStr: '',
           url,
           readtype: this.readtype,
-          isPay: false
+          isPay: false,
+          isSelect: false,
+          characterType: 'one'
+        }
+        allList.push(data)
+      })
+      comic_list_2.forEach(element => {
+        const url = `https://m.dmzj.com/view/${element.comic_id}/${element.id}.html/`
+        const data = {
+          comicName: comic_name,
+          chapterName: trimSpecial(element.chapter_name),
+          chapterNumStr: '',
+          url,
+          readtype: this.readtype,
+          isPay: false,
+          isSelect: false,
+          characterType: 'many'
         }
         allList.push(data)
       })
@@ -483,7 +503,8 @@ export const comicsWebInfo = [
           chapterNumStr: '',
           url,
           readtype: this.readtype,
-          isPay: element.is_locked
+          isPay: element.is_locked,
+          isSelect: false
         }
         allList.push(data)
       })
@@ -543,7 +564,8 @@ export const comicsWebInfo = [
           chapterNumStr: '',
           url,
           readtype: this.readtype,
-          isPay: element.is_locked
+          isPay: element.is_locked,
+          isSelect: false
         }
         allList.push(data)
       })
@@ -1065,7 +1087,8 @@ export const comicsWebInfo = [
           chapterNumStr: '',
           url,
           readtype: this.readtype,
-          isPay: !element.is_free
+          isPay: !element.is_free,
+          isSelect: false
         }
         newList.push(data)
       })
@@ -1103,7 +1126,8 @@ export const comicsWebInfo = [
           chapterNumStr: '',
           url: 'https://m.kuaikanmanhua.com/mobile/comics/' + item.id,
           readtype: 1,
-          isPay: !item.is_free
+          isPay: !item.is_free,
+          isSelect: false
         }
       })
       return newlist
