@@ -145,32 +145,56 @@
       id="select-list"
       style="border-radius: 25px;"
     >
-      <div id="select-list-1">
-        <div id="select-list-1-left">
-          <span>颜色</span>
-          <span class="span-circle" style="background: blue;" title="免费" />
-          <span class="span-circle" style="background: #AA6680;" title="最新/其它/单行本/卷" />
-          <span class="span-circle" style="background: red;" title="付费" />
-          <span class="span-circle" style="background: #ccc;" title="无效" />
-        </div>
-        <div id="select-list-1-right">
-          <van-icon
-            :style="{cursor: 'pointer'}"
-            name="edit"
-            color="#66ccff"
-            size="18"
-            title="编辑"
-            @click="editList"
-          />
+      <div id="select-list-top">
 
-          <van-icon
-            :style="{cursor: 'pointer'}"
-            name="sort"
-            color="#ee000088"
-            size="18"
-            title="排序"
-            @click="reverseList"
-          />
+        <div id="select-list-info">
+          <div id="select-list-info-left">
+            <span>颜色</span>
+            <span class="span-circle" style="background: blue;" title="免费" />
+            <span class="span-circle" style="background: #AA6680;" title="最新/其它/单行本/卷" />
+            <span class="span-circle" style="background: red;" title="付费" />
+            <span class="span-circle" style="background: #ccc;" title="无效" />
+          </div>
+          <div id="select-list-info-right">
+            <van-icon
+              :style="{cursor: 'pointer'}"
+              name="edit"
+              color="#66ccff"
+              size="18"
+              title="编辑"
+              @click="editList"
+            />
+
+            <van-icon
+              :style="{cursor: 'pointer'}"
+              name="sort"
+              color="#ee000088"
+              size="18"
+              title="排序"
+              @click="reverseList"
+            />
+          </div>
+        </div>
+
+        <div v-if="isEditList" id="select-show-edit">
+          <div style="display: flex;align-items: center;">
+            <label style="text-align: left;margin-right: 20px;" for="">删除所选章节首个字符</label>
+            <van-button
+              type="default"
+              size="mini"
+              @click="delOnechapterNameFont(1)"
+            >删除</van-button>
+          </div>
+
+          <div style="display: flex;align-items: center;margin-top: 3px;">
+            <label style="text-align: left;margin-right: 20px;" for="">删除所选章节末尾一个字符</label>
+            <van-button
+              type="default"
+              size="mini"
+              @click="delOnechapterNameFont(-1)"
+            >删除</van-button>
+          </div>
+
         </div>
       </div>
 
@@ -191,16 +215,14 @@
             </template>
             <!-- 右 -->
             <template #right-icon>
-              <div v-if="!isEditList">
-                <van-checkbox
-                  v-model="item.isSelect"
-                  :name="index"
-                  :disabled="item.url !== 'javascript:void();' ? false: true"
-                  class="selectChapter"
-                  icon-size="24px"
-                  @click="radioSelect(item.isSelect, index)"
-                />
-              </div>
+              <van-checkbox
+                v-model="item.isSelect"
+                :name="index"
+                :disabled="item.url !== 'javascript:void();' ? false: true"
+                class="selectChapter"
+                icon-size="24px"
+                @click="radioSelect(item.isSelect, index)"
+              />
             </template>
           </van-cell>
         </van-cell-group>
@@ -278,6 +300,18 @@ export default {
       this.overlayShow = true
       this.isEditList = !this.isEditList
       this.overlayShow = false
+    },
+    // 删除章节一个字符
+    delOnechapterNameFont(pos) {
+      this.list.forEach((element, index) => {
+        if (element.isSelect === true && element.chapterName.length >= 1) {
+          if (pos === 1) {
+            element.chapterName = element.chapterName.slice(1)
+          } else {
+            element.chapterName = element.chapterName.slice(0, -1)
+          }
+        }
+      })
     },
     getInfo(times) {
       try {
@@ -560,28 +594,39 @@ export default {
 }
 #select-list {
   margin: 0 15px;
-  #select-list-1 {
+
+  #select-list-top {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     background-color: #fff;
     padding: 0 10px 0 10px;
-
-    height: 30px;
+    min-height: 30px;
     border-bottom: 1px solid #ccc5;
     border-radius: 10px;
 
-    #select-list-1-left {
+    #select-list-info {
       display: flex;
-      width: 95px;
-      justify-content: space-between;
+      flex-direction: row;
       align-items: center;
-      span.span-circle {
-        width: 14px;
-        height: 14px;
+      // flex: 1;
+      justify-content: space-between;
+
+      #select-list-info-left {
         display: flex;
-        border-radius: 7px;
-        cursor: pointer;
+        width: 95px;
+        justify-content: space-between;
+        align-items: center;
+        span.span-circle {
+          width: 14px;
+          height: 14px;
+          display: flex;
+          border-radius: 7px;
+          cursor: pointer;
+        }
+      }
+
+      #select-show-edit {
+        margin: 10px;
       }
     }
   }
@@ -596,7 +641,7 @@ export default {
       }
       .input-chaptername {
         border: 1px solid @yiColor;
-        width: 333px;
+        width: 300px;
         border-radius: 5px;
         background: #fff;
         line-height: 20px;
