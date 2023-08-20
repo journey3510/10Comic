@@ -23,7 +23,7 @@
           >
             <div v-if="item !== undefined ">
               <div class="itemname">
-                <span class="custom-title">{{ item.chapterName }}</span>
+                <span class="custom-title">{{ item.downChapterName }}</span>
               </div>
 
               <van-progress
@@ -49,7 +49,7 @@
             class="downitem"
           >
             <div class="itemname">
-              <span class="custom-title">{{ item.chapterName }}</span>
+              <span class="custom-title">{{ item.downChapterName }}</span>
             </div>
             <van-divider
               :style="{ margin:'8px 0px', padding: '0 0px',height: '1px' }"
@@ -81,13 +81,13 @@
             class="downitem"
           >
             <div class="itemname">
-              <div>
+              <div style="display: flex;">
                 <van-tag
                   :title="item.comicName"
                   class="comicnametag"
                   @click="jump(item.comicPageUrl)"
                 >{{ item.comicName }}</van-tag>
-                <span class="custom-title chapterspan" :class="{ 'hasError': item.hasError }">{{ item.chapterName }}</span>
+                <span class="custom-title chapterspan" :class="{ 'hasError': item.hasError }">{{ item.downChapterName }}</span>
               </div>
               <van-icon :style="{cursor:'pointer'}" name="delete-o" size="18px" @click="deleteHistoryData(index, item.id)" />
 
@@ -225,16 +225,20 @@ export default {
       justify-content: space-between;
       margin: 2px 5px;
       .comicnametag {
-        display:inline-block;
+        display: inline-block;
         width:60px;
         max-width: 60px;
+        text-align: center;
+        height: 18px;
+        line-height: 18px;
         white-space: nowrap;
         text-overflow:ellipsis;
         overflow:hidden;
         cursor: pointer;
       }
       .chapterspan {
-        display:inline-block;
+        display: inline-block;
+        margin-left: 10px;
         max-width: 200px;
         white-space: nowrap;
         text-overflow:ellipsis;

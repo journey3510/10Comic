@@ -211,8 +211,12 @@
           >
             <!-- 左 -->
             <template v-if="isEditList" #title>
-              <input v-model="item.chapterName" class="input-chaptername" type="text">
+              <div style="display: flex;justify-content: space-around;">
+                <label :for="item.chapterNumStr">{{ item.chapterNumStr }}</label>
+                <input v-model="item.chapterName" class="input-chaptername" type="text">
+              </div>
             </template>
+
             <!-- 右 -->
             <template #right-icon>
               <van-checkbox
@@ -291,7 +295,8 @@ export default {
     showComicTitleName(numStr, name) {
       let showname = ''
       if (numStr !== '') {
-        showname = numStr + '-' + name
+        const newname = name === '' ? '' : ('-' + name)
+        showname = numStr + newname
         return showname
       }
       return name
@@ -323,6 +328,12 @@ export default {
         this.webname = currentComics.webName
 
         this.comicName = document.querySelectorAll(comicNameCss)[0].innerText.split('\n')[0].trim()
+        if (this.comicName === '') {
+          setTimeout(() => {
+            this.getInfo(1)
+          }, 1500)
+          return
+        }
         this.$bus.$emit('getComicName', this.comicName)
         //
         this.downType = getStorage('downType')
@@ -331,7 +342,7 @@ export default {
         if (times === undefined) {
           setTimeout(() => {
             this.getInfo(1)
-          }, 3000)
+          }, 1500)
         }
         console.log('getInfo-e: ', error)
       }
@@ -472,6 +483,7 @@ export default {
             comicName: trimSpecial(this.comicName),
             chapterNumStr: '',
             chapterName,
+            downChapterName: '',
             url: element.href,
             characterType: type,
             readtype,
@@ -486,7 +498,7 @@ export default {
       })
     },
 
-    // 获取当前所在章节 下载
+    // 已进入原网站漫画章节页面阅读，获取章节 下载
     getCurrentWebData() {
       if (!currentComics) {
         Toast({
@@ -508,6 +520,7 @@ export default {
         comicName: this.defineComicName,
         chapterNumStr: '',
         chapterName: this.definechapterName,
+        downChapterName: this.definechapterName,
         url: window.location.href,
         characterType: 'one',
         readtype: currentComics.readtype,
@@ -531,11 +544,19 @@ export default {
           if (!hasSelect && item.isSelect) {
             hasSelect = true
           }
-          if (item.chapterNumStr !== '') {
-            item.chapterName = item.chapterNumStr + '-' + item.chapterName
+
+          if (item.chapterNumStr !== '' && item.chapterNumStr !== undefined) {
+            const newName = item.chapterName === '' ? '' : ('-' + item.chapterName)
+            item.downChapterName = item.chapterNumStr + newName
+          } else {
+            item.downChapterName = item.chapterName
           }
-          this.downResult.push(item)
-          item.isSelect = false
+
+          // 下载的章节名可能修改为空，为空跳过
+          if (item.downChapterName !== '') {
+            this.downResult.push(item)
+            item.isSelect = false
+          }
         }
       })
 
@@ -641,7 +662,7 @@ export default {
       }
       .input-chaptername {
         border: 1px solid @yiColor;
-        width: 300px;
+        flex: 1;
         border-radius: 5px;
         background: #fff;
         line-height: 20px;

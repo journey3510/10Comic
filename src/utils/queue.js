@@ -28,7 +28,7 @@ export default class Queue {
      * @param { number } index
      */
   async * exeDown(index) {
-    const { readtype, chapterName } = this.worker[index]
+    const { readtype, downChapterName } = this.worker[index]
     const _this = this
 
     async function afterDown(index) {
@@ -37,7 +37,7 @@ export default class Queue {
       let historyData = localStorage.getItem('ylComicDownHistory') || '[]'
       historyData = JSON.parse(historyData)
       const id = (new Date()).getTime()
-      historyData.unshift({ id, comicName, chapterName, comicPageUrl, hasError })
+      historyData.unshift({ id, comicName, downChapterName, comicPageUrl, hasError })
       historyData = JSON.stringify(historyData)
       localStorage.setItem('ylComicDownHistory', historyData)
       _this.Vue.getHistoryData()
@@ -107,7 +107,7 @@ export default class Queue {
         headers: newHeaders || headers,
         timeout: 60 * 1000
       }).then((res) => {
-        const name = this.worker[index].comicName + '\\' + this.worker[index].chapterName + '\\' +
+        const name = this.worker[index].comicName + '\\' + this.worker[index].downChapterName + '\\' +
         addZeroForNum(imgIndex, this.imgIndexBitNum) + '.'
 
         let suffix = this.getSuffix(res.finalUrl)
@@ -331,7 +331,7 @@ export default class Queue {
 
         const worker = {
           comicName: item.comicName,
-          chapterName: item.chapterName,
+          downChapterName: item.downChapterName,
           url: item.url,
           isPay: item.isPay, // 是否付费章节
           imgIndex: 0, // 图片序号
@@ -376,7 +376,7 @@ export default class Queue {
 
   // 压缩
   async makeZip(workerId) {
-    const { comicName, chapterName } = this.worker[workerId]
+    const { comicName, downChapterName } = this.worker[workerId]
     return new Promise((resolve, reject) => {
       const zip = new JSZip()
       this.workerDownInfo[workerId].forEach((item, index) => {
@@ -397,7 +397,7 @@ export default class Queue {
           level: 9
         }
       }).then((zipblob) => {
-        const name = comicName + '\\' + chapterName + '.zip'
+        const name = comicName + '\\' + downChapterName + '.zip'
         this.downloadFile(name, zipblob)
         resolve()
         return
@@ -407,7 +407,7 @@ export default class Queue {
 
   async combineImages(workerId) {
     const maxSplicingHeight = getStorage('maxSplicingHeight')
-    const { comicName, chapterName } = this.worker[workerId]
+    const { comicName, downChapterName } = this.worker[workerId]
     let imgNum = 0
     let curHeight = 0
     let totalHeight = 0
@@ -443,7 +443,7 @@ export default class Queue {
       // 去除不是图片类型
       if (data.blob === 1 || data.blob === 0 || !data.blob.type.includes('image')) {
         this.worker[workerId].hasError = true
-        const error_name = comicName + '\\' + chapterName + '\\error_' + addZeroForNum(index + 1, this.imgIndexBitNum) + '.txt'
+        const error_name = comicName + '\\' + downChapterName + '\\error_' + addZeroForNum(index + 1, this.imgIndexBitNum) + '.txt'
         const imgurl = this.workerDownInfo[workerId][index].imgurl
         const newBlob = new Blob([imgurl], { type: 'text/plain' })
         _this.downloadFile(error_name, newBlob)
@@ -488,7 +488,7 @@ export default class Queue {
         context.drawImage(element, 0, offsetY, element.width, element.height)
         offsetY = offsetY + parseInt(element.height)
       }
-      const name = comicName + '\\' + chapterName + '\\' + addZeroForNum(item.num + 1, this.imgIndexBitNum) + '.jpg'
+      const name = comicName + '\\' + downChapterName + '\\' + addZeroForNum(item.num + 1, this.imgIndexBitNum) + '.jpg'
       await asyncCanvas(canvas, name)
     }
 
