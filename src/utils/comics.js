@@ -1075,6 +1075,7 @@ export const comicsWebInfo = [
     chapterCss: '.episode-title',
     readtype: 1,
     hasSpend: true,
+    useFrame: true,
     getComicInfo: async function() {
       const list = unsafeWindow.__NUXT__.data[0].comics
       const comicName = unsafeWindow.__NUXT__.data[0].topicInfo.title
@@ -1087,7 +1088,7 @@ export const comicsWebInfo = [
           chapterNumStr: '',
           url,
           readtype: this.readtype,
-          isPay: !element.is_free,
+          isPay: element.locked,
           isSelect: false
         }
         newList.push(data)
@@ -1095,12 +1096,17 @@ export const comicsWebInfo = [
       return newList
     },
     getImgs: async function(context, processData) {
-      const data = funstrToData(context, /(function.*}})(\(.*)\);<\/script>/g)
-      const comicImages = data.data[0].comicInfo.comicImages
+      const str = document.getElementById(processData.frameId).contentDocument.body.outerHTML
+      const data = funstrToData(str, /(function.*}})(\(.*)\);<\/script>/g)
+      let comicImages = data.data[0].comicInfo.comicImages
       const imgarr = []
+      if (!comicImages) {
+        comicImages = data.data[0].imgList
+      }
       comicImages.forEach(element => {
         imgarr.push(element.url)
       })
+      document.getElementById(processData.frameId).remove()
       return imgarr
     }
   },

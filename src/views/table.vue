@@ -176,7 +176,7 @@
           </div>
         </div>
 
-        <div v-if="isEditList" id="select-show-edit">
+        <div v-show="isEditList" id="select-show-edit">
           <div style="display: flex;align-items: center;">
             <label style="text-align: left;margin-right: 20px;" for="">删除所选章节首个字符</label>
             <van-button
@@ -186,7 +186,7 @@
             >删除</van-button>
           </div>
 
-          <div style="display: flex;align-items: center;margin-top: 3px;">
+          <div style="display: flex;align-items: center;margin-top: 3px;margin-bottom: 3px;">
             <label style="text-align: left;margin-right: 20px;" for="">删除所选章节末尾一个字符</label>
             <van-button
               type="default"
@@ -201,6 +201,7 @@
       <div id="select-list-2">
         <van-cell-group
           id="select-list-2-1"
+          :style="isEditList ? 'max-height: 530px;' : 'max-height: 585px;'"
           inset
         >
           <van-cell
@@ -628,9 +629,10 @@ export default {
     #select-list-info {
       display: flex;
       flex-direction: row;
-      align-items: center;
-      // flex: 1;
       justify-content: space-between;
+      align-items: center;
+      flex: 1;
+      min-height: 30px;
 
       #select-list-info-left {
         display: flex;
@@ -653,9 +655,10 @@ export default {
   }
 
   #select-list-2 {
+    margin-top: 5px;
     overflow: hidden;
     #select-list-2-1 {
-      max-height: 590px;
+      max-height: 585px;
       overflow-y:auto;
       ::-webkit-scrollbar-track-piece {
         background-color: #fff !important;
