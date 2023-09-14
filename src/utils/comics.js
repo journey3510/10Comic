@@ -65,8 +65,8 @@ export const searchFunTemplate_1 = async(data, keyword) => {
 
 export const comicsWebInfo = [
   {
-    domain: ['manhua.dmzj.com', 'www.dmzj.com', 'm.dmzj.com'],
-    homepage: 'https://manhua.dmzj.com/',
+    domain: ['manhua.idmzj.com', 'www.idmzj.com', 'm.dmzj.com', 'm.idmzj.com'],
+    homepage: 'https://manhua.idmzj.com/',
     webName: '动漫之家',
     comicNameCss: 'h1',
     readtype: 1,
@@ -79,13 +79,13 @@ export const comicsWebInfo = [
     getComicInfo: async function(comic_name) {
       const domain = getdomain()
       let text = ''
-      if (domain === 'm.dmzj.com') {
+      if (domain === 'm.idmzj.com') {
         text = document.body.outerHTML
       } else {
         const arr = window.location.href.split('/')
         let name = arr[arr.length - 1] ? arr[arr.length - 1] : arr[arr.length - 2]
         name = name.split('.')[0]
-        const comicUrl = `https://m.dmzj.com/info/${name}.html`
+        const comicUrl = `https://m.idmzj.com/info/${name}.html`
         const htmldata = await request('get', comicUrl)
         text = htmldata.responseText
       }
@@ -98,7 +98,7 @@ export const comicsWebInfo = [
       }
       const allList = []
       comic_list.forEach(element => {
-        const url = `https://m.dmzj.com/view/${element.comic_id}/${element.id}.html/`
+        const url = `https://m.idmzj.com/view/${element.comic_id}/${element.id}.html/`
         const data = {
           comicName: comic_name,
           chapterName: trimSpecial(element.chapter_name),
@@ -112,7 +112,7 @@ export const comicsWebInfo = [
         allList.push(data)
       })
       comic_list_2.forEach(element => {
-        const url = `https://m.dmzj.com/view/${element.comic_id}/${element.id}.html/`
+        const url = `https://m.idmzj.com/view/${element.comic_id}/${element.id}.html/`
         const data = {
           comicName: comic_name,
           chapterName: trimSpecial(element.chapter_name),
