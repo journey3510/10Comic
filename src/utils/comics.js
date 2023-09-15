@@ -65,10 +65,11 @@ export const searchFunTemplate_1 = async(data, keyword) => {
 
 export const comicsWebInfo = [
   {
-    domain: ['manhua.idmzj.com', 'www.idmzj.com', 'm.dmzj.com', 'm.idmzj.com'],
+    domain: ['manhua.idmzj.com', 'm.dmzj.com', 'm.idmzj.com'],
     homepage: 'https://manhua.idmzj.com/',
     webName: '动漫之家',
     comicNameCss: 'h1',
+    webDesc: '需要登录',
     readtype: 1,
     // searchTemplate_1: {
     //   search_add_url: 'tags/search.shtml?s=',
@@ -130,6 +131,29 @@ export const comicsWebInfo = [
     getImgs: async function(context, processData) {
       const str = context.match(/mReader.initData\(.*"page_url":(.*?]).*\)/)[1]
       const imgs = JSON.parse(str)
+      return imgs
+    }
+  },
+  {
+    domain: ['comic.idmzj.com', 'www.idmzj.com'],
+    homepage: 'https://comic.idmzj.com/',
+    webName: '动漫之家(访客)',
+    comicNameCss: 'h1',
+    chapterCss: '.cartoon_online_border, .list_con_li',
+    readtype: 1,
+    getImgs: async function(context, processData) {
+      const group = processData.url.match(/idmzj.com\/(.*?)\/(\d+)/)
+      const DATA = funstrToData(context, /(function[\s\S]+?return [\s\S]*?}})(\([\s\S]+?\))/g)
+      const params = DATA.pinia['app-store'].publicParams
+
+      let reqUrl = `https://comic.idmzj.com/api/v1/s_comic/chapter/detail?channel=${params.channel}&app_name=${params.app_name}&version=${params.timestamp}&timestamp=${params.timestamp}&uid&comic_py=${group[1]}&chapter_id=${group[2]}`
+      if (unsafeWindow.location.host.includes('www')) {
+        const comic_id = unsafeWindow.__NUXT__.data.getcationDeatils.comicInfo.id
+        reqUrl = `https://www.idmzj.com/api/v1/comic1/chapter/detail?channel=${params.channel}&app_name=${params.app_name}&version=1.0.0&timestamp=${params.timestamp}&uid&comic_id=${comic_id}&chapter_id=${group[2]}`
+      }
+
+      const { response } = await request('get', reqUrl)
+      const imgs = JSON.parse(response).data.chapterInfo.page_url
       return imgs
     }
   },
