@@ -747,7 +747,7 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.manhuagui.com',
+    domain: ['manhuagui.com'],
     homepage: 'https://www.manhuagui.com/',
     webName: '漫画柜',
     comicNameCss: '.book-title h1',
@@ -1250,10 +1250,11 @@ export const matchWeb = (url) => {
   }
   // 原漫画列表匹配
   for (let i = 0; i < comicsWebInfo.length; i++) {
-    if (comicsWebInfo[i].domain === hname) {
+    if (hname.includes(comicsWebInfo[i].domain)) {
       currentComics = comicsWebInfo[i]
       break
     }
+
     if (getType(comicsWebInfo[i].domain) === 'Array') {
       if (comicsWebInfo[i].domain.includes(hname)) {
         currentComics = comicsWebInfo[i]
@@ -1265,10 +1266,11 @@ export const matchWeb = (url) => {
   if (currentComics === null) {
     const userWebInfo = eval(getStorage('userWebInfo') || [])
     for (let a = 0; a < userWebInfo.length; a++) {
-      if (userWebInfo[a].domain === hname) {
+      if (hname.includes(userWebInfo[a].domain)) {
         currentComics = userWebInfo[a]
         break
       }
+
       if (getType(comicsWebInfo[i].domain) === 'Array') {
         if (comicsWebInfo[i].domain.includes(hname)) {
           currentComics = comicsWebInfo[i]
