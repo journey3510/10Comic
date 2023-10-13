@@ -129,7 +129,7 @@ export const comicsWebInfo = [
       return allList
     },
     getImgs: async function(context, processData) {
-      const str = context.match(/mReader.initData\(.*"page_url":(.*?]).*\)/)[1]
+      const str = context.match(/mReader.initData\(.*"page_url":(.*?"]).*\)/)[1]
       const imgs = JSON.parse(str)
       return imgs
     }
