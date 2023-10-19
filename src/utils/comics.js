@@ -816,7 +816,7 @@ export const comicsWebInfo = [
       }
       const josnRes = await request('get', this.homepage + 'js/config.js')
       const josnContext = josnRes.responseText
-      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
+      const imageDomian = josnContext.match(/domain:\["(.*?)"]/)[1]
       let imgarr = JSON.parse(strArr[0])
       imgarr = imgarr.map((item) => {
         if (imgarr[0].search('http') === -1) {
