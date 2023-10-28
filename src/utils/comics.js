@@ -395,17 +395,17 @@ export const comicsWebInfo = [
     domain: 'comic.naver.com',
     homepage: 'https://comic.naver.com/',
     webName: 'comic.naver',
-    comicNameCss: '#content > div.comicinfo > div.detail > h2 > span.title',
-    chapterCss: 'tbody',
-    chapterNameReg: /\)">(.*?)<\/a>/,
-    webDesc: '找到漫画目录页再使用',
+    comicNameCss: '#content > div.EpisodeListInfo__comic_info--yRAu0 > div > h2',
+    chapterCss: '#content ul',
+    chapterNameReg: /span.*?>(.*?)<\/span>/,
+    webDesc: '找到漫画目录页再使用, 新打开页面需“重载列表”',
     readtype: 1,
     headers: {
       referer: 'https://comic.naver.com/'
     },
     getImgs: async function(context) {
       const str = context.match(/class="wt_viewer"[\s\S]*?(<\/div>)/)[0]
-      const imgobj = str.matchAll(/img src="(.*?)" title/g)
+      const imgobj = str.matchAll(/img src="(.*?)"/g)
       const imgUrlArr = []
       for (const item of imgobj) {
         imgUrlArr.push(item[1])
