@@ -314,16 +314,36 @@ export const comicsWebInfo = [
     domain: 'cn.godamanga.art',
     homepage: 'https://cn.godamanga.art/',
     webName: 'GoDa',
-    comicNameCss: 'h1.stk-block-heading__text',
-    chapterCss: 'ul.main',
-    chapterNameReg: />(.*?)<span/,
+    comicNameCss: '.container nav > ol > li:nth-child(3) a',
+    chapterCss: '',
     readtype: 1,
+    getComicInfo: async function(comic_name) {
+      const chapterUrl = window.location.href.replace('/manga', '/chapterlist')
+      const { responseText } = await request('GET', chapterUrl)
+      const chapterLink = parseToDOM(responseText).querySelectorAll('.container .pb-6 a')
+
+      const allList = []
+      chapterLink.forEach(element => {
+        const data = {
+          comicName: comic_name,
+          chapterName: trimSpecial(element.querySelector('span').innerText),
+          chapterNumStr: '',
+          url: element.href,
+          readtype: this.readtype,
+          isPay: false,
+          isSelect: false,
+          characterType: 'one'
+        }
+        allList.push(data)
+      })
+      return allList
+    },
     getImgs: async function(context) {
-      const dom = parseToDOM(context).querySelector('div.stk-block-content.stk-inner-blocks.stk-7a98277-inner-blocks')
+      const dom = parseToDOM(context).querySelector('.w-full.text-center.touch-manipulation')
       const imgTag = dom.querySelectorAll('img')
       const img = []
       imgTag.forEach(element => {
-        if (!element.src.includes('data:image')) {
+        if (!element.src.includes('assets/images')) {
           img.push(element.src)
         } else {
           img.push(element.dataset.src)
