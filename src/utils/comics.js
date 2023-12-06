@@ -2,7 +2,8 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request, parseToDOM, funstrToData, getType, trimSpecial, getdomain } from '@/utils/index'
+import { request, parseToDOM, funstrToData, getType, trimSpecial, getdomain, addZeroForNum } from '@/utils/index'
+
 import { getStorage } from '@/config/setup'
 
 export const searchFunTemplate_1 = async(data, keyword) => {
@@ -966,6 +967,28 @@ export const comicsWebInfo = [
       const imgArray = []
       for (const item of group) {
         imgArray.push(item[1])
+      }
+      return imgArray
+    }
+  },
+  {
+    domain: 'www.cartoonmad.com',
+    homepage: 'https://www.cartoonmad.com/',
+    webName: '动漫狂',
+    comicNameCss: 'table > tbody > tr:nth-child(3) > td:nth-child(2) > a:nth-child(6)',
+    chapterCss: '#info',
+    readtype: 1,
+    downHeaders: {
+      referer: 'https://www.cartoonmad.com/'
+    },
+    getImgs: function(context) {
+      const comicUrl = context.match(/img src="comicpic.asp\?file=(.*?)001"/)[1]
+      const pageTotalNum = context.match(/html">\D*(\d*).*?<\/option>/g).length
+      const preImgUrl = 'https://www.cartoonmad.com/comic/comicpic.asp?file=' + comicUrl
+      const imgArray = []
+      for (let i = 0; i < pageTotalNum; i++) {
+        const imgUrl = preImgUrl + addZeroForNum(i + 1, 3)
+        imgArray.push(imgUrl)
       }
       return imgArray
     }
