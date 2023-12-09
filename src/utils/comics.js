@@ -696,51 +696,6 @@ export const comicsWebInfo = [
       return txtContext.match(imgReg)
     }
   },
-  // {
-  //   domain: 'm.wuxiamh.com',
-  //   homepage: 'https://m.wuxiamh.com/',
-  //   webName: '武侠漫画（手机）',
-  //   comicNameCss: '.view-sub.autoHeight .title',
-  //   chapterCss: '#chapter-list-1',
-  //   readtype: 0,
-  //   getImgs: async function(context) {
-  //     const imgobj = context.matchAll(/<mip-img src="(https:\/\/[\s\S]+?(jpg|webp))/g)
-  //     const imgUrlArr = []
-  //     for (const item of imgobj) {
-  //       imgUrlArr.push(item[1])
-  //     }
-  //     const nextPageUrl = context.match(/<mip-link href="(.*?)">下一页/)[1]
-  //     return { imgUrlArr, nextPageUrl }
-  //   }
-  // },
-  {
-    domain: 'www.wuxiamh.com',
-    homepage: 'https://www.wuxiamh.com/',
-    webName: '武侠漫画网（电脑）',
-    comicNameCss: '.title h1',
-    chapterCss: '#chapter-list-1',
-    readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'search/?keywords=',
-      alllist_dom_css: 'div.dmList ul',
-      minlist_dom_css: 'li.item-lg',
-      img_src: 'src'
-    },
-    getImgs: async function(context) {
-      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
-      let imgarr = eval(imgStr)
-      const josnRes = await request('get', this.homepage + 'js/config.js')
-      const josnContext = josnRes.responseText
-      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
-      imgarr = imgarr.map((item) => {
-        if (item.search('http') === -1) {
-          return imageDomian + item
-        }
-        return item
-      })
-      return imgarr
-    }
-  },
   {
     domain: ['qiximh2.com', 'www.qiximh2.com'],
     homepage: 'http://www.qiximh2.com/',
@@ -1218,35 +1173,6 @@ export const comicsWebInfo = [
       })
       document.getElementById(processData.frameId).remove()
       return imgarr
-    }
-  },
-  {
-    domain: 'www.maofly.com',
-    homepage: 'https://www.maofly.com/',
-    webName: '漫画猫',
-    comicNameCss: 'h1.comic-title',
-    chapterCss: 'ol.links-of-books.num_div',
-    readtype: 1,
-    webDesc: '?可访问?',
-    // searchTemplate_1: {
-    //   search_add_url: 'search.html?q=',
-    //   alllist_dom_css: '.comic-main-section.bg-white .row.m-0',
-    //   minlist_dom_css: 'div.col-4',
-    //   img_src: 'data-original'
-    // },
-    getImgs: async function(context) {
-      const img_data = context.match(/let img_data = "(.*?)"/)[1]
-      const asset_domain = context.match(/data-chapter-domain="(.*?)"/)[1]
-      const { responseText } = await request('get', this.homepage + 'static/js/string.min.js')
-
-      const LZStringFun = funstrToData(responseText, /(function[\s\S]+?return \S})(\(\))/g)
-      const img_data_arr = LZStringFun.decompressFromBase64(img_data).split(',')
-
-      let imgArray = []
-      imgArray = img_data_arr.map((item) => {
-        return asset_domain + '/uploads/' + item
-      })
-      return imgArray
     }
   },
   {
