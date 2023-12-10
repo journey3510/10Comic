@@ -937,7 +937,7 @@ export const comicsWebInfo = [
       referer: 'https://www.cartoonmad.com/'
     },
     getImgs: function(context) {
-      const comicUrl = context.match(/img src="comicpic.asp\?file=(.*?)001"/)[1]
+      const comicUrl = context.match(/img src="comicpic.asp\?file=(.*?)001.*?"/)[1]
       const pageTotalNum = context.match(/html">\D*(\d*).*?<\/option>/g).length
       const preImgUrl = 'https://www.cartoonmad.com/comic/comicpic.asp?file=' + comicUrl
       const imgArray = []

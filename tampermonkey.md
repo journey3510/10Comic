@@ -77,7 +77,6 @@
 | 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ | ？需要魔法？                      |
 | Komiic漫画    | https://komiic.com/             | SPA页面, 新页面需“重载列表”重新匹配新名称    |
 | 百漫谷      | https://www.darpou.com/         |                             |
-| 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |                             |
 | 七夕漫画        | http://www.qiximh2.com/             |                             |
 | 漫画柜       | https://www.manhuagui.com/        |                           |
 | 36漫画网       | https://www.36manga.com/        | ？可访问 ？                      |
@@ -87,6 +86,7 @@
 | 新新漫画        | https://www.77mh.xyz/           |                             |
 | 漫画星球        | http://www.mhxqiu2.com/         |                             |
 | 漫画屋         | https://www.mhua5.com/          |                             |
+| 动漫狂         | https://www.cartoonmad.com          |                             |
 | 最漫画         | https://www.zuimh.com/          |                             |
 | 前未漫画         | https://www.qianmh.com/          |                             |
 | 六漫画         | http://www.sixmh7.com/          |                             |
@@ -94,7 +94,6 @@
 | 包子漫画        | https://cn.baozimh.com/         |                             |
 | 爱国漫         | https://www.aiguoman.com/       |                             |
 | 快看漫画        | https://www.kuaikanmanhua.com/  |                             |
-| 漫画猫         | https://www.maofly.com/         | ?可访问?                       |
 | 好漫8         | https://www.haoman8.com/        |                             |
 
 
@@ -185,7 +184,9 @@
 
 
 ## v1.9 更新记录
-  - 2023/12/9 *v1.9.0* 
+  - 2023/12/10 *v1.9.1* 
+    - 修改动漫狂网站方法
+  - 2023/12/10 *v1.9.0* 
     - 新适配动漫狂网站，移除失效网站 漫画猫、武侠漫画网站
 
 

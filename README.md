@@ -83,7 +83,6 @@ npm run build
 | 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ |
 | Komiic漫画        | https://komiic.com/     |
 | 百漫谷    | https://www.darpou.com/         |
-| 武侠漫画网（电脑）   | https://www.wuxiamh.com/        |
 | 七夕漫画        | http://www.qiximh2.com/               |
 | 漫画柜       | https://www.manhuagui.com/        | 
 | 36漫画网       | https://www.36manga.com/        |
@@ -93,6 +92,7 @@ npm run build
 | 新新漫画        | https://www.77mh.xyz/           |
 | 漫画星球        | http://www.mhxqiu2.com/         |
 | 漫画屋         | https://www.mhua5.com/          |
+| 动漫狂         | https://www.cartoonmad.com          |
 | 最漫画         | https://www.zuimh.com/          |
 | 前未漫画         | https://www.qianmh.com/       |
 | 六漫画         | http://www.sixmh7.com/          |
@@ -100,7 +100,6 @@ npm run build
 | 包子漫画        | https://cn.baozimh.com/         |
 | 爱国漫         | https://www.aiguoman.com/       |
 | 快看漫画        | https://www.kuaikanmanhua.com/  |
-| 漫画猫         | https://www.maofly.com/         |
 | 好漫8         | https://www.haoman8.com/        |
 
 <br /><br />
