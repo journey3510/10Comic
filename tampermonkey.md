@@ -65,7 +65,6 @@
 | Mangabz     | https://mangabz.com/            |                             |
 | 动漫屋         | https://www.dm5.com/            |                             |
 | 动漫屋2         | https://tel.dm5.com/            |                             |
-| dmhua8         | https://www.dmhua8.com/          |                          |
 | 奇漫屋         | http://www.qiman59.com/         |                             |
 | GoDa         | https://cn.godamanga.art/        |                             |
 | 咚漫          | https://www.dongmanmanhua.cn/   |                             |
@@ -84,12 +83,11 @@
 | 快岸漫画        | https://kanbook.net/            | 首次打开网站章节页可能需自行输入验证码      |
 | 动漫戏说        | https://comic.acgn.cc/          |                             |
 | 新新漫画        | https://www.77mh.xyz/           |                             |
-| 漫画星球        | http://www.mhxqiu2.com/         |                             |
+| 漫画星球        | http://www.mhxqiu4.com/         |                             |
 | 漫画屋         | https://www.mhua5.com/          |                             |
 | 动漫狂         | https://www.cartoonmad.com          |                             |
 | 最漫画         | https://www.zuimh.com/          |                             |
-| 前未漫画         | https://www.qianmh.com/          |                             |
-| 六漫画         | http://www.sixmh7.com/          |                             |
+| 六漫画         | http://www.6mh1.com/          |                             |
 | 漫画芯         | https://www.mhxin.com/          |                             |
 | 包子漫画        | https://cn.baozimh.com/         |                             |
 | 爱国漫         | https://www.aiguoman.com/       |                             |
@@ -184,6 +182,8 @@
 
 
 ## v1.9 更新记录
+  - 2023/12/25 *v1.9.2* 
+    - 修复/移除部分失效网站
   - 2023/12/10 *v1.9.1* 
     - 修改动漫狂网站方法
   - 2023/12/10 *v1.9.0* 

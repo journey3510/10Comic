@@ -238,28 +238,6 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.dmhua8.com',
-    homepage: 'https://www.dmhua8.com/',
-    webName: 'dmhua8',
-    comicNameCss: '.book-detail.pr.fr .book-title h1 span',
-    chapterCss: '.chapter-body.clearfix',
-    readtype: 1,
-    getImgs: async function(context) {
-      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
-      let imgarr = eval(imgStr)
-      const josnRes = await request('get', this.homepage + 'js/config.js')
-      const josnContext = josnRes.responseText
-      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
-      imgarr = imgarr.map((item) => {
-        if (item.search('http') === -1) {
-          return imageDomian + item
-        }
-        return item
-      })
-      return imgarr
-    }
-  },
-  {
     domain: 'tel.dm5.com',
     homepage: 'https://tel.dm5.com/',
     webName: '动漫屋2',
@@ -884,8 +862,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.mhxqiu2.com',
-    homepage: 'http://www.mhxqiu2.com/',
+    domain: 'www.mhxqiu4.com',
+    homepage: 'http://www.mhxqiu4.com/',
     webName: '漫画星球',
     comicNameCss: '.cy_title h1',
     chapterCss: '.cy_plist #mh-chapter-list-ol-0',
@@ -969,31 +947,18 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.qianmh.com',
-    homepage: 'https://www.qianmh.com/',
-    webName: '前未漫画',
-    comicNameCss: 'h1',
-    chapterCss: '#chapter-list-1',
-    readtype: 1,
-    readCssText: '.img_info {display: none;}.comic_wraCon img {border: 0px;margin-top:0px;}',
-    getImgs: async function(context) {
-      const imgStr = context.match(/var chapterImages = ([[\s\S]+?])[\s\S]+?var chapterPath/)[1]
-      const imgs = eval(imgStr)
-      return imgs
-    }
-  },
-  {
-    domain: 'www.sixmh7.com',
-    homepage: 'http://www.sixmh7.com/',
+    domain: 'www.6mh1.com',
+    homepage: 'http://www.6mh1.com/',
     webName: '六漫画',
-    comicNameCss: '#intro_l > div.cy_title > h1',
-    chapterCss: '.cy_zhangjie .cy_plist',
+    comicNameCss: 'h1.name_mh',
+    chapterCss: '#chapter-list1',
     readtype: 1,
-    getImgs: async function(context) {
-      let imgStr = funstrToData(context, /(function[\s\S]+?return \S})(\([\s\S]+?{}\))/g)
-      imgStr = imgStr.match(/\[[\s\S]+?\]/)[0]
-      const imgArray = JSON.parse(imgStr)
-      return imgArray
+    useFrame: true,
+    getImgs: async function(context, processData) {
+      const iframe = document.getElementById(processData.frameId).contentWindow
+      const newImgs = JSON.parse(JSON.stringify(iframe.newImgs))
+      document.getElementById(processData.frameId).remove()
+      return newImgs
     }
   },
   {
