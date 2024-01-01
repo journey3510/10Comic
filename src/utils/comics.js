@@ -623,9 +623,9 @@ export const comicsWebInfo = [
     domain: 'komiic.com',
     homepage: 'https://komiic.com/',
     webName: 'Komiic漫画',
-    comicNameCss: 'h1.ComicMain__title',
-    chapterCss: '.container .v-window-item .container .row',
-    chapterNameReg: /ComicChapters__serial">(\d*\.?\d*)</,
+    comicNameCss: '.ComicMain__info .text-h6',
+    chapterCss: '.v-card-text .v-container .v-row',
+    chapterNameReg: / class="serial">(.*?)<\/span>/,
     webDesc: 'SPA页面, 新页面需“重载列表”重新匹配新名称',
     headers: {
       referer: 'https://komiic.com/'
