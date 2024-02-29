@@ -96,7 +96,8 @@ npm run build
 | 六漫画         | http://www.6mh1.com/          |
 | 漫画芯         | https://www.mhxin.com/          |
 | 包子漫画        | https://cn.baozimh.com/         |
-| 爱国漫         | https://www.aiguoman.com/       |
+| 爱国漫         | https://www.guoman.net/       |
+| 最次元         | https://zcymh.com/       |
 | 快看漫画        | https://www.kuaikanmanhua.com/  |
 | 好漫8         | https://www.haoman8.com/        |
 

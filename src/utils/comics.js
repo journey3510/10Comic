@@ -996,7 +996,7 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'cn.baozimh.com',
+    domain: ['cn.baozimh.com', 'WWW.baozimh.com'],
     homepage: 'https://cn.baozimh.com/',
     webName: '包子漫画',
     comicNameCss: 'h1.comics-detail__title',
@@ -1033,20 +1033,30 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.aiguoman.com',
-    homepage: 'https://www.aiguoman.com/',
+    domain: 'www.guoman.net',
+    homepage: 'https://www.guoman.net/',
     webName: '爱国漫',
     comicNameCss: '.detail-info > .detail-info-title',
     chapterCss: '#chapterlistload',
     readtype: 1,
-    searchTemplate_1: {
-      search_add_url: 'search?key=',
-      alllist_dom_css: '.container .mh-list',
-      minlist_dom_css: 'li',
-      img_src: 'src'
-    },
     getImgs: async function(context) {
       const group = context.matchAll(/<img.*src="(.*?)"/g)
+      const imgArray = []
+      for (const item of group) {
+        imgArray.push(item[1])
+      }
+      return imgArray
+    }
+  },
+  {
+    domain: ['zcymh.com', 'www.zcymh.com'],
+    homepage: 'https://zcymh.com/',
+    webName: '最次元',
+    comicNameCss: 'h1',
+    chapterCss: '#detail-chapter .bd',
+    readtype: 1,
+    getImgs: async function(context) {
+      const group = context.matchAll(/chapter-pid="[\s\S]*?<img src="(.*?)"/g)
       const imgArray = []
       for (const item of group) {
         imgArray.push(item[1])

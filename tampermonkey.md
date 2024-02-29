@@ -90,7 +90,8 @@
 | 六漫画         | http://www.6mh1.com/          |                             |
 | 漫画芯         | https://www.mhxin.com/          |                             |
 | 包子漫画        | https://cn.baozimh.com/         |                             |
-| 爱国漫         | https://www.aiguoman.com/       |                             |
+| 爱国漫         | https://www.guoman.net/       |                              |
+| 最次元         | https://zcymh.com/       |                               |
 | 快看漫画        | https://www.kuaikanmanhua.com/  |                             |
 | 好漫8         | https://www.haoman8.com/        |                             |
 
@@ -182,6 +183,9 @@
 
 
 ## v1.9 更新记录
+  - 2024/2/29 *v1.9.4* 
+    - 更新爱国漫新域名
+    - 新增匹配最次元网站
   - 2024/1/1 *v1.9.3* 
     - 修复脚本在Komiic漫画获取章节列表异常
   - 2023/12/25 *v1.9.2* 
