@@ -1,7 +1,7 @@
 # 10图漫
   使用 Vue + Vant 开发的油猴插件脚本（Tampermonkey）
 
-  基于浏览器油猴插件的使用，任意网页提供漫画搜索；漫画分章节多队列并行下载(可直接下载/压缩下载/拼接下载)，可用于动漫之家、极速漫画、腾讯漫画、哔哩哔哩等30+网站；对个别漫画网站修改阅读样式；可按需编写定义规则JSON导入以支持其他漫画网站
+  基于浏览器油猴插件的使用，任意网页提供部分漫画网站搜索；漫画分章节多队列并行下载(可直接下载/压缩下载/拼接下载)，可用于动漫之家、极速漫画、腾讯漫画、哔哩哔哩等30+网站；对个别漫画网站修改阅读样式；可按需编写定义规则JSON导入以支持其他漫画网站
 
   [![github](https://img.shields.io/badge/journey3510-10Comic_-blue?style=flat&logo=github)](https://github.com/journey3510/10Comic)
 [![github](https://img.shields.io/github/commit-activity/y/journey3510/10Comic?logo=github)](https://github.com/journey3510/10Comic)
@@ -71,13 +71,11 @@ npm run build
 | Mangabz     | https://mangabz.com/       |
 | 极速漫画        | https://www.1kkk.com/           |
 | 动漫屋         | https://www.dm5.com/            |
-| 奇漫屋         | http://www.qiman59.com/         |
 | GoDa         | https://cn.godamanga.art/        |
 | 咚漫          | https://www.dongmanmanhua.cn/   |
 | naver          | https://comic.naver.com/   |
 | webtoon          | https://www.webtoons.com/   |
 | 腾讯漫画        | https://ac.qq.com/              |
-| 酷漫屋         | http://www.kumw8.com/           |
 | 哔哩哔哩        | https://manga.bilibili.com/     |
 | 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ |
 | Komiic漫画        | https://komiic.com/     |
@@ -86,9 +84,9 @@ npm run build
 | 漫画柜       | https://www.manhuagui.com/        | 
 | 36漫画网       | https://www.36manga.com/        |
 | 古风漫画网       | https://www.gufengmh.com/   |
-| 快岸漫画        | https://kanbook.net/            | 
 | 动漫戏说        | https://comic.acgn.cc/          |
 | 新新漫画        | https://www.77mh.xyz/           |
+| 仙漫网        | https://www.gaonaojin.com/           |
 | 漫画星球        | http://www.mhxqiu4.com/         |
 | 漫画屋         | https://www.mhua5.com/          |
 | 动漫狂         | https://www.cartoonmad.com          |

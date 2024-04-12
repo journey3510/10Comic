@@ -65,13 +65,11 @@
 | Mangabz     | https://mangabz.com/            |                             |
 | 动漫屋         | https://www.dm5.com/            |                             |
 | 动漫屋2         | https://tel.dm5.com/            |                             |
-| 奇漫屋         | http://www.qiman59.com/         |                             |
 | GoDa         | https://cn.godamanga.art/        |                             |
 | 咚漫          | https://www.dongmanmanhua.cn/   |                             |
 | webtoons    | https://www.webtoons.com/       | ？需要魔法？                      |
 | comic.naver | https://comic.naver.com/        | 找到漫画目录页再使用                  |
 | 腾讯漫画        | https://ac.qq.com/              | 2023.3.2起, 需要APP观看的章节无法完整下载 |
-| 酷漫屋         | http://www.kumw8.com/          |                             |
 | 哔哩哔哩        | https://manga.bilibili.com/     |                             |
 | 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ | ？需要魔法？                      |
 | Komiic漫画    | https://komiic.com/             | SPA页面, 新页面需“重载列表”重新匹配新名称    |
@@ -80,9 +78,9 @@
 | 漫画柜       | https://www.manhuagui.com/        |                           |
 | 36漫画网       | https://www.36manga.com/        | ？可访问 ？                      |
 | 古风漫画网     | https://www.gufengmh.com/          |                             |
-| 快岸漫画        | https://kanbook.net/            | 首次打开网站章节页可能需自行输入验证码      |
 | 动漫戏说        | https://comic.acgn.cc/          |                             |
 | 新新漫画        | https://www.77mh.xyz/           |                             |
+| 仙漫网        | https://www.gaonaojin.com/           |                             |
 | 漫画星球        | http://www.mhxqiu4.com/         |                             |
 | 漫画屋         | https://www.mhua5.com/          |                             |
 | 动漫狂         | https://www.cartoonmad.com          |                             |
@@ -183,6 +181,9 @@
 
 
 ## v1.9 更新记录
+  - 2024/4/12 *v1.9.5* 
+    - 新增匹配仙漫网
+    - 更新/移除部分失效网站
   - 2024/2/29 *v1.9.4* 
     - 更新爱国漫新域名
     - 新增匹配最次元网站
