@@ -18,6 +18,7 @@ const configDefault = {
   maxSplicingHeight: 20000,
   imgIndexBitNum: 3,
   imgSplicingFlag: true,
+  imgDownRange: [1, -1], // 章节图片下载范围  第1张至最后1张
   // downHistory: '[]', // 废弃
   userWebInfo: [],
   rootDir: '10Comic'

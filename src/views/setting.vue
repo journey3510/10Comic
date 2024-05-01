@@ -313,6 +313,60 @@
                 />
               </template>
             </van-cell>
+
+            <!-- 图片下载范围 -->
+            <van-cell
+              title-class="cellleftvalue"
+              value-class="cellrightvalue"
+              label="原默认设置 1至-1"
+              center
+            >
+              <template #title>
+                <span class="custom-title">图片下载范围</span>
+                <van-popover
+                  v-model="imgDownRangeHint"
+                  placement="right"
+                  get-container="#downpart"
+                  :offset="[-5,5]"
+                  :close-on-click-outside="true"
+                >
+                  <div>
+                    <code class="popovertext">*1至-1 代表从第一张图片下载至最后一张</code><br>
+                  </div>
+                  <template #reference>
+                    <van-icon
+                      name="info-o"
+                      color="red"
+                      @mouseover="imgDownRangeHint = true"
+                      @mouseleave="imgDownRangeHint = false"
+                    />
+                  </template>
+
+                </van-popover>
+              </template>
+
+              <template #default>
+                <div>
+                  <input
+                    v-model="imgDownRange[0]"
+                    class="img-down-range-input"
+                    type="number"
+                    min="1"
+                    onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                    @blur="imgDownRangeBlur"
+                  >
+                  <code style="width: 10px;"> - </code>
+                  <input
+                    v-model="imgDownRange[1]"
+                    class="img-down-range-input"
+                    type="number"
+                    max="-1"
+                    onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                    @blur="imgDownRangeBlur"
+                  >
+                </div>
+              </template>
+            </van-cell>
           </van-cell-group>
 
           <van-cell-group id="webpart" title="原网站阅读样式修改" inset>
@@ -440,10 +494,12 @@ export default {
       maxChapterNum: 1,
       maxPictureNum: 2,
       imgIndexBitNum: 3,
+      imgDownRange: [1, -1],
       imgSplicingFlag: false,
       //
       downTypePopover: false,
       addZeroHint: false,
+      imgDownRangeHint: false,
       showPopover: false,
       showUiPopover: false,
       setupOtherPage: 0,
@@ -525,6 +581,12 @@ export default {
       if (val > 65530) this.maxSplicingHeight = 65530
       this.onChangeData('maxSplicingHeight', this.maxSplicingHeight)
     },
+    imgDownRangeBlur() {
+      if (this.imgDownRange[0] < 1) this.imgDownRange[0] = 1
+      if (this.imgDownRange[1] > -1) this.imgDownRange[1] = -1
+      this.imgDownRange = JSON.parse(JSON.stringify(this.imgDownRange))
+      this.onChangeData('imgDownRange', this.imgDownRange)
+    },
     exeFun(flag, basic) {
       let rightSize = 100; let centerSize = 100
       basic.rightSize ? rightSize = basic.rightSize : ''
@@ -545,6 +607,8 @@ export default {
         this.maxSplicingHeight = GM_getValue('maxSplicingHeight')
         this.imgIndexBitNum = GM_getValue('imgIndexBitNum')
         this.imgSplicingFlag = GM_getValue('imgSplicingFlag')
+
+        this.imgDownRange = GM_getValue('imgDownRange')
         //
         this.appLoadDefault = GM_getValue('appLoadDefault')
       // eslint-disable-next-line no-empty
@@ -682,6 +746,16 @@ export default {
       }
       .custom-title {
         text-align: left;
+      }
+
+      .img-down-range-input {
+        width: 40px;
+        height: 18px;
+        margin-right: 2px;
+        border: 1px #66ccff solid;
+        border-radius: 10px;
+        text-align: center;
+        background: #fff;
       }
 
       #max-splicing-height-input {

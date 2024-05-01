@@ -54,10 +54,19 @@ export default class Queue {
       let imgs = []
       try {
         imgs = await getImage(processData)
+        const imgDownRange = getStorage('imgDownRange')
+        const start = parseInt(imgDownRange[0])
+        const end = parseInt(imgDownRange[1])
+        if (end === -1) {
+          imgs = imgs.slice(start - 1)
+        } else {
+          imgs = imgs.slice(start - 1, end + 1)
+        }
       } catch (error) {
         this.worker[index].hasError = true
       }
-      imgs === [] ? this.worker[index].hasError = true : ''
+      // eslint-disable-next-line eqeqeq
+      imgs == [] ? this.worker[index].hasError = true : ''
       this.worker[index].imgs = imgs
       this.worker[index].totalNumber = imgs.length
       yield this.down(index)
