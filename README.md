@@ -83,7 +83,7 @@ npm run build
 | 七夕漫画        | http://www.qiximh2.com/               |
 | 漫画柜       | https://www.manhuagui.com/        | 
 | 36漫画网       | https://www.36manga.com/        |
-| 古风漫画网       | https://www.gufengmh.com/   |
+| 古风漫画网       | https://www.gufengmh9.com/   |
 | 动漫戏说        | https://comic.acgn.cc/          |
 | 新新漫画        | https://www.77mh.xyz/           |
 | 仙漫网        | https://www.gaonaojin.com/           |
@@ -96,6 +96,7 @@ npm run build
 | 包子漫画        | https://cn.baozimh.com/         |
 | 爱国漫         | https://www.guoman.net/       |
 | 最次元         | https://zcymh.com/       |
+| 看漫画        | https://www.kanman.com/   |
 | 快看漫画        | https://www.kuaikanmanhua.com/  |
 | 好漫8         | https://www.haoman8.com/        |
 

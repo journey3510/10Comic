@@ -703,11 +703,11 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.gufengmh.com',
-    homepage: 'https://www.gufengmh.com/',
+    domain: 'www.gufengmh9.com',
+    homepage: 'https://www.gufengmh9.com/',
     webName: '古风漫画网',
     comicNameCss: '.book-title h1 span',
-    chapterCss: '#chapter-list-1,#chapter-list-10',
+    chapterCss: '.chapter-body',
     readtype: 1,
     readCssText: '.img_info {display: none;}.tbCenter img {border: 0px;}',
     searchTemplate_1: {
@@ -725,7 +725,7 @@ export const comicsWebInfo = [
       }
       const josnRes = await request('get', this.homepage + 'js/config.js')
       const josnContext = josnRes.responseText
-      const imageDomian = josnContext.match(/domain:\["(.*?)"]/)[1]
+      const imageDomian = josnContext.match(/"domain":\["(.*?)"]/)[1]
       let imgarr = JSON.parse(strArr[0])
       imgarr = imgarr.map((item) => {
         if (imgarr[0].search('http') === -1) {
@@ -968,6 +968,23 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.kanman.com',
+    homepage: 'https://www.kanman.com/',
+    webName: '看漫画',
+    comicNameCss: 'h1.title',
+    chapterCss: '#j_chapter_list',
+    readtype: 1,
+    getImgs: async function(context) {
+      const imgStr = context.match(/chapter_img_list:(\[.*?\])/)[1]
+      let imgArray = eval(imgStr)
+      imgArray = imgArray.map(element => {
+        element = element.replace('hw-chapter2', 'hw-chapter3')
+        return element
+      })
+      return imgArray
+    }
+  },
+  {
     domain: 'www.kuaikanmanhua.com',
     homepage: 'https://www.kuaikanmanhua.com/',
     webName: '快看漫画',
@@ -1054,8 +1071,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.haoman8.com',
-    homepage: 'https://www.haoman8.com/',
+    domain: 'www.manhua88888.com',
+    homepage: 'https://www.manhua88888.com/',
     webName: '好漫8',
     comicNameCss: '.content .title',
     chapterCss: '#j_chapter_list',

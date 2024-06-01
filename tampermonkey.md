@@ -78,7 +78,7 @@
 | 七夕漫画        | http://www.qiximh2.com/             |                             |
 | 漫画柜       | https://www.manhuagui.com/        |                           |
 | 36漫画网       | https://www.36manga.com/        | ？可访问 ？                      |
-| 古风漫画网     | https://www.gufengmh.com/          |                             |
+| 古风漫画网     | https://www.gufengmh9.com/              |                             |
 | 动漫戏说        | https://comic.acgn.cc/          |                             |
 | 新新漫画        | https://www.77mh.xyz/           |                             |
 | 仙漫网        | https://www.gaonaojin.com/           |                             |
@@ -91,6 +91,7 @@
 | 包子漫画        | https://cn.baozimh.com/         |                             |
 | 爱国漫         | https://www.guoman.net/       |                              |
 | 最次元         | https://zcymh.com/       |                               |
+| 看漫画        | https://www.kanman.com/   |                             |
 | 快看漫画        | https://www.kuaikanmanhua.com/  |                             |
 | 好漫8         | https://www.haoman8.com/        |                             |
 
@@ -182,6 +183,8 @@
 
 
 ## v1.9 更新记录
+  - 2024/6/1 *v1.9.7* 
+    - 新增看漫画、修复个别网站获取失效
   - 2024/5/1 *v1.9.6* 
     - 新增章节图片下载范围
   - 2024/4/12 *v1.9.5* 
