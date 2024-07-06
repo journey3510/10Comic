@@ -46,7 +46,9 @@ const getFrameContent = async(id, url) => {
   const iframePromise = new Promise((resolve, reject) => {
     const iframe = document.createElement('iframe')
     iframe.id = id
-    iframe.style.display = 'none'
+    iframe.height = 150
+    iframe.class = '10comicframe'
+    iframe.style.visibility = 'hidden'
     iframe.src = url
     document.body.appendChild(iframe)
     if (iframe.attachEvent) {
@@ -223,6 +225,12 @@ export const parseToDOM = (str) => {
     div.innerHTML = str
   }
   return div
+}
+
+export function delay(n) {
+  return new Promise(function(resolve) {
+    setTimeout(resolve, n * 1000)
+  })
 }
 
 export const funstrToData = function funstrToData(str, reg) {

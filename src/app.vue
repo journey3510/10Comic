@@ -60,11 +60,11 @@
     </div>
 
     <Search />
-    <van-button
+    <!-- <van-button
       id="thebtn"
       icon="plus"
       @click="test"
-    />
+    /> -->
   </div>
 </template>
 
@@ -118,38 +118,6 @@ export default {
     },
 
     async test() {
-      let scrollerID;
-      let interval = 200;
-      let curnum
-      let totalNum
-
-      console.clear()
-      totalNum = parseInt(document.querySelector('.comicCount').innerText)
-      console.log('totalNum: ', totalNum);
-      scrollerID = startScroll()
-
-      function startScroll() {
-        let id = setInterval(function() {
-          window.scrollBy(0, 50);
-          if (document.querySelector('ul.comicContent-list').childElementCount !== curnum)
-            console.log(document.querySelector('ul.comicContent-list').childElementCount)
-          curnum = document.querySelector('ul.comicContent-list').childElementCount
-          let curHeight = window.innerHeight + window.scrollY
-          if (curHeight >= document.querySelector('ul.comicContent-list').offsetHeight) {
-            console.log('7777777777')
-            stopScroll();
-          }
-          if (document.querySelector('ul.comicContent-list').childElementCount === totalNum) {
-            console.log('5555555555')
-            stopScroll();
-          }
-        }, interval);
-        return id;
-      }
-
-      function stopScroll() {
-        clearInterval(scrollerID);
-      }
     }
   }
 }

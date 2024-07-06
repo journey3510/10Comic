@@ -2,7 +2,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request, parseToDOM, funstrToData, getType, trimSpecial, getdomain, addZeroForNum } from '@/utils/index'
+import { request, parseToDOM, funstrToData, getType, trimSpecial, getdomain, addZeroForNum, delay } from '@/utils/index'
 
 import { getStorage } from '@/config/setup'
 
@@ -653,6 +653,60 @@ export const comicsWebInfo = [
       }
       document.getElementById(processData.frameId).remove()
       return imgarr
+    }
+  },
+  {
+    domain: ['www.copymanga.tv'],
+    homepage: 'https://www.copymanga.tv/',
+    webName: '拷贝漫画',
+    comicNameCss: 'div.container .comicParticulars-title-right h6',
+    chapterCss: '.tab-content #default全部 > ul:nth-child(1)',
+    readtype: 1,
+    useFrame: true,
+    getImgs: async function(context, processData) {
+      const iframeDom = document.getElementById(processData.frameId).contentDocument
+      const iframeWindow = document.getElementById(processData.frameId).contentWindow
+
+      console.clear()
+      const interval = 200; let curnum; let totalNum; let i = 0
+
+      do {
+        totalNum = parseInt(iframeDom.querySelector('.comicCount')?.innerText)
+        console.log('totalNum: ', totalNum)
+        if (totalNum) {
+          i = 15 // 结束等待
+        } else {
+          await delay(1)
+        }
+        i++
+      } while (i < 15)
+
+      const contentEle = iframeDom.querySelector('ul.comicContent-list')
+      const result = await startScroll()
+      console.log('result: ', result)
+      clearInterval(result[0])
+
+      document.getElementById(processData.frameId).remove()
+
+      return [...contentEle.querySelectorAll('img')].map(img => img.dataset.src ?? img.src)
+
+      async function startScroll() {
+        return new Promise((resolve, reject) => {
+          const id = setInterval(function() {
+            iframeWindow.scrollBy(0, 50)
+            if (contentEle.childElementCount !== curnum) {
+              curnum = contentEle.childElementCount
+            }
+            const curHeight = iframeWindow.innerHeight + iframeWindow.scrollY
+            if (curHeight >= contentEle.offsetHeight) {
+              resolve([id, 'end'])
+            }
+            if (contentEle.childElementCount === totalNum) {
+              resolve([id, 'count'])
+            }
+          }, interval)
+        })
+      }
     }
   },
   {

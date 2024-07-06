@@ -76,6 +76,7 @@
 | Komiic漫画    | https://komiic.com/             | SPA页面, 新页面需“重载列表”重新匹配新名称    |
 | 百漫谷      | https://www.darpou.com/         |                             |
 | 七夕漫画        | http://www.qiximh2.com/             |                             |
+| 拷贝漫画        | https://www.copymanga.tv/         |                     |
 | 漫画柜       | https://www.manhuagui.com/        |                           |
 | 36漫画网       | https://www.36manga.com/        | ？可访问 ？                      |
 | 古风漫画网     | https://www.gufengmh9.com/              |                             |
@@ -183,6 +184,8 @@
 
 
 ## v1.9 更新记录
+  - 2024/7/6 *v1.9.8* 
+    - 新增拷贝漫画（frame滚动获取图片测试）
   - 2024/6/1 *v1.9.7* 
     - 新增看漫画、修复个别网站获取失效
   - 2024/5/1 *v1.9.6* 
