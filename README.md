@@ -27,8 +27,8 @@ npm install
 安装的模块及依赖
 
 <br />
-### 简单运行
 
+### 简单运行
 ```
 npm run dev
 ```

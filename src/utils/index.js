@@ -233,6 +233,42 @@ export function delay(n) {
   })
 }
 
+// 在规定时间内坚持做某事，直到事情成功为止
+// @param {num, func} (secondNum, somethimefunc)
+// * secondNum 秒数
+// * somethimefunc  事情函数，执行时返回值为“true”代表成功了
+export async function doThingsEachSecond(secondNum, somethimefunc) {
+  let i = 0; let res
+  do {
+    res = somethimefunc()
+    if (res) {
+      i = secondNum // res 成功了，还没有结束，偷偷改个时间吧
+    } else {
+      await delay(1)
+    }
+    i++
+  } while (i < secondNum)
+}
+
+// 窗口滚动
+// @param {window, funcArray} (scrollWindow, conditions)
+// * scrollWindow 滚动窗口
+// * conditions  结束滚动窗口条件函数数组
+export async function startScroll(scrollWindow, conditions) {
+  return new Promise((resolve, reject) => {
+    const id = setInterval(function() {
+      scrollWindow.scrollBy(0, 50)
+      conditions.forEach((func, index) => {
+        // 执行func
+        if (func()) {
+          clearInterval(id)
+          resolve([id, `condition_${index + 1}`])
+        }
+      })
+    }, 200)
+  })
+}
+
 export const funstrToData = function funstrToData(str, reg) {
   const group = str.matchAll(reg)
   const func = []

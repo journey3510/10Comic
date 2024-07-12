@@ -2,7 +2,8 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-eval */
 
-import { request, parseToDOM, funstrToData, getType, trimSpecial, getdomain, addZeroForNum, delay } from '@/utils/index'
+// eslint-disable-next-line no-unused-vars
+import { request, parseToDOM, funstrToData, getType, trimSpecial, getdomain, addZeroForNum, delay, doThingsEachSecond, startScroll } from '@/utils/index'
 
 import { getStorage } from '@/config/setup'
 
@@ -667,46 +668,27 @@ export const comicsWebInfo = [
       const iframeDom = document.getElementById(processData.frameId).contentDocument
       const iframeWindow = document.getElementById(processData.frameId).contentWindow
 
-      console.clear()
-      const interval = 200; let curnum; let totalNum; let i = 0
-
-      do {
-        totalNum = parseInt(iframeDom.querySelector('.comicCount')?.innerText)
-        console.log('totalNum: ', totalNum)
-        if (totalNum) {
-          i = 15 // 结束等待
-        } else {
-          await delay(1)
-        }
-        i++
-      } while (i < 15)
-
+      // 存在加载慢的可能性，10秒内持续检测是否存在数据
+      await doThingsEachSecond(10, () => parseInt(iframeDom.querySelector('.comicCount')?.innerText))
+      const totalNum = parseInt(iframeDom.querySelector('.comicCount')?.innerText)
+      console.log('totalNum: ', totalNum)
       const contentEle = iframeDom.querySelector('ul.comicContent-list')
-      const result = await startScroll()
+
+      // 结束滚动条件
+      const end_condition_1 = () => {
+        const curHeight = iframeWindow.innerHeight + iframeWindow.scrollY
+        return curHeight >= contentEle.offsetHeight
+      }
+      const end_condition_2 = () => contentEle.childElementCount === totalNum
+
+      // 等待滚动结果
+      const result = await startScroll(iframeWindow, [end_condition_1, end_condition_2])
       console.log('result: ', result)
       clearInterval(result[0])
 
       document.getElementById(processData.frameId).remove()
 
       return [...contentEle.querySelectorAll('img')].map(img => img.dataset.src ?? img.src)
-
-      async function startScroll() {
-        return new Promise((resolve, reject) => {
-          const id = setInterval(function() {
-            iframeWindow.scrollBy(0, 50)
-            if (contentEle.childElementCount !== curnum) {
-              curnum = contentEle.childElementCount
-            }
-            const curHeight = iframeWindow.innerHeight + iframeWindow.scrollY
-            if (curHeight >= contentEle.offsetHeight) {
-              resolve([id, 'end'])
-            }
-            if (contentEle.childElementCount === totalNum) {
-              resolve([id, 'count'])
-            }
-          }, interval)
-        })
-      }
     }
   },
   {
