@@ -71,14 +71,23 @@ export const comicsWebInfo = [
     homepage: 'https://manhua.idmzj.com/',
     webName: '动漫之家',
     comicNameCss: 'h1',
+    chapterCss: '.cartoon_online_border',
+    chapterCss_2: '.cartoon_online_border_other',
     webDesc: '需要登录',
     readtype: 1,
+    useFrame: true,
     getComicInfo: async function(comic_name) {
       const domain = getdomain()
       let text = ''
       if (domain === 'm.idmzj.com') {
         text = document.body.outerHTML
       } else {
+        // 判断登录后是否有章节信息
+        const chapterList = unsafeWindow.__NUXT__?.data?.getCationDeatils?.comicInfo?.chapterList
+        if (chapterList) {
+          return false
+        }
+
         const arr = window.location.href.split('/')
         let name = arr[arr.length - 1] ? arr[arr.length - 1] : arr[arr.length - 2]
         name = name.split('.')[0]
@@ -125,9 +134,21 @@ export const comicsWebInfo = [
       return allList
     },
     getImgs: async function(context, processData) {
-      const str = context.match(/mReader.initData\(.*"page_url":(.*?"]).*\)/)[1]
-      const imgs = JSON.parse(str)
-      return imgs
+      const chapterList = unsafeWindow.__NUXT__?.data?.getCationDeatils?.comicInfo?.chapterList
+
+      if (chapterList) {
+        const iframeWindow = document.getElementById(processData.frameId).contentWindow
+        await doThingsEachSecond(10, () => iframeWindow?.__NUXT__?.data?.getchapters?.data?.chapterInfo?.page_url)
+        const imageArr = iframeWindow?.__NUXT__?.data?.getchapters?.data?.chapterInfo?.page_url
+        document.getElementById(processData.frameId).remove()
+        return imageArr
+      } else {
+        // 保留 m.dmzj.com 获取方法
+        const str = context.match(/mReader.initData\(.*"page_url":(.*?"]).*\)/)[1]
+        const imgs = JSON.parse(str)
+        document.getElementById(processData.frameId).remove()
+        return imgs
+      }
     }
   },
   {

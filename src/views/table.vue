@@ -413,12 +413,15 @@ export default {
     async getSelectList() {
       this.overlayShow = true
       try {
-        // 单页面应用 获取信息
+        // 优先 getComicInfo 获取章节信息
         if (currentComics.getComicInfo) {
-          this.list = await currentComics.getComicInfo(this.comicName)
-          this.overlayShow = false
-          this.showSelectList = true
-          return
+          const list = await currentComics.getComicInfo(this.comicName)
+          if (list) {
+            this.list = list
+            this.overlayShow = false
+            this.showSelectList = true
+            return
+          }
         }
 
         setTimeout(() => {
