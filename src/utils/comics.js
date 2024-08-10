@@ -877,6 +877,85 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.yymanhua.com',
+    homepage: 'https://www.yymanhua.com/',
+    webName: 'yymanhua',
+    comicNameCss: 'p.detail-info-title',
+    chapterCss: '.detail-list-form-con',
+    readtype: 1,
+    headers: {
+      referer: 'https://www.yymanhua.com/'
+    },
+    useFrame: true,
+    getImgs: async function(context, processData) {
+      const iframe = document.getElementById(processData.frameId).contentWindow
+      const cid = iframe.YYMANHUA_CID
+      let page
+      const _cid = iframe.YYMANHUA_CID
+      const _mid = iframe.COMIC_MID
+      const _dt = iframe.YYMANHUA_VIEWSIGN_DT
+      const _sign = iframe.YYMANHUA_VIEWSIGN
+
+      const imageArray = []
+      const count = iframe.YYMANHUA_IMAGE_COUNT
+
+      let currentCount = 0
+      while (currentCount < count) {
+        page = currentCount + 1
+        console.log('page: ', page)
+        const url = `https://www.yymanhua.com/m${cid}/chapterimage.ashx?cid=${cid}&page=${page}&key=&_cid=${_cid}&_mid=${_mid}&_dt=${_dt}&_sign=${_sign}`
+        const { response } = await request({ method: 'get', url })
+        console.log('response: ', response)
+        const funStr = funstrToData(response, /(function.*?return \S;})(\(.*?{}\))/g)
+        const newImgs = funstrToData(funStr, /(function.*?return .*?})()/g)
+        imageArray.push(...newImgs)
+        currentCount = imageArray.length
+        await delay(0.5)
+      }
+      document.getElementById(processData.frameId).remove()
+      return imageArray
+    }
+  },
+  {
+    domain: ['www.xmanhua.com', 'xmanhua.com'],
+    homepage: 'https://xmanhua.com/',
+    webName: 'xmanhua',
+    comicNameCss: 'p.detail-info-title',
+    chapterCss: '.detail-list-form-con',
+    readtype: 1,
+    headers: {
+      referer: 'https://xmanhua.com/'
+    },
+    useFrame: true,
+    getImgs: async function(context, processData) {
+      const iframe = document.getElementById(processData.frameId).contentWindow
+
+      const cid = iframe.XMANHUA_CID
+      let page
+      const _cid = iframe.XMANHUA_CID
+      const _mid = iframe.COMIC_MID
+      const _dt = iframe.XMANHUA_VIEWSIGN_DT
+      const _sign = iframe.XMANHUA_VIEWSIGN
+
+      const imageArray = []
+      const count = iframe.XMANHUA_IMAGE_COUNT
+      let currentCount = 0
+      while (currentCount < count) {
+        page = currentCount + 1
+        console.log('page: ', page)
+        const url = `https://xmanhua.com/m${cid}/chapterimage.ashx?cid=${cid}&page=${page}&key=&_cid=${_cid}&_mid=${_mid}&_dt=${_dt}&_sign=${_sign}`
+        const { response } = await request({ method: 'get', url })
+        const funStr = funstrToData(response, /(function.*?return \S;})(\(.*?{}\))/g)
+        const newImgs = funstrToData(funStr, /(function.*?return .*?})()/g)
+        imageArray.push(...newImgs)
+        currentCount = imageArray.length
+        await delay(0.5)
+      }
+      document.getElementById(processData.frameId).remove()
+      return imageArray
+    }
+  },
+  {
     domain: 'www.cartoonmad.com',
     homepage: 'https://www.cartoonmad.com/',
     webName: '动漫狂',
@@ -887,12 +966,12 @@ export const comicsWebInfo = [
       referer: 'https://www.cartoonmad.com/'
     },
     getImgs: function(context) {
-      const comicUrl = context.match(/img src="comicpic.asp\?file=(.*?)001.*?"/)[1]
-      const pageTotalNum = context.match(/html">\D*(\d*).*?<\/option>/g).length
-      const preImgUrl = 'https://www.cartoonmad.com/comic/comicpic.asp?file=' + comicUrl
+      const preImgUrl = 'https:' + context.match(/<img src="(.*?)001.*?"/)[1]
+      const suffix = context.match(/<img src="(.*?)001\.(.*?)"/)[2]
+      const pageTotalNum = context.match(/<\/option>.*html">.*?(\d+).*?<\/select>/)[1]
       const imgArray = []
       for (let i = 0; i < pageTotalNum; i++) {
-        const imgUrl = preImgUrl + addZeroForNum(i + 1, 3)
+        const imgUrl = preImgUrl + addZeroForNum(i + 1, 3) + '.' + suffix
         imgArray.push(imgUrl)
       }
       return imgArray
