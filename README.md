@@ -71,7 +71,7 @@ npm run build
 | Mangabz     | https://mangabz.com/       |
 | 极速漫画        | https://www.1kkk.com/           |
 | 动漫屋         | https://www.dm5.com/            |
-| GoDa         | https://cn.godamanga.art/        |
+| GoDa         | https://godamh.com/        |
 | 咚漫          | https://www.dongmanmanhua.cn/   |
 | naver          | https://comic.naver.com/   |
 | webtoon          | https://www.webtoons.com/   |

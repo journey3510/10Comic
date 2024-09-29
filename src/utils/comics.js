@@ -287,45 +287,26 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'cn.godamanga.art',
-    homepage: 'https://cn.godamanga.art/',
+    domain: 'godamh.com',
+    homepage: 'https://godamh.com/',
     webName: 'GoDa',
     comicNameCss: '.container nav > ol > li:nth-child(3) a',
-    chapterCss: '',
+    chapterCss: '.chapterlists',
+    chapterNameReg: /data-ct="(.*?)"/,
     readtype: 1,
-    getComicInfo: async function(comic_name) {
-      const chapterUrl = window.location.href.replace('/manga', '/chapterlist')
-      const { responseText } = await request('GET', chapterUrl)
-      const chapterLink = parseToDOM(responseText).querySelectorAll('.container .pb-6 a')
-
-      const allList = []
-      chapterLink.forEach(element => {
-        const data = {
-          comicName: comic_name,
-          chapterName: trimSpecial(element.querySelector('span').innerText),
-          chapterNumStr: '',
-          url: element.href,
-          readtype: this.readtype,
-          isPay: false,
-          isSelect: false,
-          characterType: 'one'
-        }
-        allList.push(data)
-      })
-      return allList
+    headers: {
+      referer: 'https://godamh.com/'
     },
     getImgs: async function(context) {
-      const dom = parseToDOM(context).querySelector('.w-full.text-center.touch-manipulation')
-      const imgTag = dom.querySelectorAll('img')
-      const img = []
-      imgTag.forEach(element => {
-        if (!element.src.includes('assets/images')) {
-          img.push(element.src)
-        } else {
-          img.push(element.dataset.src)
-        }
+      const ms = context.match(/data-ms="(\d+)".*data-cs="(\d+)"/)[1]
+      const cs = context.match(/data-ms="(\d+)".*data-cs="(\d+)"/)[2]
+
+      const url = `https://api-get.mgsearcher.com/api/chapter/getinfo?m=${ms}&c=${cs}`
+      const { responseText } = await request('GET', url)
+      const images = JSON.parse(responseText).data.info.images.map(element => {
+        return element.url
       })
-      return img
+      return images
     }
   },
   {

@@ -62,13 +62,13 @@ export default class Queue {
         } else {
           imgs = imgs.slice(start - 1, end + 1)
         }
+        // eslint-disable-next-line eqeqeq
+        imgs == [] ? this.worker[index].hasError = true : ''
+        this.worker[index].imgs = imgs
+        this.worker[index].totalNumber = imgs.length
       } catch (error) {
         this.worker[index].hasError = true
       }
-      // eslint-disable-next-line eqeqeq
-      imgs == [] ? this.worker[index].hasError = true : ''
-      this.worker[index].imgs = imgs
-      this.worker[index].totalNumber = imgs.length
       yield this.down(index)
         .then(function() {
           afterDown(index)

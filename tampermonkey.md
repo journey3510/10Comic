@@ -66,7 +66,7 @@
 | Mangabz     | https://mangabz.com/            |                             |
 | 动漫屋         | https://www.dm5.com/            |                             |
 | 动漫屋2         | https://tel.dm5.com/            |                             |
-| GoDa         | https://cn.godamanga.art/        |                             |
+| GoDa         | https://godamh.com        |                             |
 | 咚漫          | https://www.dongmanmanhua.cn/   |                             |
 | webtoons    | https://www.webtoons.com/       | ？需要魔法？                      |
 | comic.naver | https://comic.naver.com/        | 找到漫画目录页再使用                  |
@@ -184,6 +184,9 @@
 
 
 ## v2.0 更新记录
+  - 2024/9/30 *v2.0.3* 
+    - 修改GoDa网站新域名匹配方法
+    - 修复下载错误时可能出现进度条不变bug
   - 2024/8/10 *v2.0.2* 
     - 新增匹配yymanhua、xmanhua
     - 修改动漫狂网站获取图片方法
