@@ -310,6 +310,40 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'www.comemh.com',
+    homepage: 'https://www.comemh.com/',
+    webName: '来漫画',
+    comicNameCss: '.title h1',
+    chapterCss: '#play_0 ul ',
+    readtype: 1,
+    useFrame: true,
+    getImgs: async function(context, processData) {
+      const iframeWindow = document.getElementById(processData.frameId).contentWindow
+      const arr = iframeWindow.getUrlpics()
+      const host = iframeWindow.gethost()
+      const image = arr.map(element => host + element)
+      document.getElementById(processData.frameId).remove()
+      return image
+    }
+  },
+  {
+    domain: 'www.rumanhua.com',
+    homepage: 'https://www.rumanhua.com/',
+    webName: 'R如漫画',
+    comicNameCss: 'h1.name_mh',
+    chapterCss: '.chapterList .chapterlistload ul',
+    readtype: 1,
+    useFrame: true,
+    getImgs: async function(context, processData) {
+      const iframeDom = document.getElementById(processData.frameId).contentDocument
+      await delay(1.5)
+      const image = [...iframeDom.querySelectorAll('.main_img img')].map(img => img.dataset.src ?? img.src)
+      document.getElementById(processData.frameId).remove()
+      return image
+    }
+  },
+
+  {
     domain: 'www.dongmanmanhua.cn',
     homepage: 'https://www.dongmanmanhua.cn/',
     webName: '咚漫',

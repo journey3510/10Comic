@@ -72,6 +72,8 @@ npm run build
 | 极速漫画        | https://www.1kkk.com/           |
 | 动漫屋         | https://www.dm5.com/            |
 | GoDa         | https://godamh.com/        |
+| 来漫画         | https://www.comemh.com/        |
+| R如漫画         | https://www.rumanhua.com/       |
 | 咚漫          | https://www.dongmanmanhua.cn/   |
 | naver          | https://comic.naver.com/   |
 | webtoon          | https://www.webtoons.com/   |
