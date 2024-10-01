@@ -67,6 +67,7 @@ npm run build
 | **网站** | **网站首页**                      |
 |-------------|-----------------------------------|
 | 动漫之家        | https://manhua.idmzj.com/        |
+| 动漫之家(手机)     | https://m.idmzj.com/       |
 | 动漫之家(访客)    | https://comic.idmzj.com/       |
 | Mangabz     | https://mangabz.com/       |
 | 极速漫画        | https://www.1kkk.com/           |

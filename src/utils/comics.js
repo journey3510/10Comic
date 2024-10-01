@@ -67,7 +67,7 @@ export const searchFunTemplate_1 = async(data, keyword) => {
 
 export const comicsWebInfo = [
   {
-    domain: ['manhua.idmzj.com', 'm.dmzj.com', 'm.idmzj.com'],
+    domain: 'manhua.idmzj.com',
     homepage: 'https://manhua.idmzj.com/',
     webName: '动漫之家',
     comicNameCss: 'h1',
@@ -149,6 +149,20 @@ export const comicsWebInfo = [
         document.getElementById(processData.frameId).remove()
         return imgs
       }
+    }
+  },
+  {
+    domain: ['m.dmzj.com', 'm.idmzj.com'],
+    homepage: 'https://m.idmzj.com/',
+    webName: '动漫之家(手机)',
+    comicNameCss: '#comicName',
+    chapterCss: '#list',
+    readtype: 1,
+    getImgs: async function(context) {
+      const str = context.match(/mReader.initData\(.*"page_url":(.*?"]).*\)/)[1]
+      const imgs = JSON.parse(str)
+      console.log('imgs: ', imgs)
+      return imgs
     }
   },
   {

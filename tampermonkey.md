@@ -62,6 +62,7 @@
 | **网站** | **首页**                    | **提示**                 |
 |-------------|---------------------------------|-----------------------------|
 | 动漫之家        | https://manhua.idmzj.com/        |                             |
+| 动漫之家(手机)     | https://m.idmzj.com/       |                             |
 | 动漫之家(访客)    | https://comic.idmzj.com/       |                             |
 | Mangabz     | https://mangabz.com/            |                             |
 | 动漫屋         | https://www.dm5.com/            |                             |
@@ -126,17 +127,22 @@
     comicNameCss，String, 漫画名的CSS选择器,
     chapterCss，String, 含有所有章节链接的dom的CSS选择器,
     readtype， Number, 值:1 -卷轴阅读或SPA网页, 值:0 -翻页阅读 (指不能一次性获取到某章节所有图片地址),
+    useFrame, Boolean, 当 该 key存在 且 value为 true, 使用 隐藏的 iframe 窗口获取章节内容
     webDesc, String,  一些网站备注或提醒信息
 
     getImgs，String,  字符内容为获取章节图片的函数,
-      * 1、(readtype == 1) - 卷轴阅读或SPA网页
+      // ———————— 1 —————————— 卷轴阅读或SPA网页
+      * 1、(readtype == 1) 
       * @param {String} (context)  
         * context 某一章节链接的请求正文
       * @return {Array} imgArray
           * 要求返回imgArray 数组 包含该章节所有图片地址
           * 例如 return ['http://xx.xx.xx/1.jpg','http://xx.xx.xx/2.jpg']
           
-      * 2、(readtype == 0) - 翻页阅读
+  
+
+      // ———————— 2 —————————— 翻页阅读
+      * 2、(readtype == 0) 
       * @param {String, Object} (context, processData)
         * context 章节某一页链接的请求正文
         * processData 进程反馈数据及自定义保存的数据
@@ -157,13 +163,22 @@
                 ……
               }
             }
+
+
+
+      // ———————— 3 ——————————   使用 iframe 窗口获取章节内容
+      * 3、(readtype == 1 且 useFrame == true) 
+      * @param {String, Object} (context, processData)
+        * context 章节某一页链接的请求正文
+        * processData 进程反馈数据及自定义保存的数据
+      // 参考下面规则 JOSN 2
   }
 ]
 ```
 
 
-- 导入规则 JOSN举例
-
+- 导入规则 JOSN参考
+  1.  **readtype == 1**,
 ```
 [
   {
@@ -184,8 +199,45 @@
 ```
 <br />
 
+  2.  **useFrame == true 且 readtype == 1** <br />
+  **使用 iframe 打开章节网页后获取内容 （iframe是隐藏的)**  <br />
+```
+[
+  {
+    domain: 'xx.xx.com',
+    homepage: 'https://xx.xx.com/',
+    webName: 'xxx',
+    comicNameCss: '.oddtitle_m .title_text h1',
+    chapterCss: '.online_border',
+    useFrame: true,
+    readtype: 1,
+    getImgs: `async function(context, processData) {
+      // processData.frameId 是脚本打开某一章节网页 iframe 的 id
+      const iframeWindow = document.getElementById(processData.frameId).contentWindow
+      const iframeDom = document.getElementById(processData.frameId).contentDocument
+
+
+      // iframeWindow 的变量和函数方法 （或许会用到）
+      // const xx = iframeWindow.xx
+      // const xxfun = iframeWindow.xxfun()
+
+      const image = [...iframeDom.querySelectorAll('.xx img')].map(img => img.dataset.src ?? img.src)
+
+      // 最后关闭打开的 iframe 并返回图片数组
+      document.getElementById(processData.frameId).remove()
+      return image
+    }`
+  }
+]
+```
+<br />
+
+
 
 ## v2.0 更新记录
+  - 2024/10/01 *v2.0.5* 
+    - 完善部分 md 文档
+    - 重新匹配动漫之家手机版网页
   - 2024/10/01 *v2.0.4* 
     - 新增匹配来漫画、R如漫画网站
   - 2024/9/30 *v2.0.3* 
