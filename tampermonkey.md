@@ -65,6 +65,7 @@
 | 动漫之家(手机)     | https://m.idmzj.com/       |                             |
 | 动漫之家(访客)    | https://comic.idmzj.com/       |                             |
 | Mangabz     | https://mangabz.com/            |                             |
+| 再漫画        | https://manhua.zaimanhua.com/        |                       |
 | 动漫屋         | https://www.dm5.com/            |                             |
 | 动漫屋2         | https://tel.dm5.com/            |                             |
 | GoDa         | https://godamh.com        |                             |
@@ -238,6 +239,8 @@
 
 
 ## v2.0 更新记录
+  - 2024/10/24 *v2.0.6* 
+    - 新匹配再漫画网站
   - 2024/10/01 *v2.0.5* 
     - 完善部分 md 文档
     - 重新匹配动漫之家手机版网页

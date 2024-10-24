@@ -231,7 +231,7 @@ export const comicsWebInfo = [
     domain: 'manhua.zaimanhua.com',
     homepage: 'https://manhua.zaimanhua.com/',
     webName: '再漫画',
-    comicNameCss: 'h1 a',
+    comicNameCss: '.wrap_intro_l_comic h1 a',
     chapterCss: '.tab-content-selected',
     readtype: 1,
     useFrame: true,
