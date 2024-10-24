@@ -178,7 +178,9 @@
 
 
 - 导入规则 JOSN参考
-  1.  **readtype == 1**,
+
+  1、  **readtype == 1**
+
 ```
 [
   {
@@ -199,8 +201,9 @@
 ```
 <br />
 
-  2.  **useFrame == true 且 readtype == 1** <br />
-  **使用 iframe 打开章节网页后获取内容 （iframe是隐藏的)**  <br />
+  2、  **useFrame == true 且 readtype == 1** <br />
+  **使用 iframe 打开章节网页后获取内容 （iframe是隐藏的)**  
+
 ```
 [
   {

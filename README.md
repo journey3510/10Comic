@@ -70,6 +70,7 @@ npm run build
 | 动漫之家(手机)     | https://m.idmzj.com/       |
 | 动漫之家(访客)    | https://comic.idmzj.com/       |
 | Mangabz     | https://mangabz.com/       |
+| 再漫画        | https://manhua.zaimanhua.com/        |
 | 极速漫画        | https://www.1kkk.com/           |
 | 动漫屋         | https://www.dm5.com/            |
 | GoDa         | https://godamh.com/        |

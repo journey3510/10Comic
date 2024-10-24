@@ -228,6 +228,22 @@ export const comicsWebInfo = [
     }
   },
   {
+    domain: 'manhua.zaimanhua.com',
+    homepage: 'https://manhua.zaimanhua.com/',
+    webName: '再漫画',
+    comicNameCss: 'h1 a',
+    chapterCss: '.tab-content-selected',
+    readtype: 1,
+    useFrame: true,
+    getImgs: async function(context, processData) {
+      const iframeWindow = document.getElementById(processData.frameId).contentWindow
+      await delay(1.5)
+      const page_url = iframeWindow.__NUXT__.data.getChapters.data.chapterInfo.page_url
+      document.getElementById(processData.frameId).remove()
+      return page_url
+    }
+  },
+  {
     domain: 'www.dm5.com',
     homepage: 'https://www.dm5.com/',
     webName: '动漫屋',
