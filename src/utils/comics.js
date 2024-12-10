@@ -331,17 +331,20 @@ export const comicsWebInfo = [
       const ms = context.match(/data-ms="(\d+)".*data-cs="(\d+)"/)[1]
       const cs = context.match(/data-ms="(\d+)".*data-cs="(\d+)"/)[2]
 
-      const url = `https://api-get.mgsearcher.com/api/chapter/getinfo?m=${ms}&c=${cs}`
+      const url = `https://api-get-v2.mgsearcher.com/api/chapter/getinfo?m=${ms}&c=${cs}`
       const { responseText } = await request('GET', url)
-      const images = JSON.parse(responseText).data.info.images.map(element => {
-        return element.url
+
+      const info = JSON.parse(responseText).data.info
+      const domain = info.images.line === 2 ? 'https://f40-1-4.g-mh.online' : 'https://t40-1-4.g-mh.online'
+      const images = info.images.images.map(element => {
+        return domain + element.url
       })
       return images
     }
   },
   {
-    domain: 'www.comemh.com',
-    homepage: 'https://www.comemh.com/',
+    domain: 'www.comemh8.com',
+    homepage: 'https://www.comemh8.com/',
     webName: '来漫画',
     comicNameCss: '.title h1',
     chapterCss: '#play_0 ul ',
@@ -352,6 +355,7 @@ export const comicsWebInfo = [
       const arr = iframeWindow.getUrlpics()
       const host = iframeWindow.gethost()
       const image = arr.map(element => host + element)
+      console.log('image: ', image)
       document.getElementById(processData.frameId).remove()
       return image
     }
@@ -697,7 +701,9 @@ export const comicsWebInfo = [
     getImgs: async function(context) {
       const txtUrl = context.match(/http(\S*).txt/gi)[0]
       const txtRes = await request('get', txtUrl)
-      const txtContext = txtRes.responseText
+      let txtContext = txtRes.responseText
+      txtContext = txtContext.replace(/img2.manga8.xyz/g, 'img4.manga8.xyz')
+      txtContext = txtContext.replace(/img.manga8.xyz/g, 'img3.manga8.xyz')
       const imgReg = /http(\S*)jpg/g
       return txtContext.match(imgReg)
     }
