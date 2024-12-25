@@ -86,6 +86,7 @@ npm run build
 | 百漫谷    | https://www.darpou.com/         |
 | 七夕漫画        | http://www.qiximh2.com/               |
 | 拷贝漫画        | https://www.copymanga.tv/         |
+| 风车漫画        | https://www.fengchemh.com/        |
 | 漫画柜       | https://www.manhuagui.com/        | 
 | 36漫画网       | https://www.36manga.com/        |
 | 古风漫画网       | https://www.gufengmh9.com/   |

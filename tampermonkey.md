@@ -55,6 +55,13 @@
  - <sapn id='browserapi'> 油猴-浏览器API （设置
     - 油猴 - 设置 - 通用 - 配置模式 - 选高级
     - 设置 - 下载 BETA - 下载模式 - 选浏览器API
+  - **唤不起脚本界面?**
+    - **原因**  脚本引入外部组件，可能会有因不同地区的网络影响导致没有加载的这些外部资源，使脚本无法正常运行。<br />
+    具体点击油猴插件，右键“10图漫”脚本，进入脚本编辑页后，点击外部，查看是否有 4 个外部引用链接缓存（文件大小不为0
+    <br />
+    - **解决方法** 隔一段时间再尝试，网络影响可能就没有了（；´д｀）ゞ。也可以尝试使用加速器，刷新网页，再唤起脚本界面。（[参考1](https://greasyfork.org/zh-CN/scripts/447819B/discussions/218225)、 [参考2](https://greasyfork.org/zh-CN/scripts/447819/discussions/217570) )
+
+
 <br /><br />
 
 
@@ -75,12 +82,13 @@
 | webtoons    | https://www.webtoons.com/       | ？需要魔法？                      |
 | comic.naver | https://comic.naver.com/        | 找到漫画目录页再使用                  |
 | 腾讯漫画        | https://ac.qq.com/              | 2023.3.2起, 需要APP观看的章节无法完整下载 |
-| 哔哩哔哩        | https://manga.bilibili.com/     |                             |
-| 哔哩哔哩漫画国际版   | https://www.bilibilicomics.com/ | ？需要魔法？                      |
+| 哔哩哔哩        | ~~https://manga.bilibili.com/~~    |       已失效                      |
+| 哔哩哔哩漫画国际版   | ~~https://www.bilibilicomics.com/~~ |  已失效                      |
 | Komiic漫画    | https://komiic.com/             | SPA页面, 新页面需“重载列表”重新匹配新名称    |
 | 百漫谷      | https://www.darpou.com/         |                             |
 | 七夕漫画        | http://www.qiximh2.com/             |                             |
 | 拷贝漫画        | https://www.copymanga.tv/         |                     |
+| 风车漫画        | https://www.fengchemh.com/        |                     |
 | 漫画柜       | https://www.manhuagui.com/        |                           |
 | 36漫画网       | https://www.36manga.com/        | ？可访问 ？                      |
 | 古风漫画网     | https://www.gufengmh9.com/              |                             |
@@ -239,6 +247,10 @@
 
 
 ## v2.0 更新记录
+  - 2024/12/25 *v2.0.7* 
+    - 修改下载失效的GoDa、来漫画、百漫谷网站
+    - 新增风车漫画匹配、修改拷贝漫画章节chapterCss
+    - 修改md文件
   - 2024/10/24 *v2.0.6* 
     - 新匹配再漫画网站
   - 2024/10/01 *v2.0.5* 

@@ -580,6 +580,7 @@ export const comicsWebInfo = [
       const postUrl = 'https://manga.bilibili.com/twirp/comic.v1.Comic/GetImageIndex?device=pc&platform=web'
       const { responseText } = await request({ method: 'post', url: postUrl, data, useCookie: isPay })
       const imgArray = JSON.parse(responseText).data.images
+      console.log('imgArray: ', imgArray)
 
       const saveImg = []
       const query = []
@@ -590,6 +591,9 @@ export const comicsWebInfo = [
       const img_data = new FormData()
       img_data.append('urls', JSON.stringify(query))
       const img_data_res = await request('post', imgPostUrl, img_data)
+
+      console.log('img_data_res: ', img_data_res)
+
       const imgObjArr = JSON.parse(img_data_res.responseText).data
       imgObjArr.forEach(imgObj => {
         saveImg.push(`${imgObj.url}?token=${imgObj.token}`)
@@ -733,7 +737,7 @@ export const comicsWebInfo = [
     homepage: 'https://www.copymanga.tv/',
     webName: '拷贝漫画',
     comicNameCss: 'div.container .comicParticulars-title-right h6',
-    chapterCss: '.tab-content #default全部 > ul:nth-child(1)',
+    chapterCss: '.tab-content > div.active > ul:nth-child(1)',
     readtype: 1,
     useFrame: true,
     getImgs: async function(context, processData) {
@@ -761,6 +765,21 @@ export const comicsWebInfo = [
       document.getElementById(processData.frameId).remove()
 
       return [...contentEle.querySelectorAll('img')].map(img => img.dataset.src ?? img.src)
+    }
+  },
+  {
+    domain: 'www.fengchemh.com',
+    homepage: 'https://www.fengchemh.com/',
+    webName: '风车漫画',
+    comicNameCss: 'h1',
+    chapterCss: '#ewave-playlist-1',
+    readtype: 1,
+    useFrame: true,
+    getImgs: async function(context, processData) {
+      const iframeWindow = document.getElementById(processData.frameId).contentWindow
+      const images = iframeWindow.params.images
+      document.getElementById(processData.frameId).remove()
+      return images
     }
   },
   {
