@@ -361,8 +361,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: 'www.rumanhua.com',
-    homepage: 'https://www.rumanhua.com/',
+    domain: 'www.rumanhua1.com',
+    homepage: 'http://www.rumanhua1.com/',
     webName: 'R如漫画',
     comicNameCss: 'h1.name_mh',
     chapterCss: '.chapterList .chapterlistload ul',
@@ -733,8 +733,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: ['www.copymanga.tv'],
-    homepage: 'https://www.copymanga.tv/',
+    domain: ['www.copymanga.tv', 'www.mangacopy.com'],
+    homepage: 'https://www.mangacopy.com/',
     webName: '拷贝漫画',
     comicNameCss: 'div.container .comicParticulars-title-right h6',
     chapterCss: '.tab-content > div.active > ul:nth-child(1)',
