@@ -1,4 +1,6 @@
-$scrollbarColor: #66ccff88;
+// 原 global.scss 转换为 global_scss.less 
+
+@scrollbarColor: #66ccff88;
 
 .yi-ling-app {
   * {
@@ -22,7 +24,7 @@ $scrollbarColor: #66ccff88;
   }
   ::-webkit-scrollbar-thumb:vertical {
     height: 5px;
-    background-color: $scrollbarColor;
+    background-color: @scrollbarColor;
     border-radius: 15px;
     -webkit-border-radius:  15px;
   }

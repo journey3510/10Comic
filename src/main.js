@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import App from './app.vue'
 
-import './styles/global.scss'
+import './styles/global_scss.less'
 import './styles/global.less'
 
 import { isDev } from './config'

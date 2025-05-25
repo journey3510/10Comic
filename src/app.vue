@@ -123,7 +123,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 * {
   margin: 0;
   padding: 0;
@@ -149,8 +149,6 @@ export default {
 <style lang="less" scoped>
 .yi-ling-app {
   position: fixed;
-  // width: 100%;
-  // height: 100%;
   z-index: 100000;
 
   #app-right {
@@ -208,7 +206,6 @@ export default {
   }
 }
 .card--hide {
-  // right: -@appWidth !important;
   transform: translate(100%, -50%)  !important;
   .card__btn {
     svg {
