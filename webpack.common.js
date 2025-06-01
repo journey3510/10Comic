@@ -33,14 +33,6 @@ module.exports = () => {
           ]
         },
         {
-          test: /\.scss$/,
-          use: [
-            'style-loader',
-            'css-loader',
-            'sass-loader'
-          ]
-        },
-        {
           test: /\.less$/i,
           use: [
             'style-loader',
@@ -68,10 +60,9 @@ module.exports = () => {
           loader: 'vue-loader',
           options: {
             loaders: {
-              'scss': [
+              'less': [
                 'style-loader',
                 'css-loader',
-                'sass-loader',
                 'less-loader'
               ]
             }
