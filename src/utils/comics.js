@@ -1105,8 +1105,8 @@ export const comicsWebInfo = [
     }
   },
   {
-    domain: ['cn.baozimh.com', 'WWW.baozimh.com'],
-    homepage: 'https://cn.baozimh.com/',
+    domain: ['www.baozimhcn.com', 'www.baozimh.com'],
+    homepage: 'https://www.baozimh.com/',
     webName: '包子漫画',
     comicNameCss: 'h1.comics-detail__title',
     chapterCss: '.comics-detail > .l-content:nth-of-type(3) #chapter-items',

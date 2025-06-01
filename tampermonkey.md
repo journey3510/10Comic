@@ -101,7 +101,7 @@
 | 最漫画         | https://www.zuimh.com/          |                             |
 | 六漫画         | http://www.6mh1.com/          |                             |
 | 漫画芯         | https://www.mhxin.com/          |                             |
-| 包子漫画        | https://cn.baozimh.com/         |                             |
+| 包子漫画        | https://cn.baozimhcn.com/         |                             |
 | 爱国漫         | https://www.guoman.net/       |                              |
 | 最次元         | https://zcymh.com/       |                               |
 | 看漫画        | https://www.kanman.com/   |                             |
